@@ -1,14 +1,12 @@
 <?php
- 
- namespace jfsullivan\CommunityManager\Livewire\Memberships\Forms;
 
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+namespace jfsullivan\CommunityManager\Livewire\Memberships\Forms;
+
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
-use Illuminate\Support\Str;
- 
+
 class AddMemberForm extends Form
 {
     public $owningModel = null;
@@ -41,8 +39,8 @@ class AddMemberForm extends Form
             'email' => $this->email,
         ], [
             'first_name' => $this->first_name,
-            'last_name' =>  $this->last_name,
-            'password' => Hash::make(Str::password(10))
+            'last_name' => $this->last_name,
+            'password' => Hash::make(Str::password(10)),
         ]);
 
         $memberRole = $roleClass::find($this->role_id);

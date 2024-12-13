@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use jfsullivan\ArticleManager\Models\Article;
-use jfsullivan\CommunityManager\Models\Community;
 
 class ArticleController extends Controller
 {
@@ -27,7 +26,7 @@ class ArticleController extends Controller
     public function show(Request $request, $id): View
     {
         $community = $request->user()->currentCommunity;
-dd('test');
+        dd('test');
         $article = Article::findOrFail($id);
 
         // if (Gate::denies('view', $community)) {
@@ -37,7 +36,7 @@ dd('test');
         return view('community-manager::articles.show', [
             'user' => $request->user(),
             'community' => $community,
-            'article' => $article
+            'article' => $article,
         ]);
     }
 }

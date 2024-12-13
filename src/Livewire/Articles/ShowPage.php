@@ -5,7 +5,6 @@ namespace jfsullivan\CommunityManager\Livewire\Articles;
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\ArticleManager\Livewire\ShowPage as ArticleShowPage;
 use Livewire\Attributes\Computed;
-use Illuminate\Support\Str;
 
 class ShowPage extends ArticleShowPage
 {
@@ -42,7 +41,7 @@ class ShowPage extends ArticleShowPage
     #[Computed]
     public function pageTitle(): string
     {
-        return 'Community Articles - ' . $this->article->title;
+        return 'Community Articles - '.$this->article->title;
     }
 
     public function render()
@@ -50,7 +49,7 @@ class ShowPage extends ArticleShowPage
         return view('article-manager::livewire.show-page')
             ->layout($this->layout, [
                 'community' => $this->community,
-                'selectedToolbarItem' => 'news'
+                'selectedToolbarItem' => 'news',
             ])
             ->title($this->pageTitle);
     }

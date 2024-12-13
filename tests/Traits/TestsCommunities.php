@@ -9,7 +9,7 @@ use jfsullivan\MemberManager\Models\Status;
 
 trait TestsCommunities
 {
-    public function setupCommunity(User $user = null)
+    public function setupCommunity(?User $user = null)
     {
         // $this->community = Community::factory()->create([ 'user_id' => $user->id ]);
         $this->community = (empty($user)) ? Community::factory()->create() : Community::factory()->create(['user_id' => $user->id]);
@@ -22,7 +22,7 @@ trait TestsCommunities
 
         $community->members()->attach($user->id, [
             'role_id' => $memberRole->id,
-            'status_id' => $memberStatus->id
+            'status_id' => $memberStatus->id,
         ]);
 
         $user->current_community_id = $community->id;

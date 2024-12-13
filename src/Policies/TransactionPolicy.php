@@ -10,7 +10,7 @@ class TransactionPolicy
 
     public function viewAny($user, $transactionOwner, $community)
     {
-        if($transactionOwner->id === $user->id) {
+        if ($transactionOwner->id === $user->id) {
             return true;
         }
 
@@ -19,7 +19,7 @@ class TransactionPolicy
 
     public function view($user, $transaction, $community)
     {
-        if($transaction->user_id === $user->id) {
+        if ($transaction->user_id === $user->id) {
             return true;
         }
 

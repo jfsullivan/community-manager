@@ -12,17 +12,16 @@ use jfsullivan\UiKit\Livewire\Datatable\WithSelectables;
 use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class MemberBalancesPage extends Component
 {
-    use WithPerPagePagination;
-    use WithSelectables;
+    use BalanceFilter;
     use SearchFilter;
     use WithFilters;
+    use WithPerPagePagination;
+    use WithSelectables;
     use WithSorting;
-    use BalanceFilter;
 
     public $community_id;
 
@@ -33,7 +32,7 @@ class MemberBalancesPage extends Component
         $this->defaultSortDir = [
             'name' => 'asc',
             'balance' => 'desc',
-            'last_activity' => 'desc'
+            'last_activity' => 'desc',
         ];
     }
 
@@ -42,8 +41,8 @@ class MemberBalancesPage extends Component
     {
         $communityClass = app(config('community-manager.community_model'));
 
-        return ($this->community_id) 
-            ? $communityClass::find($this->community_id) 
+        return ($this->community_id)
+            ? $communityClass::find($this->community_id)
             : Auth::user()->currentCommunity;
     }
 
@@ -61,8 +60,8 @@ class MemberBalancesPage extends Component
 
                 break;
             case 'balance':
-                $query->orderByRaw('IFNULL(balance, 0) ' . $dir ?? $this->defaultSortDir['balance'])
-                        ->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
+                $query->orderByRaw('IFNULL(balance, 0) '.$dir ?? $this->defaultSortDir['balance'])
+                    ->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
 
                 break;
 
@@ -86,7 +85,7 @@ class MemberBalancesPage extends Component
             ->withFullName()
             ->withCommunityMembershipBalance($this->community)
             ->withCurrentMembership('community', $this->community->id)
-            ->whereHas('memberships', function($query) {
+            ->whereHas('memberships', function ($query) {
                 $query->where('model_id', $this->community->id)->where('model_type', 'community');
             })
             ->when($this->balanceFilter == 'zero', fn ($query) => $query->where('balance', '=', 0))

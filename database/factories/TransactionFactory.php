@@ -27,7 +27,7 @@ class TransactionFactory extends Factory
             'transacted_at' => now(),
             'organization_id' => Organization::factory(),
             'type_id' => TransactionType::factory(),
-            'amount' => -500
+            'amount' => -500,
         ];
     }
 }

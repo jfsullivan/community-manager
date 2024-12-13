@@ -9,15 +9,15 @@ use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
 
 class CommunityPolicy
 {
-    use HandlesAuthorization;
     use ChecksForFeatures;
+    use HandlesAuthorization;
 
-    public function before(Authenticatable $user, string $ability): bool|null
+    public function before(Authenticatable $user, string $ability): ?bool
     {
         if ($user->ownsCommunity(auth()->user()->currentCommunity)) {
             return true;
         }
-    
+
         return null;
     }
 

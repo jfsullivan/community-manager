@@ -16,12 +16,13 @@ use Livewire\Component;
 class MemberTransactionHistoryPage extends Component
 {
     use SearchFilter;
-    use WithFilters;
-    use WithSorting;
-    use WithPerPagePagination;
     use TransactionTypeFilter;
+    use WithFilters;
+    use WithPerPagePagination;
+    use WithSorting;
 
     public $community_id;
+
     public $user_id;
 
     public function mount()
@@ -61,8 +62,8 @@ class MemberTransactionHistoryPage extends Component
     {
         $communityClass = app(config('community-manager.community_model'));
 
-        return ($this->community_id) 
-            ? $communityClass::find($this->community_id) 
+        return ($this->community_id)
+            ? $communityClass::find($this->community_id)
             : Auth::user()->currentCommunity;
     }
 
@@ -71,8 +72,8 @@ class MemberTransactionHistoryPage extends Component
     {
         $userClass = app(config('community-manager.user_model'));
 
-        return ($this->user_id) 
-            ? $userClass::find($this->user_id) 
+        return ($this->user_id)
+            ? $userClass::find($this->user_id)
             : Auth::user();
     }
 
@@ -82,7 +83,7 @@ class MemberTransactionHistoryPage extends Component
         $transactionClass = app(config('community-manager.transaction_model'));
 
         return $transactionClass::query()
-            ->selectRaw("SUM( amount ) as total")
+            ->selectRaw('SUM( amount ) as total')
             ->where('community_id', $this->community->id)
             ->where('user_id', $this->user->id)
             ->groupBy('user_id')

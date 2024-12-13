@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Auth;
 use JamesMills\LaravelTimezone\Facades\Timezone;
 use jfsullivan\CommunityManager\Actions\Organizations\CreateTransaction;
 use jfsullivan\CommunityManager\Models\Transaction;
-use jfsullivan\CommunityManager\Models\TransactionType;
 use LivewireUI\Modal\ModalComponent;
-use Spatie\LaravelOptions\Options;
 
 class TransactionFormModal_OLD extends ModalComponent
 {
-    
-
     public $additional_validation = [];
+
     public $user_id;
+
     public $transaction_id;
+
     public $userNameValue;
+
     public $transferPartnerNameValue;
 
     public $transferDirection = false;
@@ -43,23 +43,17 @@ class TransactionFormModal_OLD extends ModalComponent
         $this->transferPartnerNameValue = $this->getTransferPartnerNameValue();
     }
 
-    
-
     // public function getTransactionProperty()
     // {
     //     return Transaction::find($this->transaction_id);
     // }
-
-    
 
     public function getTransferPartnerNameValue()
     {
         return ($this->transaction && $this->transaction->type->isTransferTransaction()) ? $this->transaction->transferPartner()->withFullName()->first()->full_name : '';
     }
 
-    public function determineInputsFromRelatedModel()
-    {
-    }
+    public function determineInputsFromRelatedModel() {}
 
     public function updatedStateTypeId($value)
     {
@@ -74,7 +68,7 @@ class TransactionFormModal_OLD extends ModalComponent
 
     public function isTransferTransaction()
     {
-        return in_array($this->state['type_id'], [ 5, 6 ]);
+        return in_array($this->state['type_id'], [5, 6]);
     }
 
     public function save(CreateTransaction $creator)

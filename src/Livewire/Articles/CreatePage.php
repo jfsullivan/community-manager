@@ -4,8 +4,8 @@ namespace jfsullivan\CommunityManager\Livewire\Articles;
 
 use App\Models\Pool;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Computed;
 use jfsullivan\ArticleManager\Livewire\CreatePage as ArticleCreatePage;
+use Livewire\Attributes\Computed;
 
 class CreatePage extends ArticleCreatePage
 {
@@ -16,8 +16,8 @@ class CreatePage extends ArticleCreatePage
     {
         $communityClass = app(config('community-manager.community_model'));
 
-        return ($this->community_id) 
-            ? $communityClass::find($this->community_id) 
+        return ($this->community_id)
+            ? $communityClass::find($this->community_id)
             : Auth::user()->currentCommunity;
     }
 
@@ -28,13 +28,13 @@ class CreatePage extends ArticleCreatePage
     }
 
     #[Computed]
-    public function layout() : string
+    public function layout(): string
     {
         return 'community-manager::components.layouts.community';
     }
 
     #[Computed]
-    public function pageTitle() : string
+    public function pageTitle(): string
     {
         return 'New Community Article';
     }
@@ -45,7 +45,7 @@ class CreatePage extends ArticleCreatePage
             ->title($this->pageTitle)
             ->layout($this->layout, [
                 // 'pool' => $this->pool,
-                'selectedToolbarItem' => 'news'
+                'selectedToolbarItem' => 'news',
             ]);
     }
 }

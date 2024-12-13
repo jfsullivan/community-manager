@@ -19,23 +19,22 @@ use jfsullivan\CommunityManager\Livewire\Accounting\Modals\UpdateTransactionModa
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\CommunityTransactionsPage;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberBalancesPage;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionsPage;
+use jfsullivan\CommunityManager\Livewire\Articles\CommunityArticlesIndexPage;
 use jfsullivan\CommunityManager\Livewire\CommunityMenu;
 use jfsullivan\CommunityManager\Livewire\Dashboard;
 use jfsullivan\CommunityManager\Livewire\Header;
-use jfsullivan\CommunityManager\Livewire\Modals\JoinCommunity;
 use jfsullivan\CommunityManager\Livewire\Memberships\Modals\AddMemberModal;
 use jfsullivan\CommunityManager\Livewire\Memberships\Modals\ImportMembersModal;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage;
+use jfsullivan\CommunityManager\Livewire\Modals\JoinCommunity;
 use jfsullivan\CommunityManager\Livewire\NavigationMenu;
 use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
 use jfsullivan\CommunityManager\Livewire\ResponsiveNavigationMenu;
-use jfsullivan\CommunityManager\Livewire\TestModal;
 use jfsullivan\CommunityManager\Mixins\CustomMoney;
 use jfsullivan\CommunityManager\Policies\CommunityArticlePolicy;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use jfsullivan\CommunityManager\Livewire\Articles\CommunityArticlesIndexPage;
 
 class CommunityManagerServiceProvider extends PackageServiceProvider
 {
@@ -139,7 +138,6 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
             // Accounting
             // $this->registerComponent('accounting.transactions.transaction-detail');
 
-
             // $this->registerComponent('profile-menu.link');
         });
     }
@@ -176,23 +174,21 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
 
             // Livewire::component('community-manager::livewire.accounting.member-transactions-page', MemberTransactionsPage::class);
 
-
             // Livewire::component('community-manager::community.create-community-form', CreateOrganizationForm::class);
             // Livewire::component('community-manager::community.update-community-name-form', UpdateOrganizationNameForm::class);
             // Livewire::component('community-manager::community.delete-community-form', DeleteOrganizationForm::class);
-
 
             // Livewire::component('community-manager::livewire.communities.admin.configuration.settings', Settings::class);
             // Livewire::component('community-manager::livewire.communities.admin.configuration.invitations', Invitations::class);
         });
     }
 
-    protected function registerComponent(string $component, string $name = null, $class = null)
+    protected function registerComponent(string $component, ?string $name = null, $class = null)
     {
-        if (!empty($class)) {
-            Blade::component('community-manager::' . $component, $class);
+        if (! empty($class)) {
+            Blade::component('community-manager::'.$component, $class);
         } else {
-            Blade::component('community-manager::components.' . $component, 'community-manager::' . $name ?? $component);
+            Blade::component('community-manager::components.'.$component, 'community-manager::'.$name ?? $component);
         }
     }
 }

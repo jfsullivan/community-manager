@@ -2,8 +2,6 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Filters;
 
-use jfsullivan\CommunityManager\Models\TransactionType;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 
 trait BalanceFilter

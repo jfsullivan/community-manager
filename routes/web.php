@@ -11,22 +11,18 @@ use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionHisto
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionsPage;
 use jfsullivan\CommunityManager\Livewire\Admin\Dashboard as CommunityAdminDashboard;
 // use jfsullivan\CommunityManager\Livewire\Articles\CommunityArticlesIndexPage;
-use jfsullivan\CommunityManager\Livewire\Articles\Index as ArticleIndex;
-use jfsullivan\CommunityManager\Livewire\Articles\Show as ArticleShow;
-use jfsullivan\CommunityManager\Livewire\Dashboard;
-use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
-use jfsullivan\MemberManager\Models\Invitation;
+use jfsullivan\CommunityManager\Livewire\Articles\EditPage as CommunityArticlesEditPage;
+use jfsullivan\CommunityManager\Livewire\Articles\IndexPage as CommunityArticlesIndexPage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\ArticleManagementPage as CommunityArticleManagementPage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\CreateArticlePage as CommunityArticleCreatePage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\EditArticlePage as CommunityArticleEditPage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\ShowArticlePage as CommunityArticleShowPage;
-
-use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage as CommunityMemberManagementPage;
-
-use jfsullivan\CommunityManager\Livewire\Articles\IndexPage as CommunityArticlesIndexPage;
+use jfsullivan\CommunityManager\Livewire\Articles\Show as ArticleShow;
 use jfsullivan\CommunityManager\Livewire\Articles\ShowPage as CommunityArticlesShowPage;
-
-use jfsullivan\CommunityManager\Livewire\Articles\EditPage as CommunityArticlesEditPage;
+use jfsullivan\CommunityManager\Livewire\Dashboard;
+use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage as CommunityMemberManagementPage;
+use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
+use jfsullivan\MemberManager\Models\Invitation;
 
 Route::group(['middleware' => config('jetstream.middleware', ['web'])], function () {
     // Route::middleware(['signed'])->group(function () {
@@ -99,7 +95,6 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
                 Route::get('members', CommunityMemberManagementPage::class)->name('members.index');
                 // Route::get('members', [MemberController::class, 'manage'])->name('members.manage');
                 //     Route::get('members/invitations', [InvitationController::class, 'index'])->name('members.invitations');
-
 
                 /**************************************************************************
                  * Community Accounting Routes - community.admin.accounting.*

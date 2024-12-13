@@ -20,7 +20,7 @@ class AddFundsModal extends ModalComponent
     {
         return true;
     }
-   
+
     #[Computed]
     public function community()
     {

@@ -3,7 +3,6 @@
 namespace jfsullivan\CommunityManager\Http\Controllers;
 
 use Illuminate\Http\Request;
-use jfsullivan\CommunityManager\Http\Controllers\Controller;
 use jfsullivan\CommunityManager\Models\Community;
 
 class CurrentCommunityController extends Controller
@@ -11,7 +10,6 @@ class CurrentCommunityController extends Controller
     /**
      * Update the authenticated user's current community.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)

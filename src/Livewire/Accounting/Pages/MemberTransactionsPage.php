@@ -12,19 +12,19 @@ use jfsullivan\UiKit\Livewire\Datatable\WithSelectables;
 use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class MemberTransactionsPage extends Component
 {
     use SearchFilter;
-    use WithFilters;
-    use WithSorting;
-    use WithSelectables;
-    use WithPerPagePagination;
     use TransactionTypeFilter;
+    use WithFilters;
+    use WithPerPagePagination;
+    use WithSelectables;
+    use WithSorting;
 
     public $community_id;
+
     public $user_id;
 
     public function mount()
@@ -64,8 +64,8 @@ class MemberTransactionsPage extends Component
     {
         $communityClass = app(config('community-manager.community_model'));
 
-        return ($this->community_id) 
-            ? $communityClass::find($this->community_id) 
+        return ($this->community_id)
+            ? $communityClass::find($this->community_id)
             : Auth::user()->currentCommunity;
     }
 
@@ -74,9 +74,9 @@ class MemberTransactionsPage extends Component
     {
         $userClass = app(config('community-manager.user_model'));
 
-        return ($this->user_id) 
-            ? $userClass::select('id','email','first_name','last_name')->withFullName()->findOrFail($this->user_id) 
-            : $userClass::select('id','email','first_name','last_name')->withFullName()->findOrFail(Auth::user()->id);
+        return ($this->user_id)
+            ? $userClass::select('id', 'email', 'first_name', 'last_name')->withFullName()->findOrFail($this->user_id)
+            : $userClass::select('id', 'email', 'first_name', 'last_name')->withFullName()->findOrFail(Auth::user()->id);
     }
 
     #[Computed]
@@ -85,7 +85,7 @@ class MemberTransactionsPage extends Component
         $transactionClass = app(config('community-manager.transaction_model'));
 
         return $transactionClass::query()
-            ->selectRaw("SUM( amount ) as total")
+            ->selectRaw('SUM( amount ) as total')
             ->where('community_id', $this->community->id)
             ->where('user_id', $this->user->id)
             ->groupBy('user_id')

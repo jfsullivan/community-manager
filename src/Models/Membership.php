@@ -16,12 +16,12 @@ class Membership extends MemberManagerMembership
         $query->withExpression('balances', function ($query) use ($community) {
             $query->from('transactions')
                 ->select('user_id')
-                ->selectRaw("SUM( transactions.amount ) as balance")
+                ->selectRaw('SUM( transactions.amount ) as balance')
                 ->where('community_id', $community->id)
                 ->groupBy('user_id');
         })
-        ->leftJoin('balances', 'memberships.user_id', '=', 'balances.user_id')
-        ->addSelect('balances.*');
+            ->leftJoin('balances', 'memberships.user_id', '=', 'balances.user_id')
+            ->addSelect('balances.*');
     }
 
     /**************************************************************************
@@ -32,7 +32,7 @@ class Membership extends MemberManagerMembership
         return Attribute::make(
             get: fn ($value) => Money::ofMinor($value ?? 0, 'USD'),
             set: function ($value) {
-                return ($value instanceOf Money) 
+                return ($value instanceof Money)
                         ? $value->getMinorAmount()->toInt()
                         : Money::of($value, 'USD')->getMinorAmount()->toInt();
             },

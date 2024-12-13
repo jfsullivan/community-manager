@@ -4,10 +4,8 @@ namespace jfsullivan\CommunityManager\Livewire\Accounting\Traits;
 
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\CommunityManager\Livewire\Accounting\Forms\TransactionForm;
-use JamesMills\LaravelTimezone\Facades\Timezone;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
 use Spatie\LaravelOptions\Options;
 
 trait HasTransactionForm
@@ -49,7 +47,7 @@ trait HasTransactionForm
     #[Computed]
     public function transactionTypes()
     {
-        return Options::forModels(TransactionType::orderBy('name'))->append(fn(TransactionType $type) => ['slug' => $type->slug])->toArray();
+        return Options::forModels(TransactionType::orderBy('name'))->append(fn (TransactionType $type) => ['slug' => $type->slug])->toArray();
     }
 
     public function getCustomValidation()
@@ -79,7 +77,7 @@ trait HasTransactionForm
 
     public function searchTransferUsers($searchTerm)
     {
-        return Options::forModels($this->usersSearchQuery($searchTerm), label: 'full_name')->filter(fn($user) => $user->id !== $this->form->user_id)->toArray();
+        return Options::forModels($this->usersSearchQuery($searchTerm), label: 'full_name')->filter(fn ($user) => $user->id !== $this->form->user_id)->toArray();
     }
 
     public function render()

@@ -13,7 +13,7 @@ class TransactionTypeFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'direction' => -1
+            'direction' => -1,
         ];
     }
 }

@@ -18,9 +18,9 @@ use Livewire\WithFileUploads;
 
 class EditPage extends Component
 {
-    use WithFileUploads;
     use HasAttachments;
     use UsesRouteDetails;
+    use WithFileUploads;
 
     public $community_id;
 
@@ -37,8 +37,8 @@ class EditPage extends Component
     {
         $communityClass = app(config('community-manager.community_model'));
 
-        return ($this->community_id) 
-            ? $communityClass::find($this->community_id) 
+        return ($this->community_id)
+            ? $communityClass::find($this->community_id)
             : Auth::user()->currentCommunity;
     }
 
@@ -49,13 +49,13 @@ class EditPage extends Component
     }
 
     #[Computed]
-    public function layout() : string
+    public function layout(): string
     {
         return 'community-manager::components.layouts.community';
     }
 
     #[Computed]
-    public function pageTitle() : string
+    public function pageTitle(): string
     {
         return 'Community Articles - Edit Article';
     }
@@ -116,7 +116,7 @@ class EditPage extends Component
         }
 
         $this->validate();
-        
+
         $this->form->start_at = Timezone::convertToLocal(Carbon::now(), 'Y-m-d H:i:s');
 
         $this->article = $this->form->update();
@@ -143,7 +143,7 @@ class EditPage extends Component
         return view('article-manager::livewire.form')
             ->layout($this->layout, [
                 'community' => $this->community,
-                'selectedToolbarItem' => 'news'
+                'selectedToolbarItem' => 'news',
             ])
             ->title($this->pageTitle);
     }

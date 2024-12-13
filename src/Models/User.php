@@ -11,10 +11,10 @@ use jfsullivan\CommunityManager\Traits\OwnsCommunities;
 
 class User extends Authenticatable
 {
-    use HasFactory;
-    use OwnsCommunities;
     use HasCommunityMemberships;
+    use HasFactory;
     use Notifiable;
+    use OwnsCommunities;
 
     protected $fillable = ['name', 'email'];
 

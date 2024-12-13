@@ -8,7 +8,7 @@ class DeleteTransactionModal extends DeleteConfirmationModal
 {
     public $modelType = 'transaction';
 
-    public function deleteRecords() : bool
+    public function deleteRecords(): bool
     {
         $transactionClass = app(config('community-manager.transaction_model'));
 
