@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('member_roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug');
+            $table->string('color');
+            $table->nullableTimestamps();
+        });
+
+        DB::table('member_roles')->insert([
+            ['name' => 'Admin', 'slug' => 'admin', 'color' => 'red']
+        ]);
+
+        DB::table('member_roles')->insert([
+            ['name' => 'Member', 'slug' => 'member', 'color' => 'blue']
+        ]);
+    }
+};

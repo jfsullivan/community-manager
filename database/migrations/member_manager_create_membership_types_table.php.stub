@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('membership_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug');
+            $table->string('color');
+            $table->nullableTimestamps();
+        });
+
+        DB::table('membership_types')->insert([
+            ['name' => 'Lifetime', 'slug' => 'lifetime', 'color' => 'yellow']
+        ]);
+
+        DB::table('membership_types')->insert([
+            ['name' => 'Standard', 'slug' => 'standard', 'color' => 'green']
+        ]);
+    }
+};

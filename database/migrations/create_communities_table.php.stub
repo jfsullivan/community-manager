@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('communities', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable()->constrained()->onUpdate('cascade')->onDelete('set null');
+            $table->string('name')->required();
+            $table->longText('description')->nullable();
+            $table->longText('welcome_message')->nullable();
+            $table->integer('join_id');
+            $table->text('password');
+            $table->string('timezone');
+            $table->boolean('track_member_balances')->default(false);
+            $table->timestamps();
+        });
+    }
+};

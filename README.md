@@ -1,48 +1,31 @@
-# :package_description
+# A package to manage a community or organization
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/jfsullivan/community-manager.svg?style=flat-square)](https://packagist.org/packages/jfsullivan/community-manager)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/jfsullivan/community-manager/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/jfsullivan/community-manager/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/jfsullivan/community-manager/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/jfsullivan/community-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/jfsullivan/community-manager.svg?style=flat-square)](https://packagist.org/packages/jfsullivan/community-manager)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
 This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require jfsullivan/community-manager
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
+php artisan vendor:publish --tag="community-manager-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-config"
+php artisan vendor:publish --tag="community-manager-config"
 ```
 
 This is the contents of the published config file:
@@ -55,14 +38,67 @@ return [
 Optionally, you can publish the views using
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-views"
+php artisan vendor:publish --tag="community-manager-views"
 ```
 
 ## Usage
 
+### Owning a Community
+Your Eloquent model, typically the `User` model, that owns a community should use the `jfsullivan\CommunityManager\Traits\OwnsCommunities` trait.
+
+Here's an example of how to implement the trait:
+
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+namespace App\Models;
+
+use jfsullivan\CommunityManager\Traits\OwnsCommunities;
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    use OwnsCommunities;
+}
+```
+
+### Community Memberships
+Your Eloquent model, typically the `User` model, that has community memberships should use the `jfsullivan\CommunityManager\Traits\HasCommunityMemberships` trait.
+
+Here's an example of how to implement the trait:
+
+```php
+namespace App\Models;
+
+use jfsullivan\CommunityManager\Traits\HasCommunityMemberships;
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    use HasCommunityMemberships;
+}
+```
+
+Your models' migrations should have a field to save the generated slug to.
+
+With its migration:
+
+```php
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateYourEloquentModelTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('your_eloquent_models', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('slug'); // Field name same as your `saveSlugsTo`
+            $table->string('name');
+            $table->timestamps();
+        });
+    }
+}
+
 ```
 
 ## Testing
@@ -75,17 +111,9 @@ composer test
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Jack Sullivan](https://github.com/jfsullivan)
 - [All Contributors](../../contributors)
 
 ## License
