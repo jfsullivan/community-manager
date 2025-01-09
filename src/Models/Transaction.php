@@ -37,7 +37,6 @@ class Transaction extends Model
 
     // protected $appends = ['absolute_amount'];
 
-    
     /**************************************************************************
      * Model Relationships
     ***************************************************************************/
@@ -78,7 +77,7 @@ class Transaction extends Model
         return $query->where('user_id', $user->id);
     }
 
-    public function scopeSearch($query, string $terms = null)
+    public function scopeSearch($query, ?string $terms = null)
     {
         collect(explode(' ', $terms))->filter()->each(function ($term) use ($query) {
             $term = '%'.$term.'%';
@@ -98,7 +97,7 @@ class Transaction extends Model
         return Attribute::make(
             get: fn ($value) => Money::ofMinor($value, 'USD'),
             set: function ($value) {
-                return ($value instanceOf Money) 
+                return ($value instanceof Money)
                         ? $value->getMinorAmount()->toInt()
                         : Money::of($value, 'USD')->getMinorAmount()->toInt();
             },
@@ -124,8 +123,6 @@ class Transaction extends Model
             get: fn ($value, $attributes) => Money::ofMinor($attributes['amount'], 'USD')->formatWith($formatter),
         );
     }
-
-
 
     // public function getAbsoluteAmountAttribute()
     // {

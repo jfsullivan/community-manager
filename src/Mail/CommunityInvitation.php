@@ -6,8 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use jfsullivan\CommunityManager\Models\Community;
-use jfsullivan\MemberManager\Models\Invitation;
 use jfsullivan\MemberManager\Mail\BaseMailable;
+use jfsullivan\MemberManager\Models\Invitation;
 
 class CommunityInvitation extends BaseMailable implements ShouldQueue
 {

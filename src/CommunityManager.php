@@ -2,6 +2,4 @@
 
 namespace jfsullivan\CommunityManager;
 
-class CommunityManager
-{
-}
+class CommunityManager {}

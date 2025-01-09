@@ -2,23 +2,21 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Modals;
 
-use Illuminate\Support\Facades\Auth;
-// use jfsullivan\MemberManager\Actions\JoinCommunity as JoinCommunityAction;
-use Illuminate\Request;
 use Illuminate\Support\Carbon;
-use jfsullivan\CommunityManager\Forms\JoinCommunityForm;
+// use jfsullivan\MemberManager\Actions\JoinCommunity as JoinCommunityAction;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use jfsullivan\CommunityManager\Models\Membership;
 use jfsullivan\MemberManager\Models\Role;
 use jfsullivan\MemberManager\Models\Type;
 use Livewire\Attributes\Rule;
 use LivewireUI\Modal\ModalComponent;
-use Illuminate\Support\Str;
 
 class JoinCommunity extends ModalComponent
 {
     #[Rule('required|min:5', as: 'Community ID', onUpdate: false)]
     public $join_id = '';
- 
+
     #[Rule('required|string', as: 'Community Password', onUpdate: false)]
     public $password = '';
 
@@ -52,11 +50,13 @@ class JoinCommunity extends ModalComponent
 
         if (! $community) {
             $this->addError('form', 'Unable to find a community with that ID and Password combination.');
+
             return;
         }
 
         if ($community->members()->where('user_id', Auth::user()->id)->exists()) {
             $this->addError('form', 'You are already a member of that community.');
+
             return;
         }
 
@@ -79,7 +79,7 @@ class JoinCommunity extends ModalComponent
         //     'created_at' => Carbon::now(),
         // ]);
 
-        if($community->members()->where('user_id', Auth::user()->id)->exists()) {
+        if ($community->members()->where('user_id', Auth::user()->id)->exists()) {
             $this->dispatch('refresh-community-list');
 
             $this->dispatch('notify',

@@ -43,7 +43,7 @@ class IndexPage extends ArticleIndexPage
         return view('community-manager::livewire.articles.index-page')
             ->layout($this->layout, [
                 'community' => $this->community,
-                'selectedToolbarItem' => 'news'
+                'selectedToolbarItem' => 'news',
             ])
             ->title($this->pageTitle);
     }

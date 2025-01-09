@@ -25,7 +25,7 @@ return [
      * The fully qualified class name of the community transaction policy.
      */
     'transaction_policy' => jfsullivan\CommunityManager\Policies\TransactionPolicy::class,
-    
+
     /*
      * The path to the admin layout for the community.
      */

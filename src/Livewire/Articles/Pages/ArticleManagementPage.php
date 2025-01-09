@@ -20,7 +20,7 @@ class ArticleManagementPage extends ArticleManagementPageComponent
         return config('community-manager.admin_layout');
     }
 
-    // public function addMemberModal(): string 
+    // public function addMemberModal(): string
     // {
     //     return 'community-manager::memberships.modals.add-member-modal';
     // }
@@ -35,8 +35,8 @@ class ArticleManagementPage extends ArticleManagementPageComponent
     {
         $communityClass = app(config('community-manager.community_model'));
 
-        return ($this->community_id) 
-            ? $communityClass::find($this->community_id) 
+        return ($this->community_id)
+            ? $communityClass::find($this->community_id)
             : Auth::user()->currentCommunity;
     }
 

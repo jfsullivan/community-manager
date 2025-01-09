@@ -4,7 +4,6 @@ namespace jfsullivan\CommunityManager\Livewire\Articles\Pages;
 
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\ArticleManager\Livewire\Pages\ShowArticlePage as BaseShowArticlePage;
-use jfsullivan\ArticleManager\Models\Article;
 use Livewire\Attributes\Computed;
 
 class ShowArticlePage extends BaseShowArticlePage

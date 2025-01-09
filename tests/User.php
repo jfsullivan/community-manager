@@ -2,18 +2,18 @@
 
 namespace jfsullivan\CommunityManager\Tests;
 
-use jfsullivan\CommunityManager\Database\Factories\UserFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use jfsullivan\CommunityManager\Traits\HasCommunities;
-use jfsullivan\CommunityManager\Traits\CanBeSiteAdmin;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use jfsullivan\CommunityManager\Database\Factories\UserFactory;
+use jfsullivan\CommunityManager\Traits\CanBeSiteAdmin;
+use jfsullivan\CommunityManager\Traits\HasCommunities;
 
 class User extends Authenticatable
 {
-    use HasFactory;
-    use HasCommunities;
     use CanBeSiteAdmin;
+    use HasCommunities;
+    use HasFactory;
     use Notifiable;
 
     protected $fillable = ['name', 'email'];

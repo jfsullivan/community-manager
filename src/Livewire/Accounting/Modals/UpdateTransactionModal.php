@@ -56,7 +56,7 @@ class UpdateTransactionModal extends ModalComponent
     public function save()
     {
         $this->validate();
-        
+
         $transaction = $this->form->update();
 
         $this->closeModal();

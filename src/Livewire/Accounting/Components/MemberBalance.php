@@ -2,11 +2,11 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Components;
 
+use Brick\Money\Money;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Brick\Money\Money;
 
 class MemberBalance extends Component
 {
@@ -25,8 +25,8 @@ class MemberBalance extends Component
     {
         $communityClass = app(config('community-manager.community_model'));
 
-        return ($this->community_id) 
-            ? $communityClass::find($this->community_id) 
+        return ($this->community_id)
+            ? $communityClass::find($this->community_id)
             : Auth::user()->currentCommunity;
     }
 
@@ -35,8 +35,8 @@ class MemberBalance extends Component
     {
         $userClass = app(config('community-manager.user_model'));
 
-        return ($this->user_id) 
-            ? $userClass::find($this->user_id) 
+        return ($this->user_id)
+            ? $userClass::find($this->user_id)
             : Auth::user();
     }
 
@@ -46,13 +46,13 @@ class MemberBalance extends Component
         $transactionClass = app(config('community-manager.transaction_model'));
 
         $total = $transactionClass::query()
-            ->selectRaw("SUM( amount ) as total")
+            ->selectRaw('SUM( amount ) as total')
             ->where('community_id', $this->community->id)
             ->where('user_id', $this->user->id)
             ->groupBy('user_id')
             ->value('total');
 
-            return Money::ofMinor($total ?? 0, $this->community->currency);
+        return Money::ofMinor($total ?? 0, $this->community->currency);
     }
 
     #[On('transaction-created')]

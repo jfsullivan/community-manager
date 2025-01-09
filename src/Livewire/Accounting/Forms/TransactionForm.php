@@ -1,7 +1,8 @@
 <?php
- 
- namespace jfsullivan\CommunityManager\Livewire\Accounting\Forms;
 
+namespace jfsullivan\CommunityManager\Livewire\Accounting\Forms;
+
+use Brick\Money\Money;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use JamesMills\LaravelTimezone\Facades\Timezone;
@@ -9,8 +10,7 @@ use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
-use Brick\Money\Money;
- 
+
 class TransactionForm extends Form
 {
     public $transaction;
@@ -39,16 +39,16 @@ class TransactionForm extends Form
     {
         $this->transaction = $transaction;
 
-        $this->id =  $this->transaction->id;
-        $this->community_id =  $this->transaction->community_id ?? Auth::user()->current_community_id;
-        $this->type_id =  $this->transaction->type_id;
-        $this->user_id =  $this->transaction->user_id;
-        $this->transfer_user_id =  $this->transaction->transfer_user_id;
-        $this->transacted_at =  Timezone::convertToLocal($this->transaction->transacted_at, 'Y-m-d H:i:s');
-        $this->description =  $this->transaction->description;
+        $this->id = $this->transaction->id;
+        $this->community_id = $this->transaction->community_id ?? Auth::user()->current_community_id;
+        $this->type_id = $this->transaction->type_id;
+        $this->user_id = $this->transaction->user_id;
+        $this->transfer_user_id = $this->transaction->transfer_user_id;
+        $this->transacted_at = Timezone::convertToLocal($this->transaction->transacted_at, 'Y-m-d H:i:s');
+        $this->description = $this->transaction->description;
 
         // str_replace($amount->getCurrency()->getSymbol(), '', $amount->formatTo('en_US'))
-        $this->amount =  $this->transaction->absoluteAmountValue;
+        $this->amount = $this->transaction->absoluteAmountValue;
     }
 
     public function store()

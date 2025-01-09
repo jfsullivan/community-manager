@@ -8,21 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 use jfsullivan\CommunityManager\Mail\Templates\CommunityInvitationMailTemplate;
 // use jfsullivan\ArticleManager\Traits\HasArticles;
 // use jfsullivan\BrainTools\Mail\Templates\CommunityInvitationMailTemplate;
-use jfsullivan\CommunityManager\Traits\TracksMemberBalances;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
+use jfsullivan\CommunityManager\Traits\TracksMemberBalances;
 use jfsullivan\MemberManager\Traits\HasMembers;
 use jfsullivan\MemberManager\Traits\InvitesMembers;
-use jfsullivan\CommunityManager\Models\Membership;
 
 class Community extends Model
 {
-    use TracksMemberBalances;
     use ChecksForFeatures;
-
-    use InvitesMembers;
     // use HasArticles;
     use HasFactory;
     use HasMembers;
+
+    use InvitesMembers;
+    use TracksMemberBalances;
 
     protected $fillable = ['name', 'user_id', 'join_id', 'password', 'track_member_balances', 'timezone'];
 
@@ -47,8 +46,8 @@ class Community extends Model
     public function memberships()
     {
         return $this->morphMany(Membership::class, 'model');
-            // ->leftJoin('users', 'memberships.user_id', 'users.id')
-            // ->withFullName();
+        // ->leftJoin('users', 'memberships.user_id', 'users.id')
+        // ->withFullName();
     }
 
     /**************************************************************************
@@ -75,7 +74,7 @@ class Community extends Model
     public function purge()
     {
         $this->owner()->where('current_community_id', $this->id)
-                ->update(['current_community_id' => null]);
+            ->update(['current_community_id' => null]);
 
         $this->users()->where('current_community_id', $this->id)
             ->update(['current_community_id' => null]);
@@ -129,9 +128,9 @@ class Community extends Model
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => trim(collect(explode(' ', $attributes['name']))
-                    ->map(function ($segment) {
-                        return mb_substr($segment, 0, 1);
-                    })->join('')),
+                ->map(function ($segment) {
+                    return mb_substr($segment, 0, 1);
+                })->join('')),
         );
     }
 }

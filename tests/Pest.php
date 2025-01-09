@@ -34,7 +34,7 @@ function createRoute(string $name, string $uri)
     })->name($name);
 }
 
-function createCommunity(User $user = null)
+function createCommunity(?User $user = null)
 {
     $community = (empty($user))
             ? Community::factory()->create()

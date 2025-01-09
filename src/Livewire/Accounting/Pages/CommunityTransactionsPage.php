@@ -2,19 +2,17 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Pages;
 
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\UiKit\Livewire\Datatable\Filters\SearchFilter;
 use jfsullivan\UiKit\Livewire\Datatable\WithFilters;
 use jfsullivan\UiKit\Livewire\Datatable\WithPerPagePagination;
-use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use jfsullivan\UiKit\Livewire\Datatable\WithSelectables;
+use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Livewire\Attributes\Url;
 
 class CommunityTransactionsPage extends Component
 {
@@ -81,7 +79,7 @@ class CommunityTransactionsPage extends Component
         $transactionClass = app(config('community-manager.transaction_model'));
 
         return $transactionClass::query()
-            ->selectRaw("SUM( amount ) as total")
+            ->selectRaw('SUM( amount ) as total')
             ->where('community_id', $this->community->id)
             ->get();
     }

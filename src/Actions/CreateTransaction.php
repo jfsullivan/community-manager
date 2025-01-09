@@ -14,7 +14,6 @@ class CreateTransaction
      * Validate and create a new transaction for the given community.
      *
      * @param  mixed  $user
-     * @param  array  $input
      * @return mixed
      */
     public function create($user, array $input, array $additional_validation = [])
@@ -36,7 +35,7 @@ class CreateTransaction
 
         $transactionClass = app(config('community-manager.transaction_model'));
         $transaction = $transactionClass::updateOrCreate(
-            [ 'id' => $input['id'] ?? null ],
+            ['id' => $input['id'] ?? null],
             $input
         );
 
