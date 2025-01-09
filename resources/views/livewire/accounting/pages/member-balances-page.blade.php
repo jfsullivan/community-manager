@@ -23,7 +23,7 @@
             </x-slot>
         </x-heading.page-heading>
     </div>
-                
+
     <div class="flex flex-col w-full">
         <x-infolist class="divide-y divide-gray-200" searchable selectable sortable :total-records="$this->records->total()" :records-shown="$this->records->count()">
             <x-slot name="bulkActions">
@@ -89,7 +89,7 @@
 
                         <x-infolist.item.column class="justify-end col-span-4 md:col-span-3">
                             <div class="flex items-center space-x-2 sm:space-x-4">
-                                <x-money.formatted :amount="$member->balance" class="font-medium" />
+                                <x-money :amount="$member->balance" class="font-medium" formatted />
                                 @if(Gate::allows('create-community-transaction', $this->community))
                                     <x-button.circular class="bg-primary-50 group-hover:bg-primary-200" wire:click="$dispatch('openModal', { component: 'community-manager::accounting.modals.create-transaction-modal', arguments: { user_id: {{ $member->id }} } })">
                                         <x-apexicon-open.plus class="w-4 h-4 stroke-2 sm:w-5 sm:h-5 text-primary-700" />

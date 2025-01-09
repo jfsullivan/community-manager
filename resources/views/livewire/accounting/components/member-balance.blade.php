@@ -23,11 +23,11 @@
         ])
     >
         @if($formatted)
-            <x-money.formatted :amount="$this->memberBalance" :class="$class" />
-        @else 
+            <x-money :amount="$this->memberBalance" formatted :class="$class" />
+        @else
             <x-money :amount="$this->memberBalance" :class="$class" />
         @endif
-        
+
         @if($selectable)
             <x-apexicon-open.arrow-right class="w-3 h-3 ml-0.5 stroke-2" />
         @endif

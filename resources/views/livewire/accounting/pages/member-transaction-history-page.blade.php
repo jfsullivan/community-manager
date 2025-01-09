@@ -50,7 +50,7 @@
                         </x-slot>
                     </x-infolist.heading>
                 </x-slot>
-    
+
                 @forelse ($this->records as $transaction)
                     <x-infolist.item wire:key="transaction-{{ $transaction->id }}" :key="$transaction->id">
                         <x-slot name="columns">
@@ -77,13 +77,13 @@
                                 <x-infolist.item.column class="flex justify-end lg:justify-start text-sm">
                                     <x-community-manager::accounting.transactions.transaction-type-detail :transaction="$transaction" />
                                 </x-infolist.item.column>
-        
+
                                 <x-infolist.item.column class="flex justify-end text-xs sm:text-sm">
-                                    <x-money.formatted :amount="$transaction->amount" />
+                                    <x-money :amount="$transaction->amount" formatted />
                                 </x-infolist.item.column>
                             </div>
                         </x-slot>
-    
+
                         <x-slot name="actions">
                             <div class="w-10 sm:w-16 flex justify-center items-center">
                                 @if(Gate::any(['edit-community-transaction', 'delete-community-transaction'], [$this->community]))
@@ -91,19 +91,19 @@
                                         <x-slot name="trigger">
                                             <x-apexicon-open.dots-vertical class="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-500 stroke-2" />
                                         </x-slot>
-    
+
                                         @if(Gate::allows('edit-community-transaction', $this->community))
                                             <x-dropdown.link type="button" class="flex items-center space-x-2" wire:click="$dispatch('openModal', { component: 'community-manager::accounting.modals.update-transaction-modal', arguments: { transaction_id: {{ $transaction->id }} } })">
                                                 <x-apexicon-open.edit class="w-5 h-5 text-gray-400 stroke-2" /><span>Edit Transaction</span>
                                             </x-dropdown.link>
                                         @endif
-    
+
                                         @if(Gate::allows('delete-community-transaction', [$this->community]))
                                             <x-dropdown.link type="button" class="flex items-center space-x-2" wire:click="$dispatch('openModal', { component: 'community-manager::accounting.modals.delete-transaction-modal', arguments: { record_id: {{ $transaction->id }} } })">
                                                 <x-apexicon-open.trash class="w-5 h-5 text-gray-400 stroke-2"/><span>Delete Transaction</span>
                                             </x-dropdown.link>
                                         @endif
-    
+
                                     </x-dropdown>
                                 @endif
                             </div>

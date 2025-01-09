@@ -72,7 +72,7 @@
                             </x-infolist.item.column>
 
                             <x-infolist.item.column class="flex justify-end text-xs sm:text-sm">
-                                <x-money.formatted :amount="$transaction->amount" />
+                                <x-money :amount="$transaction->amount" formatted />
                             </x-infolist.item.column>
                         </div>
                     </x-slot>

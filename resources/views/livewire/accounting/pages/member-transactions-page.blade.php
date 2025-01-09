@@ -9,7 +9,7 @@
         <x-breadcrumbs.dividers.chevron />
         <x-breadcrumbs.item>{{ $this->user->full_name }} Transactions</x-breadcrumbs.item>
     </x-breadcrumbs>
-    
+
     <div class="flex justify-center w-full bg-white border-b border-gray-200">
         <x-heading.page-heading class="w-full px-2">
             <x-slot name="avatar">
@@ -49,7 +49,7 @@
                     <x-apexicon-open.trash class="w-5 h-5 text-gray-400 stroke-2 group-hover:text-gray-500"/><span class="whitespace-nowrap">Delete Selected Transactions</span>
                 </x-dropdown.link>
             </x-slot>
-            
+
             <x-slot name="heading">
                 <x-infolist.heading>
                     <x-infolist.heading.column sort-key="date" sort-direction="{{ $sorts['date'] ?? null }}" class="justify-start col-span-2">Date</x-infolist.heading.column>
@@ -92,7 +92,7 @@
                             </x-infolist.item.column>
 
                             <x-infolist.item.column class="flex justify-end text-xs sm:text-sm">
-                                <x-money.formatted :amount="$transaction->amount" />
+                                <x-money :amount="$transaction->amount" formatted />
                             </x-infolist.item.column>
                         </div>
                     </x-slot>
