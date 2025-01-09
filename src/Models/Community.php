@@ -16,10 +16,10 @@ use jfsullivan\MemberManager\Traits\InvitesMembers;
 class Community extends Model
 {
     use ChecksForFeatures;
+
     // use HasArticles;
     use HasFactory;
     use HasMembers;
-
     use InvitesMembers;
     use TracksMemberBalances;
 
