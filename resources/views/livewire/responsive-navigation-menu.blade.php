@@ -1,5 +1,5 @@
 <!-- Slide Over Navigation Menu -->
-<x-slide-over id="navigation-menu" width="sm" class="bg-white">
+<x-slide-over id="navigation-menu" width="sm" class="bg-white pwa-safe-area-adjustment">
     <x-slot name="trigger">
         <button x-on:click="$dispatch('open-navigation-menu-slide-over')"
             class="inline-flex items-center justify-center p-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100/10 focus:outline-none focus:bg-transparent">
@@ -31,13 +31,13 @@
                             @livewire('community-manager::accounting.components.member-balance')
                         </div>
                     @endcan
-        
+
                     @can('add-funds', Auth::user()->currentCommunity)
                         <x-community-manager::accounting.add-funds-button size="2xs" />
                     @endcan
                 </div>
             </div>
-            
+
             <!-- Community Dashboard -->
             <x-community-manager::dropdown-link url="{{ route('community.dashboard') }}" show-arrow>
                 <x-slot name="icon"><x-apexicon-open.home class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
@@ -70,7 +70,7 @@
             <x-community-manager::responsive-navigation-menu.section-header>
                 {{ __('community-manager::labels.switch-community') }}
             </x-community-manager::responsive-navigation-menu.section-header>
-    
+
             @foreach (Auth::user()->allCommunities() as $community)
                 <x-community-manager::switchable-community :community="$community" />
             @endforeach
