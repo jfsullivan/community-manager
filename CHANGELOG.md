@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 0.1.2 - 2025-01-30
+
+PWA Safe Area adjustment to prevent the navigation slide-over from overlapping with the IOS safe area on mobile devices.
+
 ## 0.1.1 - 2025-01-09
 
 Fix money components
