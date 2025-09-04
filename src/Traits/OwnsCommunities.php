@@ -14,6 +14,10 @@ trait OwnsCommunities
 
     public function ownsCommunity($community)
     {
+        if(is_null($community)) {
+            return false;
+        }
+
         return $this->id == $community->user_id;
     }
 }
