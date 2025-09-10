@@ -1,11 +1,11 @@
 <?php
 
-namespace jfsullivan\BrainTools\Database\Factories;
+namespace jfsullivan\CommunityManager\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use jfsullivan\BrainTools\Models\Organization;
-use jfsullivan\BrainTools\Models\Transaction;
-use jfsullivan\BrainTools\Models\TransactionType;
+use jfsullivan\CommunityManager\Models\Community;
+use jfsullivan\CommunityManager\Models\Transaction;
+use jfsullivan\CommunityManager\Models\TransactionType;
 
 class TransactionFactory extends Factory
 {
@@ -23,11 +23,15 @@ class TransactionFactory extends Factory
      */
     public function definition()
     {
+        $userClass = config('community-manager.user_model', 'jfsullivan\\CommunityManager\\Tests\\User');
+
         return [
             'transacted_at' => now(),
-            'organization_id' => Organization::factory(),
+            'community_id' => Community::factory(),
             'type_id' => TransactionType::factory(),
+            'user_id' => $userClass::factory(),
             'amount' => -500,
+            'description' => $this->faker->sentence(),
         ];
     }
 }

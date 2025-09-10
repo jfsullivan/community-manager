@@ -18,6 +18,7 @@ class CommunityFactory extends Factory
             'user_id' => $userClass::factory(),
             'join_id' => $this->faker->randomNumber(6),
             'password' => bin2hex(random_bytes(6)),
+            'timezone' => $this->faker->timezone(),
             'track_member_balances' => $this->faker->boolean(50),
         ];
     }

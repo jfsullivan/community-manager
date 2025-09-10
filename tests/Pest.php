@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\User;
 use jfsullivan\MemberManager\Models\Role;
-use jfsullivan\MemberManager\Models\Status;
+use jfsullivan\MemberManager\Models\Type;
 
 uses(LazilyRefreshDatabase::class);
 uses(jfsullivan\CommunityManager\Tests\TestCase::class)->in('Feature', 'Unit');
@@ -46,11 +46,11 @@ function createCommunity(?User $user = null)
 function addCommunityMember(Community $community, User $user)
 {
     $memberRole = Role::where('slug', 'member')->first();
-    $memberStatus = Status::where('slug', 'active')->first();
+    $memberType = Type::where('slug', 'active')->first();
 
     $community->members()->attach($user->id, [
         'role_id' => $memberRole->id,
-        'status_id' => $memberStatus->id,
+        'type_id' => $memberType->id,
     ]);
 
     $user->current_community_id = $community->id;
