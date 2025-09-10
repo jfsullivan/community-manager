@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\UiKit\Livewire\Datatable\Filters\SearchFilter;
-use jfsullivan\UiKit\Livewire\Datatable\WithFilters;
 use jfsullivan\UiKit\Livewire\Datatable\WithCursorPagination;
+use jfsullivan\UiKit\Livewire\Datatable\WithFilters;
 use jfsullivan\UiKit\Livewire\Datatable\WithSelectables;
 use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use Livewire\Attributes\Computed;
@@ -18,12 +18,13 @@ class CommunityTransactionsPage extends Component
 {
     use SearchFilter;
     use TransactionTypeFilter;
-    use WithFilters;
     use WithCursorPagination;
+    use WithFilters;
     use WithSelectables;
     use WithSorting;
 
     public $community_id;
+
     public $cursor;
 
     public function mount()

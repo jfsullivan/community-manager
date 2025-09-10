@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 0.1.4 - 2025-09-10
+
+**Full Changelog**: https://github.com/jfsullivan/community-manager/compare/v0.1.3...v0.1.4
+
 ## 0.1.3 - 2025-09-04
 
 Fix issue when the user doesn't have a current community, which occurs after initial account creation
