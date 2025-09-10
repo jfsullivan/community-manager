@@ -7,7 +7,7 @@ use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\UiKit\Livewire\Datatable\Filters\SearchFilter;
 use jfsullivan\UiKit\Livewire\Datatable\WithFilters;
-use jfsullivan\UiKit\Livewire\Datatable\WithPerPagePagination;
+use jfsullivan\UiKit\Livewire\Datatable\WithCursorPagination;
 use jfsullivan\UiKit\Livewire\Datatable\WithSelectables;
 use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use Livewire\Attributes\Computed;
@@ -19,11 +19,12 @@ class CommunityTransactionsPage extends Component
     use SearchFilter;
     use TransactionTypeFilter;
     use WithFilters;
-    use WithPerPagePagination;
+    use WithCursorPagination;
     use WithSelectables;
     use WithSorting;
 
     public $community_id;
+    public $cursor;
 
     public function mount()
     {
@@ -109,7 +110,7 @@ class CommunityTransactionsPage extends Component
     #[Computed]
     public function records()
     {
-        return $this->applyCursorPagination($this->transactionQuery);
+        return $this->applyPagination($this->transactionQuery);
     }
 
     #[On('transaction-created')]

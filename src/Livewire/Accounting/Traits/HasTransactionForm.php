@@ -5,6 +5,7 @@ namespace jfsullivan\CommunityManager\Livewire\Accounting\Traits;
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\CommunityManager\Livewire\Accounting\Forms\TransactionForm;
 use jfsullivan\CommunityManager\Models\TransactionType;
+use jfsullivan\CommunityManager\Tests\User;
 use Livewire\Attributes\Computed;
 use Spatie\LaravelOptions\Options;
 
@@ -67,7 +68,16 @@ trait HasTransactionForm
 
     public function usersSearchQuery($searchTerm)
     {
-        return $this->community->members()->search($searchTerm)->select('id')->withFullName()->orderByFullName('asc')->limit(20);
+        $userClass = config('community-manager.user_model');
+        
+        return $userClass::whereHas('communities', function ($query) {
+                $query->where('communities.id', $this->community->id);
+            })
+            ->select('id')
+            ->withFullName()
+            ->searchByFullName($searchTerm)
+            ->orderByFullName('asc')
+            ->limit(20);
     }
 
     public function searchUsers($searchTerm)
@@ -77,7 +87,7 @@ trait HasTransactionForm
 
     public function searchTransferUsers($searchTerm)
     {
-        return Options::forModels($this->usersSearchQuery($searchTerm), label: 'full_name')->filter(fn ($user) => $user->id !== $this->form->user_id)->toArray();
+        return Options::forModels($this->usersSearchQuery($searchTerm)->where('id', '!=', $this->form->user_id)->ray(), label: 'full_name')->toArray();
     }
 
     public function render()

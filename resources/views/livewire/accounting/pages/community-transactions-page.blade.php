@@ -152,12 +152,7 @@
 
             <x-slot name="footer">
                 <div class="flex justify-end flex-1 w-full">
-                    {{ $this->records->links('ui-kit::components.pagination.simple.index') }}
-                    {{-- @if($this->records->total())
-                            {{ $this->records->onEachSide(0)->links('ui-kit::components.pagination.standard.index') }}
-                    @else
-
-                    @endif --}}
+                    {{ $this->records->links('ui-kit::components.pagination.simple.cursor') }}
                 </div>
             </x-slot>
 

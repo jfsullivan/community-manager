@@ -79,7 +79,7 @@ class TransactionForm extends Form
 
         $transactionType = TransactionType::find($this->type_id);
 
-        $transaction = $this->transaction->update([
+        $this->transaction->update([
             'community_id' => $this->community_id,
             'type_id' => $this->type_id,
             'user_id' => $this->user_id,
@@ -89,6 +89,6 @@ class TransactionForm extends Form
             'amount' => Money::of($this->amount, 'USD')->multipliedBy($transactionType->direction),
         ]);
 
-        return $transaction;
+        return $this->transaction->fresh();
     }
 }
