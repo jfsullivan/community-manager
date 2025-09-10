@@ -14,7 +14,7 @@ trait OwnsCommunities
 
     public function ownsCommunity($community)
     {
-        if(is_null($community)) {
+        if (is_null($community)) {
             return false;
         }
 
