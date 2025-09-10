@@ -16,13 +16,14 @@ class Dashboard extends Component
 
     public function getCommunityProperty()
     {
-        return $this->user->currentCommunity;
+        $community = $this->user->currentCommunity;
+        return $community ? $community->load('owner') : null;
     }
 
     public function render()
     {
         return view('community-manager::livewire.dashboard', [
             'community' => $this->community,
-        ]);
+        ])->layout('components.layouts.app');
     }
 }

@@ -23,6 +23,7 @@ class TestCase extends Orchestra
     {
         return [
             \BladeUI\Icons\BladeIconsServiceProvider::class,
+            \jfsullivan\CommonHelpers\CommonHelpersServiceProvider::class,
             \jfsullivan\CommunityManager\CommunityManagerServiceProvider::class,
             \jfsullivan\MemberManager\MemberManagerServiceProvider::class,
             \jfsullivan\UiKit\UiKitServiceProvider::class,
@@ -42,9 +43,21 @@ class TestCase extends Orchestra
         config()->set('community-manager.user_model', \jfsullivan\CommunityManager\Tests\User::class);
         config()->set('community-manager.community_model', \jfsullivan\CommunityManager\Models\Community::class);
         config()->set('community-manager.transaction_model', \jfsullivan\CommunityManager\Models\Transaction::class);
+        config()->set('community-manager.admin_layout', 'layouts.app');
         config()->set('member-manager.name_type', 'full_name');
+        config()->set('member-manager.membership_model', \jfsullivan\MemberManager\Models\Membership::class);
+        config()->set('member-manager.role_model', \jfsullivan\MemberManager\Models\Role::class);
 
         Blade::component('layouts.app', AppLayout::class);
+        
+        // Set up authorization gates for dashboard view
+        \Illuminate\Support\Facades\Gate::define('view-member-balance', function ($user, $community) {
+            return true; // Allow all for testing
+        });
+        
+        \Illuminate\Support\Facades\Gate::define('add-funds', function ($user, $community) {
+            return true; // Allow all for testing
+        });
 
         $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
             $table->increments('id');
@@ -52,6 +65,7 @@ class TestCase extends Orchestra
             $table->string('email');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('profile_photo_path')->nullable();
             $table->unsignedBigInteger('current_community_id')->nullable();
             $table->string('email_verified_at')->nullable();
             $table->string('password')->nullable();

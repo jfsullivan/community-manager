@@ -48,15 +48,20 @@ class CommunityTransactionsPage extends Component
         switch ($key) {
             case 'date':
             default:
-                $query->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date']);
+                $query->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date'])
+                        ->orderBy('id', 'desc'); // Add unique column as tiebreaker
 
                 break;
             case 'amount':
-                $query->orderBy('amount', $dir ?? $this->defaultSortDir['amount']);
+                $query->orderBy('amount', $dir ?? $this->defaultSortDir['amount'])
+                        ->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date'])
+                        ->orderBy('id', 'desc'); // Add unique column as tiebreaker
 
                 break;
             case 'type':
-                $query->orderBy('transaction_types.name', $dir ?? $this->defaultSortDir['type']);
+                $query->orderBy('transaction_types.name', $dir ?? $this->defaultSortDir['type'])
+                        ->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date'])
+                        ->orderBy('id', 'desc'); // Add unique column as tiebreaker
 
                 break;
         }

@@ -166,8 +166,6 @@ class TransactionFormsTest extends TestCase
     /** @test */
     public function it_can_search_for_users()
     {
-        // Skip this test for now since the search functionality isn't working
-        // $this->markTestSkipped('Search functionality needs to be fixed - searchByFullName scope not returning results');
         
         // Create a user with first_name and last_name for better search compatibility
         $searchUser = User::factory()->create([
@@ -389,9 +387,6 @@ class TransactionFormsTest extends TestCase
     /** @test */
     public function it_dispatches_transaction_updated_event()
     {
-        // Skip this test for now
-        $this->markTestSkipped('Skipping until UpdateTransactionModal save method is fixed');
-
         $transaction = Transaction::factory()->create([
             'community_id' => $this->community->id,
             'user_id' => $this->user->id,
@@ -401,6 +396,8 @@ class TransactionFormsTest extends TestCase
         ]);
 
         $updatedData = [
+            'form.type_id' => 1,
+            'form.amount' => '50.00',
             'form.description' => 'Updated for event test',
         ];
 
@@ -454,18 +451,14 @@ class TransactionFormsTest extends TestCase
 
     /**
      * Note: The following tests check for transfer transaction companion logic.
-     * Based on the codebase analysis, the old TransactionFormModal_OLD had logic 
-     * to create companion transactions for transfers (saveCompanionTransaction method),
-     * but this logic appears to be missing in the new CreateTransactionModal and 
-     * UpdateTransactionModal components. These tests document the expected behavior.
+     * The CreateTransactionAction and UpdateTransactionAction classes handle
+     * creating and updating companion transactions for transfer transactions.
      */
 
     /** @test */
     public function it_should_create_companion_transaction_for_transfer_out()
     {
-        $this->markTestSkipped('Transfer companion transaction logic not implemented in new forms yet');
-        
-        // This test documents the expected behavior for transfer transactions
+        // This test verifies the transfer companion transaction logic
         $transferData = [
             'form.type_id' => 5, // Transfer Out
             'form.user_id' => $this->user->id,
@@ -505,9 +498,7 @@ class TransactionFormsTest extends TestCase
     /** @test */
     public function it_should_create_companion_transaction_for_transfer_in()
     {
-        $this->markTestSkipped('Transfer companion transaction logic not implemented in new forms yet');
-        
-        // This test documents the expected behavior for transfer transactions
+        // This test verifies the transfer companion transaction logic
         $transferData = [
             'form.type_id' => 6, // Transfer In
             'form.user_id' => $this->user->id,
@@ -547,8 +538,6 @@ class TransactionFormsTest extends TestCase
     /** @test */
     public function it_should_update_companion_transaction_when_updating_transfer_transaction()
     {
-        $this->markTestSkipped('Transfer companion transaction logic not implemented in new forms yet');
-        
         // Create initial transfer transactions (main + companion)
         $mainTransaction = Transaction::factory()->create([
             'community_id' => $this->community->id,

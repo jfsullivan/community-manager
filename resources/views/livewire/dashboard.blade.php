@@ -5,10 +5,10 @@
                 <div class="flex-1 min-w-0">
                     <!-- Profile -->
                     <div class="flex items-center">
-                        <x-profile-photo class="hidden w-16 h-16 sm:block" :url="$community->owner->profile_photo_url" :name="$community->name" />
+                        <x-profile-photo class="hidden w-16 h-16 sm:block" :url="$community->owner->profile_photo_path ?? ''" :name="$community->name" />
                         <div>
                             <div class="flex items-center">
-                                <x-profile-photo class="w-16 h-16 sm:hidden" :url="$community->owner->profile_photo_url" :name="$community->name" />
+                                <x-profile-photo class="w-16 h-16 sm:hidden" :url="$community->owner->profile_photo_path ?? ''" :name="$community->name" />
                                 <div class="flex flex-col w-full">
                                     <h1 class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                                         {{ $community->name }}
@@ -40,7 +40,7 @@
 
                 @can('view-member-balance', $community)
                     <div class="flex text-sm text-gray-400">Account Balance</div>
-                    @livewire('community-manager::livewire.accounting.member-balance', ['size' => 'lg'])
+                    {{-- @livewire('community-manager::accounting.components.member-balance', ['size' => 'lg']) --}}
                 @endcan
                 
                 <div class="mt-6 space-x-3 md:mt-0 md:ml-4">

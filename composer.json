@@ -20,6 +20,10 @@
             "type": "vcs",
             "url": "git@github.com:jfsullivan/article-manager"
         },
+        "common-helpers": {
+            "type": "vcs",
+            "url": "git@github.com:jfsullivan/common-helpers"
+        },
         "member-manager": {
             "type": "vcs",
             "url": "git@github.com:jfsullivan/member-manager"
@@ -47,6 +51,7 @@
         "illuminate/contracts": "^10.0",
         "jackiedo/timezonelist": "^5.1",
         "jfsullivan/article-manager": "^0.6",
+        "jfsullivan/common-helpers": "^1.0",
         "jfsullivan/member-manager": "^0.5",
         "jfsullivan/modal": "^3.0",
         "jfsullivan/notifications": "^0.3",

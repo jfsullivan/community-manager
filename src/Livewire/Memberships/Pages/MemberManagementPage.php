@@ -10,6 +10,11 @@ class MemberManagementPage extends MemberManagementPageComponent
 {
     public $community_id;
 
+    public function mount()
+    {
+        parent::mount();
+    }
+
     public function owningModel(): mixed
     {
         return $this->community;
@@ -40,12 +45,9 @@ class MemberManagementPage extends MemberManagementPageComponent
             : Auth::user()->currentCommunity;
     }
 
-    // #[On('member-created')]
-    // #[On('member-deleted')]
-    // #[On('member-updated')]
-    // public function render()
-    // {
-    //     return view('community-manager::livewire.memberships.pages.member-management-page')
-    //         ->layout(config('community-manager.admin_layout'));
-    // }
+    public function render()
+    {
+        return view('member-manager::livewire.pages.member-management-page')
+            ->layout('components.layouts.app');
+    }
 }

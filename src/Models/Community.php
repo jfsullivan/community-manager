@@ -45,7 +45,7 @@ class Community extends Model
 
     public function memberships()
     {
-        return $this->morphMany(Membership::class, 'model');
+        return $this->morphMany(config('member-manager.membership_model'), 'model');
         // ->leftJoin('users', 'memberships.user_id', 'users.id')
         // ->withFullName();
     }

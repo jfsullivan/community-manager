@@ -14,15 +14,26 @@ class EnsureIsCommunityAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (
-            $request->user()->hasCurrentCommunity()
-            && ($request->user()->id != $request->user()->currentCommunity->user_id
-                    && ! $request->user()->currentCommunity->memberships()->whereRelation('role', 'slug', 'admin')->where('user_id', $request->user()->id)->exists()
-            )
-        ) {
-            abort(403, 'Unauthorized action');
+        if (! $request->user()->hasCurrentCommunity()) {
+            abort(403, 'No current community');
         }
 
-        return $next($request);
+        $currentCommunity = $request->user()->currentCommunity;
+        
+        if (! $currentCommunity) {
+            abort(403, 'Current community not found');
+        }
+
+        // Allow access if user is the community owner
+        if ($request->user()->id == $currentCommunity->user_id) {
+            return $next($request);
+        }
+
+        // Allow access if user is an admin member
+        if ($currentCommunity->memberships()->whereRelation('role', 'slug', 'admin')->where('user_id', $request->user()->id)->exists()) {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized action');
     }
 }
