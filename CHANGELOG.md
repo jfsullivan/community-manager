@@ -2,6 +2,13 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 1.0.0 - 2025-09-10
+
+- Change logic for creating and updating transactions
+- Added tests
+
+**Full Changelog**: https://github.com/jfsullivan/community-manager/compare/v0.1.4...v1.0.0
+
 ## 0.1.4 - 2025-09-10
 
 **Full Changelog**: https://github.com/jfsullivan/community-manager/compare/v0.1.3...v0.1.4
