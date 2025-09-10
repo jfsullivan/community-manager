@@ -11,7 +11,7 @@ class CreateTransactionAction
     public function execute(array $data): Transaction
     {
         $transactionType = TransactionType::find($data['type_id']);
-        
+
         $transactionClass = app(config('community-manager.transaction_model'));
         $transaction = $transactionClass::create([
             'community_id' => $data['community_id'],
@@ -39,7 +39,7 @@ class CreateTransactionAction
     protected function createCompanionTransaction(Transaction $mainTransaction, array $data): Transaction
     {
         $mainTransactionType = $mainTransaction->type;
-        
+
         // Determine companion transaction type
         $companionTypeId = match ($mainTransactionType->id) {
             5 => 6, // Transfer Out -> Transfer In
@@ -47,7 +47,7 @@ class CreateTransactionAction
         };
 
         $companionTransactionType = TransactionType::find($companionTypeId);
-        
+
         $transactionClass = app(config('community-manager.transaction_model'));
         $companionTransaction = $transactionClass::create([
             'community_id' => $data['community_id'],

@@ -49,12 +49,12 @@ class TestCase extends Orchestra
         config()->set('member-manager.role_model', \jfsullivan\MemberManager\Models\Role::class);
 
         Blade::component('layouts.app', AppLayout::class);
-        
+
         // Set up authorization gates for dashboard view
         \Illuminate\Support\Facades\Gate::define('view-member-balance', function ($user, $community) {
             return true; // Allow all for testing
         });
-        
+
         \Illuminate\Support\Facades\Gate::define('add-funds', function ($user, $community) {
             return true; // Allow all for testing
         });

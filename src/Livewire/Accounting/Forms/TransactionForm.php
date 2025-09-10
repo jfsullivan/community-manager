@@ -2,14 +2,12 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Forms;
 
-use Brick\Money\Money;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use JamesMills\LaravelTimezone\Facades\Timezone;
 use jfsullivan\CommunityManager\Actions\CreateTransactionAction;
 use jfsullivan\CommunityManager\Actions\UpdateTransactionAction;
 use jfsullivan\CommunityManager\Models\Transaction;
-use jfsullivan\CommunityManager\Models\TransactionType;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
@@ -58,8 +56,8 @@ class TransactionForm extends Form
         $this->community_id = Auth::user()->current_community_id;
         $this->transacted_at = Timezone::convertFromLocal(Carbon::create($this->transacted_at)->toDateTimeString());
 
-        $createAction = new CreateTransactionAction();
-        
+        $createAction = new CreateTransactionAction;
+
         return $createAction->execute([
             'community_id' => $this->community_id,
             'type_id' => $this->type_id,
@@ -75,8 +73,8 @@ class TransactionForm extends Form
     {
         $this->transacted_at = Timezone::convertFromLocal(Carbon::create($this->transacted_at)->toDateTimeString());
 
-        $updateAction = new UpdateTransactionAction();
-        
+        $updateAction = new UpdateTransactionAction;
+
         return $updateAction->execute($this->transaction, [
             'community_id' => $this->community_id,
             'type_id' => $this->type_id,
