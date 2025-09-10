@@ -83,7 +83,7 @@ class TestCase extends Orchestra
         // Transaction-related migrations
         $migration = include __DIR__.'/../database/migrations/create_transaction_types_table.php.stub';
         $migration->up();
-        
+
         $migration = include __DIR__.'/../database/migrations/create_transactions_table.php.stub';
         $migration->up();
 

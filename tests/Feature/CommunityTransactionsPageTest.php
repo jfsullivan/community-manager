@@ -16,7 +16,9 @@ class CommunityTransactionsPageTest extends TestCase
     use RefreshDatabase;
 
     protected $community;
+
     protected $user;
+
     protected $transactionType;
 
     protected function setUp(): void
@@ -24,9 +26,9 @@ class CommunityTransactionsPageTest extends TestCase
         parent::setUp();
 
         $this->community = Community::factory()->create();
-        
+
         $this->user = User::factory()->create([
-            'current_community_id' => $this->community->id
+            'current_community_id' => $this->community->id,
         ]);
 
         // Add user as community member
@@ -36,7 +38,7 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $this->transactionType = TransactionType::find(1); // Withdrawal
-        
+
         $this->actingAs($this->user);
     }
 
@@ -44,8 +46,8 @@ class CommunityTransactionsPageTest extends TestCase
     public function it_displays_transactions_page()
     {
         Livewire::test(CommunityTransactionsPage::class, [
-                'community_id' => $this->community->id
-            ])
+            'community_id' => $this->community->id,
+        ])
             ->assertViewIs('community-manager::livewire.accounting.pages.community-transactions-page')
             ->assertOk();
     }
@@ -61,16 +63,16 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-            'community_id' => $this->community->id
+            'community_id' => $this->community->id,
         ]);
 
         // Check that initial page loads with transactions
         $records = $component->get('records');
         $this->assertNotEmpty($records->items());
-        
+
         // The default perPage is 100, so we should get 100 transactions on first page
         $this->assertLessThanOrEqual(100, count($records->items()));
-        
+
         // Should have pagination links since we have more than 100 transactions
         $this->assertTrue($records->hasPages());
     }
@@ -86,15 +88,15 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-                'community_id' => $this->community->id
-            ])
+            'community_id' => $this->community->id,
+        ])
             ->set('perPage', 10);
 
         $records = $component->get('records');
-        
+
         // With perPage set to 10, we should get at most 10 transactions
         $this->assertLessThanOrEqual(10, count($records->items()));
-        
+
         // Should have more pages since we have 50 transactions but only showing 10
         $this->assertTrue($records->hasPages());
     }
@@ -110,33 +112,33 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-                'community_id' => $this->community->id
-            ])
+            'community_id' => $this->community->id,
+        ])
             ->set('perPage', 10);
 
         // Get first page results
         $firstPageRecords = $component->get('records');
         $firstPageItems = $firstPageRecords->items();
-        
+
         $this->assertCount(10, $firstPageItems);
         $this->assertTrue($firstPageRecords->hasPages());
 
         // Get the cursor for next page and navigate
         if ($firstPageRecords->hasMorePages()) {
             $nextCursor = $firstPageRecords->nextCursor();
-            
+
             $component->set('cursor', $nextCursor->encode());
-            
+
             $secondPageRecords = $component->get('records');
             $secondPageItems = $secondPageRecords->items();
-            
+
             // Should get different transactions on second page
             $this->assertCount(10, $secondPageItems);
-            
+
             // Verify that the items are different (different IDs)
             $firstPageIds = collect($firstPageItems)->pluck('id')->sort()->values();
             $secondPageIds = collect($secondPageItems)->pluck('id')->sort()->values();
-            
+
             $this->assertNotEquals($firstPageIds, $secondPageIds);
         }
     }
@@ -161,21 +163,21 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-                'community_id' => $this->community->id
-            ])
+            'community_id' => $this->community->id,
+        ])
             ->set('perPage', 10)
             ->set('transactionTypeFilter', $withdrawalType->id);
 
         $filteredRecords = $component->get('records');
-        
+
         // Should only get withdrawal transactions
         $this->assertLessThanOrEqual(10, count($filteredRecords->items()));
-        
+
         // Verify all returned items are withdrawal type
         foreach ($filteredRecords->items() as $transaction) {
             $this->assertEquals($withdrawalType->id, $transaction->type_id);
         }
-        
+
         // Should still have pagination since we have 30 withdrawals but only showing 10
         $this->assertTrue($filteredRecords->hasPages());
     }
@@ -199,16 +201,16 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-                'community_id' => $this->community->id
-            ])
+            'community_id' => $this->community->id,
+        ])
             ->set('perPage', 10)
             ->set('searchFilter', 'payment');
 
         $searchResults = $component->get('records');
-        
+
         // Should only get transactions with "payment" in description
         $this->assertLessThanOrEqual(10, count($searchResults->items()));
-        
+
         // Should have pagination since we have 20 matching transactions but only showing 10
         $this->assertTrue($searchResults->hasPages());
     }
@@ -224,19 +226,19 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-                'community_id' => $this->community->id
-            ])
+            'community_id' => $this->community->id,
+        ])
             ->set('perPage', 10)
             ->call('sortBy', 'date', 'asc');
 
         $sortedRecords = $component->get('records');
-        
+
         // Should get 10 transactions
         $this->assertCount(10, $sortedRecords->items());
-        
+
         // Should maintain pagination with sorting
         $this->assertTrue($sortedRecords->hasPages());
-        
+
         // Verify sorting - first item should be older than or equal to second item
         $items = $sortedRecords->items();
         if (count($items) >= 2) {
@@ -265,12 +267,12 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-            'community_id' => $this->community->id
+            'community_id' => $this->community->id,
         ]);
 
         $memberBalance = $component->get('memberBalance');
         $this->assertNotNull($memberBalance);
-        
+
         // Should have a collection with balance totals
         $this->assertNotEmpty($memberBalance);
     }
@@ -280,7 +282,7 @@ class CommunityTransactionsPageTest extends TestCase
     {
         // Create another community with transactions
         $otherCommunity = Community::factory()->create();
-        
+
         Transaction::factory()->count(10)->create([
             'community_id' => $this->community->id,
             'user_id' => $this->user->id,
@@ -294,14 +296,14 @@ class CommunityTransactionsPageTest extends TestCase
         ]);
 
         $component = Livewire::test(CommunityTransactionsPage::class, [
-            'community_id' => $this->community->id
+            'community_id' => $this->community->id,
         ]);
 
         $records = $component->get('records');
-        
+
         // Should only get transactions from our community
         $this->assertCount(10, $records->items());
-        
+
         // Verify all transactions belong to the correct community
         foreach ($records->items() as $transaction) {
             $this->assertEquals($this->community->id, $transaction->community_id);

@@ -12,11 +12,11 @@ use jfsullivan\MemberManager\Traits\HasFullName;
 
 class User extends Authenticatable
 {
-    use HasFactory;
-    use Notifiable;
     use HasCommunityMemberships;
-    use OwnsCommunities;
+    use HasFactory;
     use HasFullName;
+    use Notifiable;
+    use OwnsCommunities;
 
     protected $fillable = ['name', 'email', 'current_community_id', 'first_name', 'last_name'];
 

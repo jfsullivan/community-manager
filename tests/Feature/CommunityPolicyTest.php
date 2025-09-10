@@ -7,7 +7,6 @@ it('allows a community owner to access the community members admin page', functi
     // Skip this test for now
     $this->markTestSkipped('Skipping until policies are reworked');
 
-
     $userClass = config('community-manager.user_model');
 
     $communityOwner = $userClass::factory()->create();

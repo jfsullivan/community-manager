@@ -61,23 +61,23 @@ class MemberBalancesPage extends Component
                 break;
             case 'balance':
                 $query->orderByRaw('IFNULL(balance, 0) '.$dir ?? $this->defaultSortDir['balance'])
-                        ->when((config('member-manager.name_type') == 'single'), function ($query) {
-                            $query->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
-                        }, function ($query) {
-                            $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['name'])
-                                ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['name']);
-                        });
+                    ->when((config('member-manager.name_type') == 'single'), function ($query) {
+                        $query->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
+                    }, function ($query) {
+                        $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['name'])
+                            ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['name']);
+                    });
 
                 break;
 
             case 'last_activity':
                 $query->orderBy('last_accessed_at', $dir ?? $this->defaultSortDir['last_accessed_at'])
-                        ->when((config('member-manager.name_type') == 'single'), function ($query) {
-                            $query->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
-                        }, function ($query) {
-                            $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['name'])
-                                ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['name']);
-                        });
+                    ->when((config('member-manager.name_type') == 'single'), function ($query) {
+                        $query->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
+                    }, function ($query) {
+                        $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['name'])
+                            ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['name']);
+                    });
 
                 break;
         }
