@@ -35,7 +35,7 @@
                     wire:search="searchUsers"
                     :searchTerm="$this->userSearchTerm"
                     :error="$errors->first('form.user_id')" 
-                />
+                >{{ $this->userSearchTerm ?? '' }}</x-input.combobox>
             </x-input.group>
 
             <x-input.group for="transacted_at" label="Date" required class="col-span-6" :error="$errors->first('form.transacted_at')">

@@ -39,7 +39,7 @@ class TransactionForm extends Form
     {
         $this->transaction = $transaction;
 
-        $this->id = $this->transaction->id;
+        // $this->id = $this->transaction->id;
         $this->community_id = $this->transaction->community_id ?? Auth::user()->current_community_id;
         $this->type_id = $this->transaction->type_id;
         $this->user_id = $this->transaction->user_id;
