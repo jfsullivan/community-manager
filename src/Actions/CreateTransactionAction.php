@@ -13,13 +13,16 @@ class CreateTransactionAction
         $transactionType = TransactionType::find($data['type_id']);
         
         $transactionClass = app(config('community-manager.transaction_model'));
+
         $transaction = $transactionClass::create([
             'community_id' => $data['community_id'],
             'type_id' => $data['type_id'],
             'user_id' => $data['user_id'],
             'transfer_user_id' => $data['transfer_user_id'] ?? null,
             'transacted_at' => $data['transacted_at'],
-            'description' => $data['description'],
+            'description' => $data['description'] ?? null,
+            'model_id' => $data['model_id'] ?? null,
+            'model_type' => $data['model_type'] ?? null,
             'amount' => Money::of($data['amount'], 'USD')->multipliedBy($transactionType->direction),
         ]);
 
