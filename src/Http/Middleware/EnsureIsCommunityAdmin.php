@@ -19,7 +19,7 @@ class EnsureIsCommunityAdmin
         }
 
         $currentCommunity = $request->user()->currentCommunity;
-        
+
         if (! $currentCommunity) {
             abort(403, 'Current community not found');
         }

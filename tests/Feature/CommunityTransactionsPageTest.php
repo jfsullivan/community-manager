@@ -126,9 +126,9 @@ class CommunityTransactionsPageTest extends TestCase
         // Get the cursor for next page and navigate
         if ($firstPageRecords->hasMorePages()) {
             $nextCursor = $firstPageRecords->nextCursor();
-            
+
             $component->call('nextPage', $nextCursor->encode());
-            
+
             $secondPageRecords = $component->get('records');
             $secondPageItems = $secondPageRecords->items();
 

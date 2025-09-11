@@ -168,7 +168,7 @@ class TransactionFormsTest extends TestCase
     /** @test */
     public function it_can_search_for_users()
     {
-        
+
         // Create a user with first_name and last_name for better search compatibility
         $searchUser = User::factory()->create([
             'name' => 'John Doe',

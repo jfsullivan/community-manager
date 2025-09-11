@@ -17,6 +17,7 @@ class Dashboard extends Component
     public function getCommunityProperty()
     {
         $community = $this->user->currentCommunity;
+
         return $community ? $community->load('owner') : null;
     }
 
