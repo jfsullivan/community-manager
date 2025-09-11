@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 1.0.1 - 2025-09-11
+
+Fix issue with missing description
+
 ## 1.0.0 - 2025-09-10
 
 - Change logic for creating and updating transactions
