@@ -7,7 +7,13 @@ use jfsullivan\CommunityManager\Models\TransactionType;
 
 class TransactionTypeFactory extends Factory
 {
-    protected $model = TransactionType::class;
+    /**
+     * Get the model class from config
+     */
+    public function modelName()
+    {
+        return config('community-manager.transaction_type_model', TransactionType::class);
+    }
 
     public function definition()
     {

@@ -10,17 +10,13 @@ use jfsullivan\CommunityManager\Models\TransactionType;
 class TransactionFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
+     * Get the model class from config
      */
-    protected $model = Transaction::class;
+    public function modelName()
+    {
+        return config('community-manager.transaction_model', Transaction::class);
+    }
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition()
     {
         $userClass = config('community-manager.user_model', 'jfsullivan\\CommunityManager\\Tests\\User');

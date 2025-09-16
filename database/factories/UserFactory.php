@@ -8,7 +8,13 @@ use jfsullivan\CommunityManager\Models\User;
 
 class UserFactory extends Factory
 {
-    protected $model = User::class;
+    /**
+     * Get the model class from config
+     */
+    public function modelName()
+    {
+        return config('community-manager.user_model', User::class);
+    }
 
     public function definition()
     {

@@ -22,6 +22,11 @@ return [
     'transaction_model' => jfsullivan\CommunityManager\Models\Transaction::class,
 
     /*
+     * The fully qualified class name of the community transaction type model.
+     */
+    'transaction_type_model' => jfsullivan\CommunityManager\Models\TransactionType::class,
+
+    /*
      * The fully qualified class name of the community transaction policy.
      */
     'transaction_policy' => jfsullivan\CommunityManager\Policies\TransactionPolicy::class,

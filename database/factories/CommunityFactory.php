@@ -7,7 +7,13 @@ use jfsullivan\CommunityManager\Models\Community;
 
 class CommunityFactory extends Factory
 {
-    protected $model = Community::class;
+    /**
+     * Get the model class from config
+     */
+    public function modelName()
+    {
+        return config('community-manager.community_model', Community::class);
+    }
 
     public function definition()
     {
