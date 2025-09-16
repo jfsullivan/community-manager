@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 1.0.2 - 2025-09-16
+
+Add Dynamic Factory Models
+
 ## 1.0.1 - 2025-09-11
 
 Fix issue with missing description
