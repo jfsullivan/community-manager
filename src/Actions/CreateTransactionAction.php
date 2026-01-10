@@ -14,7 +14,8 @@ class CreateTransactionAction
 
         $transactionClass = app(config('community-manager.transaction_model'));
 
-        $transaction = $transactionClass::create([
+        // Core fields that need special handling
+        $coreFields = [
             'community_id' => $data['community_id'],
             'type_id' => $data['type_id'],
             'user_id' => $data['user_id'],
@@ -24,7 +25,20 @@ class CreateTransactionAction
             'model_id' => $data['model_id'] ?? null,
             'model_type' => $data['model_type'] ?? null,
             'amount' => Money::of($data['amount'], 'USD')->multipliedBy($transactionType->direction),
-        ]);
+        ];
+
+        // Get additional fillable fields from the data array
+        $instance = new $transactionClass;
+        $fillableFields = $instance->getFillable();
+
+        // Extract additional fields that are fillable but not in core fields
+        $additionalFields = collect($data)
+            ->only($fillableFields)
+            ->except(array_keys($coreFields))
+            ->toArray();
+
+        // Merge core fields with additional fields
+        $transaction = $transactionClass::create(array_merge($coreFields, $additionalFields));
 
         // Create companion transaction for transfers
         if ($this->isTransferTransaction($transactionType)) {
@@ -52,7 +66,9 @@ class CreateTransactionAction
         $companionTransactionType = TransactionType::find($companionTypeId);
 
         $transactionClass = app(config('community-manager.transaction_model'));
-        $companionTransaction = $transactionClass::create([
+
+        // Core fields for companion transaction
+        $coreFields = [
             'community_id' => $data['community_id'],
             'type_id' => $companionTypeId,
             'user_id' => $data['transfer_user_id'],
@@ -60,7 +76,18 @@ class CreateTransactionAction
             'transacted_at' => $data['transacted_at'],
             'description' => $data['description'],
             'amount' => Money::of($data['amount'], 'USD')->multipliedBy($companionTransactionType->direction),
-        ]);
+        ];
+
+        // Get additional fillable fields
+        $instance = new $transactionClass;
+        $fillableFields = $instance->getFillable();
+
+        $additionalFields = collect($data)
+            ->only($fillableFields)
+            ->except(array_keys($coreFields))
+            ->toArray();
+
+        $companionTransaction = $transactionClass::create(array_merge($coreFields, $additionalFields));
 
         return $companionTransaction;
     }
