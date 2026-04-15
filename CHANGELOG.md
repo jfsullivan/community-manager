@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 1.0.3 - 2026-01-10
+
+**Full Changelog**: https://github.com/jfsullivan/community-manager/compare/v1.0.2...v1.0.3
+
 ## 1.0.2 - 2025-09-16
 
 Add Dynamic Factory Models
