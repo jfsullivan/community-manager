@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 2.0.0 - 2026-04-15
+
+Updated for Laravel 11
+
 ## 1.0.3 - 2026-01-10
 
 **Full Changelog**: https://github.com/jfsullivan/community-manager/compare/v1.0.2...v1.0.3
