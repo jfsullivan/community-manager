@@ -43,30 +43,35 @@
         "ui-kit-icons": {
             "type": "vcs",
             "url": "git@github.com:jfsullivan/ui-kit-icons"
+        },
+        "user-timezone": {
+            "type": "vcs",
+            "url": "git@github.com:jfsullivan/user-timezone"
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "brick/money": "^0.8.1",
-        "illuminate/contracts": "^10.0",
+        "illuminate/contracts": "^11.0",
         "jackiedo/timezonelist": "^5.1",
         "jfsullivan/article-manager": "^0.6",
         "jfsullivan/common-helpers": "^1.0",
-        "jfsullivan/member-manager": "^0.5",
-        "jfsullivan/modal": "^3.0",
-        "jfsullivan/notifications": "^0.3",
-        "jfsullivan/ui-kit": "^2.0",
-        "jfsullivan/ui-kit-icons": "^2.0",
+        "jfsullivan/member-manager": "^0.6",
+        "jfsullivan/modal": "^4.0",
+        "jfsullivan/notifications": "^0.4",
+        "jfsullivan/ui-kit": "^3.0",
+        "jfsullivan/ui-kit-icons": "^3.0",
+        "jfsullivan/user-timezone": "^1.0",
         "livewire/flux": "^1.0",
         "spatie/laravel-options": "^1.2",
-        "spatie/laravel-package-tools": "^1.14.0",
+        "spatie/laravel-package-tools": "^1.16.0",
         "spatie/laravel-sluggable": "^3.7"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
-        "nunomaduro/collision": "^7.9",
-        "nunomaduro/larastan": "^2.0.1",
-        "orchestra/testbench": "^8.0",
+        "nunomaduro/collision": "^8.1",
+        "larastan/larastan": "^2.9",
+        "orchestra/testbench": "^9.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-arch": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",

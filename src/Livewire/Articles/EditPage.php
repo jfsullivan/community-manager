@@ -6,7 +6,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
-use JamesMills\LaravelTimezone\Facades\Timezone;
 use jfsullivan\ArticleManager\Livewire\Forms\ArticleForm;
 use jfsullivan\ArticleManager\Livewire\Traits\HasAttachments;
 use jfsullivan\ArticleManager\Livewire\Traits\UsesRouteDetails;
@@ -117,7 +116,7 @@ class EditPage extends Component
 
         $this->validate();
 
-        $this->form->start_at = Timezone::convertToLocal(Carbon::now(), 'Y-m-d H:i:s');
+        $this->form->start_at = Carbon::now()->toUserTimezone('Y-m-d H:i:s');
 
         $this->article = $this->form->update();
 

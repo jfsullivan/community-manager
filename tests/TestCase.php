@@ -30,7 +30,7 @@ class TestCase extends Orchestra
             \jfsullivan\UiKitIcons\UiKitIconsServiceProvider::class,
             \Livewire\LivewireServiceProvider::class,
             \LivewireUI\Modal\LivewireModalServiceProvider::class,
-            \JamesMills\LaravelTimezone\LaravelTimezoneServiceProvider::class,
+            \jfsullivan\UserTimezone\UserTimezoneServiceProvider::class,
             \Spatie\LaravelOptions\OptionsServiceProvider::class,
         ];
     }

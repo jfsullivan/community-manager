@@ -4,7 +4,6 @@ namespace jfsullivan\CommunityManager\Livewire\Accounting\Forms;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use JamesMills\LaravelTimezone\Facades\Timezone;
 use jfsullivan\CommunityManager\Actions\CreateTransactionAction;
 use jfsullivan\CommunityManager\Actions\UpdateTransactionAction;
 use jfsullivan\CommunityManager\Models\Transaction;
@@ -44,7 +43,7 @@ class TransactionForm extends Form
         $this->type_id = $this->transaction->type_id;
         $this->user_id = $this->transaction->user_id;
         $this->transfer_user_id = $this->transaction->transfer_user_id;
-        $this->transacted_at = Timezone::convertToLocal($this->transaction->transacted_at, 'Y-m-d H:i:s');
+        $this->transacted_at = Carbon::parse($this->transaction->transacted_at)->toUserTimezone('Y-m-d H:i:s');
         $this->description = $this->transaction->description;
 
         // str_replace($amount->getCurrency()->getSymbol(), '', $amount->formatTo('en_US'))
@@ -54,7 +53,7 @@ class TransactionForm extends Form
     public function store()
     {
         $this->community_id = Auth::user()->current_community_id;
-        $this->transacted_at = Timezone::convertFromLocal(Carbon::create($this->transacted_at)->toDateTimeString());
+        $this->transacted_at = Carbon::parse($this->transacted_at)->toAppTimezone()->toDateTimeString();
 
         $createAction = new CreateTransactionAction;
 
@@ -71,7 +70,7 @@ class TransactionForm extends Form
 
     public function update()
     {
-        $this->transacted_at = Timezone::convertFromLocal(Carbon::create($this->transacted_at)->toDateTimeString());
+        $this->transacted_at = Carbon::parse($this->transacted_at)->toAppTimezone()->toDateTimeString();
 
         $updateAction = new UpdateTransactionAction;
 

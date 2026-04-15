@@ -3,7 +3,6 @@
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
 use Illuminate\Support\Carbon;
-use JamesMills\LaravelTimezone\Facades\Timezone;
 use jfsullivan\CommunityManager\Livewire\Accounting\Traits\HasTransactionForm;
 use Livewire\Attributes\Computed;
 use LivewireUI\Modal\ModalComponent;
@@ -19,7 +18,7 @@ class CreateTransactionModal extends ModalComponent
     public function mount()
     {
         $this->form->user_id = $this->user_id;
-        $this->form->transacted_at = Timezone::convertToLocal(Carbon::now('UTC'), 'Y-m-d H:i:s');
+        $this->form->transacted_at = Carbon::now('UTC')->toUserTimezone('Y-m-d H:i:s');
     }
 
     #[Computed]
