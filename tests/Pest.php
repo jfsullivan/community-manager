@@ -5,11 +5,12 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\User;
+use jfsullivan\CommunityManager\Tests\TestCase;
 use jfsullivan\MemberManager\Models\Role;
 use jfsullivan\MemberManager\Models\Type;
 
 uses(LazilyRefreshDatabase::class);
-uses(jfsullivan\CommunityManager\Tests\TestCase::class)->in('Feature', 'Unit');
+uses(TestCase::class)->in('Feature', 'Unit');
 
 /*
 |--------------------------------------------------------------------------

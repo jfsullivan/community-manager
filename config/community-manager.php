@@ -1,35 +1,44 @@
 <?php
 
+use jfsullivan\ArticleManager\Livewire\Articles\Show;
+use jfsullivan\CommunityManager\Livewire\Dashboard;
+use jfsullivan\CommunityManager\Models\Community;
+use jfsullivan\CommunityManager\Models\Transaction;
+use jfsullivan\CommunityManager\Models\TransactionType;
+use jfsullivan\CommunityManager\Models\User;
+use jfsullivan\CommunityManager\Policies\CommunityPolicy;
+use jfsullivan\CommunityManager\Policies\TransactionPolicy;
+
 return [
     /*
      * The fully qualified class name of the user model.
      */
-    'user_model' => jfsullivan\CommunityManager\Models\User::class,
+    'user_model' => User::class,
 
     /*
      * The fully qualified class name of the community model.
      */
-    'community_model' => jfsullivan\CommunityManager\Models\Community::class,
+    'community_model' => Community::class,
 
     /*
      * The fully qualified class name of the community policy.
      */
-    'community_policy' => jfsullivan\CommunityManager\Policies\CommunityPolicy::class,
+    'community_policy' => CommunityPolicy::class,
 
     /*
      * The fully qualified class name of the community transaction model.
      */
-    'transaction_model' => jfsullivan\CommunityManager\Models\Transaction::class,
+    'transaction_model' => Transaction::class,
 
     /*
      * The fully qualified class name of the community transaction type model.
      */
-    'transaction_type_model' => jfsullivan\CommunityManager\Models\TransactionType::class,
+    'transaction_type_model' => TransactionType::class,
 
     /*
      * The fully qualified class name of the community transaction policy.
      */
-    'transaction_policy' => jfsullivan\CommunityManager\Policies\TransactionPolicy::class,
+    'transaction_policy' => TransactionPolicy::class,
 
     /*
      * The path to the admin layout for the community.
@@ -47,9 +56,9 @@ return [
      * The path to the community components.
      */
     'components' => [
-        'dashboard' => jfsullivan\CommunityManager\Livewire\Dashboard::class,
+        'dashboard' => Dashboard::class,
         'admin_dashboard' => jfsullivan\CommunityManager\Livewire\Admin\Dashboard::class,
-        'show_article' => jfsullivan\ArticleManager\Livewire\Articles\Show::class,
+        'show_article' => Show::class,
     ],
 
     /*

@@ -2,11 +2,26 @@
 
 namespace jfsullivan\CommunityManager\Tests;
 
+use BladeUI\Icons\BladeIconsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
+use jfsullivan\CommonHelpers\CommonHelpersServiceProvider;
+use jfsullivan\CommunityManager\CommunityManagerServiceProvider;
+use jfsullivan\CommunityManager\Models\Community;
+use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Tests\Components\AppLayout;
+use jfsullivan\MemberManager\MemberManagerServiceProvider;
+use jfsullivan\MemberManager\Models\Membership;
+use jfsullivan\MemberManager\Models\Role;
+use jfsullivan\UiKit\UiKitServiceProvider;
+use jfsullivan\UiKitIcons\UiKitIconsServiceProvider;
+use jfsullivan\UserTimezone\UserTimezoneServiceProvider;
+use Livewire\LivewireServiceProvider;
+use LivewireUI\Modal\LivewireModalServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Spatie\LaravelOptions\OptionsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -22,16 +37,16 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            \BladeUI\Icons\BladeIconsServiceProvider::class,
-            \jfsullivan\CommonHelpers\CommonHelpersServiceProvider::class,
-            \jfsullivan\CommunityManager\CommunityManagerServiceProvider::class,
-            \jfsullivan\MemberManager\MemberManagerServiceProvider::class,
-            \jfsullivan\UiKit\UiKitServiceProvider::class,
-            \jfsullivan\UiKitIcons\UiKitIconsServiceProvider::class,
-            \Livewire\LivewireServiceProvider::class,
-            \LivewireUI\Modal\LivewireModalServiceProvider::class,
-            \jfsullivan\UserTimezone\UserTimezoneServiceProvider::class,
-            \Spatie\LaravelOptions\OptionsServiceProvider::class,
+            BladeIconsServiceProvider::class,
+            CommonHelpersServiceProvider::class,
+            CommunityManagerServiceProvider::class,
+            MemberManagerServiceProvider::class,
+            UiKitServiceProvider::class,
+            UiKitIconsServiceProvider::class,
+            LivewireServiceProvider::class,
+            LivewireModalServiceProvider::class,
+            UserTimezoneServiceProvider::class,
+            OptionsServiceProvider::class,
         ];
     }
 
@@ -40,22 +55,22 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
         config()->set('view.paths', [__DIR__.'/resources/views', __DIR__.'/tests/resources/views']);
-        config()->set('community-manager.user_model', \jfsullivan\CommunityManager\Tests\User::class);
-        config()->set('community-manager.community_model', \jfsullivan\CommunityManager\Models\Community::class);
-        config()->set('community-manager.transaction_model', \jfsullivan\CommunityManager\Models\Transaction::class);
+        config()->set('community-manager.user_model', User::class);
+        config()->set('community-manager.community_model', Community::class);
+        config()->set('community-manager.transaction_model', Transaction::class);
         config()->set('community-manager.admin_layout', 'layouts.app');
         config()->set('member-manager.name_type', 'full_name');
-        config()->set('member-manager.membership_model', \jfsullivan\MemberManager\Models\Membership::class);
-        config()->set('member-manager.role_model', \jfsullivan\MemberManager\Models\Role::class);
+        config()->set('member-manager.membership_model', Membership::class);
+        config()->set('member-manager.role_model', Role::class);
 
         Blade::component('layouts.app', AppLayout::class);
 
         // Set up authorization gates for dashboard view
-        \Illuminate\Support\Facades\Gate::define('view-member-balance', function ($user, $community) {
+        Gate::define('view-member-balance', function ($user, $community) {
             return true; // Allow all for testing
         });
 
-        \Illuminate\Support\Facades\Gate::define('add-funds', function ($user, $community) {
+        Gate::define('add-funds', function ($user, $community) {
             return true; // Allow all for testing
         });
 

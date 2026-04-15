@@ -5,9 +5,10 @@ namespace jfsullivan\CommunityManager\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use jfsullivan\CommunityManager\Mail\Templates\CommunityInvitationMailTemplate;
+use jfsullivan\CommunityManager\Database\Factories\CommunityFactory;
 // use jfsullivan\ArticleManager\Traits\HasArticles;
 // use jfsullivan\BrainTools\Mail\Templates\CommunityInvitationMailTemplate;
+use jfsullivan\CommunityManager\Mail\Templates\CommunityInvitationMailTemplate;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
 use jfsullivan\CommunityManager\Traits\TracksMemberBalances;
 use jfsullivan\MemberManager\Traits\HasMembers;
@@ -32,7 +33,7 @@ class Community extends Model
     ***************************************************************************/
     protected static function newFactory()
     {
-        return \jfsullivan\CommunityManager\Database\Factories\CommunityFactory::new();
+        return CommunityFactory::new();
     }
 
     /**************************************************************************
