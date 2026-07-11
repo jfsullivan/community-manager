@@ -2,39 +2,61 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
+use jfsullivan\ApexUi\Modal\FormModalComponent;
 use jfsullivan\CommunityManager\Livewire\Accounting\Traits\HasTransactionForm;
 use Livewire\Attributes\Computed;
-use LivewireUI\Modal\ModalComponent;
 
-class UpdateTransactionModal extends ModalComponent
+class UpdateTransactionModal extends FormModalComponent
 {
     use HasTransactionForm;
 
+    public string $modalName = 'update-transaction';
+
+    /** @deprecated mount-time id kept for backwards compatibility; opening passes the id on the open event. */
     public $transaction_id;
 
-    public function mount()
+    public function mount(): void
     {
-        $this->form->setTransaction($this->transaction);
+        if ($this->transaction_id) {
+            $this->form->setTransaction($this->transaction);
+        }
+    }
+
+    protected function initForm(): void
+    {
+        $this->transaction_id = $this->modelId;
+
+        unset($this->transaction);
+
+        $this->form->reset();
+
+        if ($this->transaction) {
+            $this->form->setTransaction($this->transaction);
+        }
     }
 
     #[Computed]
     public function transaction()
     {
+        $transactionId = $this->modelId ?? $this->transaction_id;
+
+        if (! $transactionId) {
+            return null;
+        }
+
         $transactionClass = app(config('community-manager.transaction_model'));
 
-        return $transactionClass::find($this->transaction_id);
+        return $transactionClass::find($transactionId);
     }
 
     #[Computed]
     public function userSearchTerm()
     {
-        if (! $this->transaction && ! $this->user_id) {
+        if (! $this->transaction) {
             return null;
         }
 
-        if ($this->transaction) {
-            return $this->transaction->user()->withFullName()->first()->full_name;
-        }
+        return $this->transaction->user()->withFullName()->first()->full_name;
     }
 
     #[Computed]
@@ -48,12 +70,10 @@ class UpdateTransactionModal extends ModalComponent
             return null;
         }
 
-        if ($this->transaction) {
-            return $this->transaction->transferPartner()->withFullName()->first()->full_name;
-        }
+        return $this->transaction->transferPartner()->withFullName()->first()->full_name;
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate();
 

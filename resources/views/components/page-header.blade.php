@@ -6,18 +6,18 @@
             
 			<div class="flex flex-col items-center space-y-6 sm:flex-row sm:justify-between">
 				<div class="flex items-center space-x-5">
-					<div class="flex-shrink-0">
+					<div class="shrink-0">
                         @if($community->hasMedia('logo'))
                             <x-community-manager::community-logo :src="$community->getFirstMediaUrl('logo')" :type="$community->getFirstMedia('logo')->mime_type" />
                         @else
-                            <x-profile-photo class="w-12 h-12 mx-auto text-2xl" name="{{ $community->name }}" />
+                            <flux:avatar circle class="w-12 h-12 mx-auto text-2xl" name="{{ $community->name }}" />
                         @endif
 					</div>
 					<div class="flex flex-col items-center sm:items-start sm:pt-1">
 						<div class="text-xl font-bold text-gray-900 sm:text-2xl">{{ $community->name }}</div>
                         <div class="items-center justify-center hidden text-sm font-medium text-gray-500 md:flex md:justify-start">
                             <a href="{{ route('community.dashboard') }}" class="flex items-center hover:underline">
-                                <x-apexicon-open.shield-tick class="w-4 h-4 stroke-1.5 mr-1" />
+                                <flux:icon name="apex-ui.shield-tick" class="w-4 h-4 stroke-1.5 mr-1" />
                                 {{ $community->owner->name }}
                             </a>
                         </div>
@@ -29,7 +29,7 @@
                     @can('view-member-balance', $community)
                         <div class="flex flex-col items-center justify-center">
                             <div class="flex text-xs text-gray-400">Your Balance</div>
-                            @livewire('community-manager::accounting.components.member-balance', ['size' => 'lg'])
+                            @livewire('community-manager.accounting.components.member-balance', ['size' => 'lg'])
                         </div>
                     @endcan
 
@@ -37,7 +37,7 @@
                         <x-community-manager::accounting.add-funds-button />
                         {{-- <div class="flex justify-center mt-5 sm:mt-0">
                             <a x-on:click="window.livewire.dispatch('openModal', 'accounting.payment-methods')" 
-                                class="flex items-center justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                class="flex items-center justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                             >
                                 Add Funds
                             </a>

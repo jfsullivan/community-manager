@@ -3,29 +3,27 @@
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Pages;
 
 use Illuminate\Support\Facades\Auth;
+use jfsullivan\ApexUi\Livewire\Traits\WithFilters;
+use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
+use jfsullivan\ApexUi\Livewire\Traits\WithSearchFilter;
+use jfsullivan\ApexUi\Livewire\Traits\WithSorting;
 use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
 use jfsullivan\CommunityManager\Models\TransactionType;
-use jfsullivan\UiKit\Livewire\Datatable\Filters\SearchFilter;
-use jfsullivan\UiKit\Livewire\Datatable\WithCursorPagination;
-use jfsullivan\UiKit\Livewire\Datatable\WithFilters;
-use jfsullivan\UiKit\Livewire\Datatable\WithSelectables;
-use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class CommunityTransactionsPage extends Component
 {
-    use SearchFilter;
     use TransactionTypeFilter;
-    use WithCursorPagination;
     use WithFilters;
-    use WithSelectables;
+    use WithPerPagePagination;
+    use WithSearchFilter;
     use WithSorting;
 
-    public $community_id;
+    public array $selected = [];
 
-    public $cursor;
+    public $community_id;
 
     public function mount()
     {

@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center w-full">
-    <div class="flex justify-center w-full bg-white shadow">
+    <div class="flex justify-center w-full bg-white shadow-sm">
         <div class="w-full px-4 sm:px-6 max-w-7xl lg:mx-auto lg:px-8">
             <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
                 <div class="flex-1 min-w-0">
@@ -40,19 +40,18 @@
 
                 @can('view-member-balance', $community)
                     <div class="flex text-sm text-gray-400">Account Balance</div>
-                    {{-- @livewire('community-manager::accounting.components.member-balance', ['size' => 'lg']) --}}
+                    {{-- @livewire('community-manager.accounting.components.member-balance', ['size' => 'lg']) --}}
                 @endcan
                 
                 <div class="mt-6 space-x-3 md:mt-0 md:ml-4">
 
                     @can('add-funds', $community)
-                        <x-button theme="primary"
+                        <x-apex::button variant="primary"
                             class="text-white bg-teal-600 border-teal-600 hover:bg-teal-500 active:bg-teal-700"
-                            x-on:click="window.livewire.dispatch('openModal', 'accounting.payment-methods')"
-                            wire:click="$dispatch('openModal', {component: 'community-manager::accounting.modals.add-funds-modal'})"
+                            wire:click="$dispatch('open-add-funds')"
                         >
                             Add Funds
-                        </x-button.primary>
+                        </x-apex::button>
                     @endcan
                 </div>
             </div>
@@ -61,7 +60,7 @@
 
     @if(auth()->user()->ownsCommunity($community))
         <div class="flex justify-end w-full max-w-4xl mt-4 space-x-3">
-            <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-xs hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     @if(empty($community->welcome_message))
                         Add Message
                     @else 
@@ -72,7 +71,7 @@
     @endif
 
     @if($community->message)
-        <div class="w-full max-w-4xl mt-6 bg-white shadow sm:rounded-lg">
+        <div class="w-full max-w-4xl mt-6 bg-white shadow-sm sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
                 <h3 class="text-lg font-medium leading-6 text-gray-900">
                     Message from {{ $community->owner->name }}

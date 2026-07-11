@@ -3,34 +3,46 @@
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
 use Illuminate\Support\Facades\Auth;
+use jfsullivan\ApexUi\Modal\FormModalComponent;
 use jfsullivan\CommunityManager\Models\Community;
 use Livewire\Attributes\Computed;
-use LivewireUI\Modal\ModalComponent;
+use Livewire\Attributes\On;
 
-class AddFundsModal extends ModalComponent
+class AddFundsModal extends FormModalComponent
 {
+    public string $modalName = 'add-funds';
+
     public $community_id;
 
-    public static function modalMaxWidth(): string
+    /** Accept an optional explicit community from the opener (defaults to the user's current community). */
+    #[On('open-{modalName}')]
+    public function openModal($id = null, $returnTo = null, $community_id = null): void
     {
-        return 'md';
+        $this->community_id = $community_id;
+
+        unset($this->community, $this->paymentMethods);
+
+        parent::openModal($id, $returnTo);
     }
 
-    public static function destroyOnClose(): bool
+    protected function initForm(): void {}
+
+    /** Informational dialog; nothing to persist. */
+    public function save(): void
     {
-        return true;
+        $this->closeModal();
     }
 
     #[Computed]
     public function community()
     {
-        return (is_null($this->community_id)) ? Auth::user()->currentCommunity : Community::find($this->community_id);
+        return (is_null($this->community_id)) ? Auth::user()?->currentCommunity : Community::find($this->community_id);
     }
 
     #[Computed]
     public function paymentMethods()
     {
-        return $this->community->paymentMethods;
+        return $this->community?->paymentMethods ?? collect();
     }
 
     public function render()

@@ -29,7 +29,7 @@
         @endif
 
         @if($selectable)
-            <x-apexicon-open.arrow-right class="w-3 h-3 ml-0.5 stroke-2" />
+            <flux:icon name="apex-ui.arrow-right" class="w-3 h-3 ml-0.5 stroke-2" />
         @endif
     </a>
 </div>

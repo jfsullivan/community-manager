@@ -12,26 +12,6 @@ trait HasTransactionForm
 {
     public TransactionForm $form;
 
-    public static function type(): string
-    {
-        return 'slide-over';
-    }
-
-    public static function modalMaxWidth(): string
-    {
-        return 'xl';
-    }
-
-    public static function destroyOnClose(): bool
-    {
-        return true;
-    }
-
-    public static function fullWidthOnMobile(): bool
-    {
-        return true;
-    }
-
     #[Computed]
     public function user()
     {

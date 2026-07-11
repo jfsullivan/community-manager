@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use jfsullivan\ApexUi\ApexUiServiceProvider;
 use jfsullivan\CommonHelpers\CommonHelpersServiceProvider;
 use jfsullivan\CommunityManager\CommunityManagerServiceProvider;
 use jfsullivan\CommunityManager\Models\Community;
@@ -19,7 +20,6 @@ use jfsullivan\UiKit\UiKitServiceProvider;
 use jfsullivan\UiKitIcons\UiKitIconsServiceProvider;
 use jfsullivan\UserTimezone\UserTimezoneServiceProvider;
 use Livewire\LivewireServiceProvider;
-use LivewireUI\Modal\LivewireModalServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelOptions\OptionsServiceProvider;
 
@@ -44,7 +44,7 @@ class TestCase extends Orchestra
             UiKitServiceProvider::class,
             UiKitIconsServiceProvider::class,
             LivewireServiceProvider::class,
-            LivewireModalServiceProvider::class,
+            ApexUiServiceProvider::class,
             UserTimezoneServiceProvider::class,
             OptionsServiceProvider::class,
         ];

@@ -3,13 +3,12 @@
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Pages;
 
 use Illuminate\Support\Facades\Auth;
+use jfsullivan\ApexUi\Livewire\Traits\WithFilters;
+use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
+use jfsullivan\ApexUi\Livewire\Traits\WithSearchFilter;
+use jfsullivan\ApexUi\Livewire\Traits\WithSorting;
 use jfsullivan\CommunityManager\Livewire\Filters\BalanceFilter;
 use jfsullivan\CommunityManager\Models\Community;
-use jfsullivan\UiKit\Livewire\Datatable\Filters\SearchFilter;
-use jfsullivan\UiKit\Livewire\Datatable\WithFilters;
-use jfsullivan\UiKit\Livewire\Datatable\WithPerPagePagination;
-use jfsullivan\UiKit\Livewire\Datatable\WithSelectables;
-use jfsullivan\UiKit\Livewire\Datatable\WithSorting;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -17,11 +16,12 @@ use Livewire\Component;
 class MemberBalancesPage extends Component
 {
     use BalanceFilter;
-    use SearchFilter;
     use WithFilters;
     use WithPerPagePagination;
-    use WithSelectables;
+    use WithSearchFilter;
     use WithSorting;
+
+    public array $selected = [];
 
     public $community_id;
 

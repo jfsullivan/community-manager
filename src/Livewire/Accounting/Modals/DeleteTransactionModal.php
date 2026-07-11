@@ -2,10 +2,12 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
-use jfsullivan\UiKit\Livewire\DeleteConfirmationModal;
+use jfsullivan\ApexUi\Modal\DeleteConfirmationModal;
 
 class DeleteTransactionModal extends DeleteConfirmationModal
 {
+    public string $modalName = 'delete-transaction';
+
     public $modelType = 'transaction';
 
     public function deleteRecords(): bool

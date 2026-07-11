@@ -1,10 +1,8 @@
 <x-brain-layouts.organization-admin>
     <x-slot name="breadcrumbs">
-        <x-breadcrumbs.item url="{{ route('organizations.admin.index') }}"><x-apexicon-solid.home class="flex-shrink-0 h-5 w-5" /></x-breadcrumbs.item>
-        <x-breadcrumbs.dividers.chevron />
-        <x-breadcrumbs.item url="{{ route('organizations.admin.members.manage') }}">Members</x-breadcrumbs.item>
-        <x-breadcrumbs.dividers.chevron />
-        <x-breadcrumbs.item>Invitations</x-breadcrumbs.item>
+        <x-apex::breadcrumbs.item href="{{ route('organizations.admin.index') }}"><flux:icon name="apex-ui.home" class="shrink-0 h-5 w-5" /></x-apex::breadcrumbs.item>
+        <x-apex::breadcrumbs.item href="{{ route('organizations.admin.members.manage') }}">Members</x-apex::breadcrumbs.item>
+        <x-apex::breadcrumbs.item>Invitations</x-apex::breadcrumbs.item>
     </x-slot>
 
 

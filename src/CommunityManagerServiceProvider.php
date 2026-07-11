@@ -145,41 +145,41 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
     protected function configureLivewireComponents()
     {
         $this->callAfterResolving(BladeCompiler::class, function () {
-            // Livewire::component('community-manager::livewire.mail-preview', MailPreview::class);
+            // Livewire::component('community-manager.livewire.mail-preview', MailPreview::class);
 
-            // Livewire::component('community-manager::livewire.admin.site-admin-dashboard', SiteAdminDashboard::class);
+            // Livewire::component('community-manager.livewire.admin.site-admin-dashboard', SiteAdminDashboard::class);
 
-            Livewire::component('community-manager::header', Header::class);
-            Livewire::component('community-manager::dashboard', Dashboard::class);
-            Livewire::component('community-manager::community-menu', CommunityMenu::class);
-            Livewire::component('community-manager::responsive-navigation-menu', ResponsiveNavigationMenu::class);
+            Livewire::component('community-manager.header', Header::class);
+            Livewire::component('community-manager.dashboard', Dashboard::class);
+            Livewire::component('community-manager.community-menu', CommunityMenu::class);
+            Livewire::component('community-manager.responsive-navigation-menu', ResponsiveNavigationMenu::class);
             // Livewire::component('community.navigation-menu', NavigationMenu::class);
-            Livewire::component('community-manager::modals.join-community', JoinCommunity::class);
-            Livewire::component('community-manager::pages.create-community-page', CreateCommunityPage::class);
+            Livewire::component('community-manager.modals.join-community', JoinCommunity::class);
+            Livewire::component('community-manager.pages.create-community-page', CreateCommunityPage::class);
 
-            Livewire::component('community-manager::articles.community-articles-index-page', CommunityArticlesIndexPage::class);
+            Livewire::component('community-manager.articles.community-articles-index-page', CommunityArticlesIndexPage::class);
 
-            Livewire::component('community-manager::memberships.pages.member-management-page', MemberManagementPage::class);
-            Livewire::component('community-manager::memberships.modals.add-member-modal', AddMemberModal::class);
-            Livewire::component('community-manager::memberships.modals.import-members-modal', ImportMembersModal::class);
+            Livewire::component('community-manager.memberships.pages.member-management-page', MemberManagementPage::class);
+            Livewire::component('community-manager.memberships.modals.add-member-modal', AddMemberModal::class);
+            Livewire::component('community-manager.memberships.modals.import-members-modal', ImportMembersModal::class);
 
-            Livewire::component('community-manager::accounting.components.member-balance', MemberBalance::class);
-            Livewire::component('community-manager::accounting.modals.add-funds-modal', AddFundsModal::class);
-            Livewire::component('community-manager::accounting.modals.create-transaction-modal', CreateTransactionModal::class);
-            Livewire::component('community-manager::accounting.modals.delete-transaction-modal', DeleteTransactionModal::class);
-            Livewire::component('community-manager::accounting.modals.update-transaction-modal', UpdateTransactionModal::class);
-            Livewire::component('community-manager::accounting.pages.community-transactions-page', CommunityTransactionsPage::class);
-            Livewire::component('community-manager::accounting.pages.member-balances-page', MemberBalancesPage::class);
-            Livewire::component('community-manager::accounting.pages.member-transactions-page', MemberTransactionsPage::class);
+            Livewire::component('community-manager.accounting.components.member-balance', MemberBalance::class);
+            Livewire::component('community-manager.accounting.modals.add-funds-modal', AddFundsModal::class);
+            Livewire::component('community-manager.accounting.modals.create-transaction-modal', CreateTransactionModal::class);
+            Livewire::component('community-manager.accounting.modals.delete-transaction-modal', DeleteTransactionModal::class);
+            Livewire::component('community-manager.accounting.modals.update-transaction-modal', UpdateTransactionModal::class);
+            Livewire::component('community-manager.accounting.pages.community-transactions-page', CommunityTransactionsPage::class);
+            Livewire::component('community-manager.accounting.pages.member-balances-page', MemberBalancesPage::class);
+            Livewire::component('community-manager.accounting.pages.member-transactions-page', MemberTransactionsPage::class);
 
-            // Livewire::component('community-manager::livewire.accounting.member-transactions-page', MemberTransactionsPage::class);
+            // Livewire::component('community-manager.livewire.accounting.member-transactions-page', MemberTransactionsPage::class);
 
-            // Livewire::component('community-manager::community.create-community-form', CreateOrganizationForm::class);
-            // Livewire::component('community-manager::community.update-community-name-form', UpdateOrganizationNameForm::class);
-            // Livewire::component('community-manager::community.delete-community-form', DeleteOrganizationForm::class);
+            // Livewire::component('community-manager.community.create-community-form', CreateOrganizationForm::class);
+            // Livewire::component('community-manager.community.update-community-name-form', UpdateOrganizationNameForm::class);
+            // Livewire::component('community-manager.community.delete-community-form', DeleteOrganizationForm::class);
 
-            // Livewire::component('community-manager::livewire.communities.admin.configuration.settings', Settings::class);
-            // Livewire::component('community-manager::livewire.communities.admin.configuration.invitations', Invitations::class);
+            // Livewire::component('community-manager.livewire.communities.admin.configuration.settings', Settings::class);
+            // Livewire::component('community-manager.livewire.communities.admin.configuration.invitations', Invitations::class);
         });
     }
 

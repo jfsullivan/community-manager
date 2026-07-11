@@ -3,31 +3,26 @@
 namespace jfsullivan\CommunityManager\Livewire\Modals;
 
 use Illuminate\Support\Carbon;
-// use jfsullivan\MemberManager\Actions\JoinCommunity as JoinCommunityAction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use jfsullivan\CommunityManager\Models\Membership;
+use jfsullivan\ApexUi\Modal\FormModalComponent;
 use jfsullivan\MemberManager\Models\Role;
 use jfsullivan\MemberManager\Models\Type;
 use Livewire\Attributes\Rule;
-use LivewireUI\Modal\ModalComponent;
 
-class JoinCommunity extends ModalComponent
+class JoinCommunity extends FormModalComponent
 {
+    public string $modalName = 'join-community';
+
     #[Rule('required|min:5', as: 'Community ID', onUpdate: false)]
     public $join_id = '';
 
     #[Rule('required|string', as: 'Community Password', onUpdate: false)]
     public $password = '';
 
-    public static function modalMaxWidth(): string
+    protected function initForm(): void
     {
-        return 'sm';
-    }
-
-    public static function destroyOnClose(): bool
-    {
-        return true;
+        $this->reset('join_id', 'password');
     }
 
     public function getUserProperty()
@@ -40,7 +35,7 @@ class JoinCommunity extends ModalComponent
         return Str::length($this->join_id) < 1 || Str::length($this->password) < 1;
     }
 
-    public function join()
+    public function save(): void
     {
         $this->validate();
 
@@ -70,14 +65,6 @@ class JoinCommunity extends ModalComponent
         ]);
 
         $community->load('members');
-
-        // $membership = Membership::create([
-        //     'community_id' => $community->id,
-        //     'user_id' => Auth::user()->id,
-        //     'role_id' => $memberRoleId,
-        //     'status_id' => $memberStatusId,
-        //     'created_at' => Carbon::now(),
-        // ]);
 
         if ($community->members()->where('user_id', Auth::user()->id)->exists()) {
             $this->dispatch('refresh-community-list');

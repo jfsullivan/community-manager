@@ -448,7 +448,7 @@ class TransactionFormsTest extends TestCase
         // Should be approximately the current time (within a few seconds)
         $currentTime = Carbon::now();
         $formTime = Carbon::parse($transactedAt);
-        $this->assertTrue($formTime->diffInSeconds($currentTime) < 5);
+        $this->assertTrue((int) $formTime->diffInSeconds($currentTime, true) < 5);
     }
 
     /**

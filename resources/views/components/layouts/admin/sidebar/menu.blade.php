@@ -1,52 +1,48 @@
 <!-- Sidebar menu -->
-<x-sidebar.menu class="py-2">
-    <x-sidebar.menu.group>
-        <x-sidebar.menu.item.primary 
-            label="Dashboard"
-            icon="apexicon-open.speedometer"
-            url="{{ route('community.admin.index') }}" 
-            :active="request()->routeIs('community.admin.index')"
-        />
-    </x-sidebar.menu.group>
+<x-apex::sidebar.nav class="py-2">
+    <x-apex::sidebar.nav.item
+        icon="apex-ui.speedometer"
+        href="{{ route('community.admin.index') }}"
+        :current="request()->routeIs('community.admin.index')"
+    >
+        Dashboard
+    </x-apex::sidebar.nav.item>
 
-    <x-sidebar.menu.group>
-        <x-sidebar.menu.section-header.primary>Communication</x-sidebar.menu.section-header.primary>
+    <x-apex::sidebar.nav.group heading="Communication">
+        <x-apex::sidebar.nav.item
+            icon="apex-ui.newspaper"
+            href="{{ route('community.admin.articles.index') }}"
+            :current="request()->routeIs('community.admin.articles.*')"
+        >
+            Articles
+        </x-apex::sidebar.nav.item>
+    </x-apex::sidebar.nav.group>
 
-        <x-sidebar.menu.item.primary 
-            label="Articles" 
-            icon="apexicon-open.newspaper"
-            url="{{ route('community.admin.articles.index') }}"
-            :active="request()->routeIs('community.admin.articles.*')"
-        />
+    <x-apex::sidebar.nav.group heading="Member Management">
+        <x-apex::sidebar.nav.item
+            icon="apex-ui.users"
+            href="{{ route('community.admin.members.index') }}"
+            :current="request()->routeIs('community.admin.member.*')"
+        >
+            Members
+        </x-apex::sidebar.nav.item>
+    </x-apex::sidebar.nav.group>
 
-    </x-sidebar.menu.group>
+    <x-apex::sidebar.nav.group heading="Accounting">
+        <x-apex::sidebar.nav.item
+            icon="apex-ui.coins-swap"
+            href="{{ route('community.admin.accounting.transactions') }}"
+            :current="request()->routeIs('community.admin.accounting.transactions')"
+        >
+            Transactions
+        </x-apex::sidebar.nav.item>
 
-    <x-sidebar.menu.group>
-        <x-sidebar.menu.section-header.primary>Member Management</x-sidebar.menu.section-header.primary>
-
-        <x-sidebar.menu.item.primary
-            label="Members" 
-            icon="apexicon-open.users"
-            url="{{ route('community.admin.members.index') }}" 
-            :active="request()->routeIs('community.admin.member.*')"
-        />
-    </x-sidebar.menu.group>
-
-    <x-sidebar.menu.group>
-        <x-sidebar.menu.section-header.primary>Accounting</x-sidebar.menu.section-header.primary>
-    
-        <x-sidebar.menu.item.primary
-            label="Transactions" 
-            icon="apexicon-open.coins-swap"
-            url="{{ route('community.admin.accounting.transactions') }}" 
-            :active="request()->routeIs('community.admin.accounting.transactions')"
-        />
-
-        <x-sidebar.menu.item.primary
-            label="Member Balances" 
-            icon="apexicon-open.scales"
-            url="{{ route('community.admin.accounting.member.balances') }}"
-            :active="request()->routeIs('community.admin.accounting.member.balances')"
-        />
-    </x-sidebar.menu.group>
-</x-sidebar.menu>
+        <x-apex::sidebar.nav.item
+            icon="apex-ui.scales"
+            href="{{ route('community.admin.accounting.member.balances') }}"
+            :current="request()->routeIs('community.admin.accounting.member.balances')"
+        >
+            Member Balances
+        </x-apex::sidebar.nav.item>
+    </x-apex::sidebar.nav.group>
+</x-apex::sidebar.nav>

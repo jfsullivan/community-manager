@@ -3,19 +3,39 @@
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
 use Illuminate\Support\Carbon;
+use jfsullivan\ApexUi\Modal\FormModalComponent;
 use jfsullivan\CommunityManager\Livewire\Accounting\Traits\HasTransactionForm;
 use Livewire\Attributes\Computed;
-use LivewireUI\Modal\ModalComponent;
+use Livewire\Attributes\On;
 
-class CreateTransactionModal extends ModalComponent
+class CreateTransactionModal extends FormModalComponent
 {
     use HasTransactionForm;
+
+    public string $modalName = 'create-transaction';
 
     public $user_id;
 
     public $records = [];
 
-    public function mount()
+    /** Accept an optional pre-selected user (and bulk selection) from the opener. */
+    #[On('open-{modalName}')]
+    public function openModal($id = null, $returnTo = null, $user_id = null, array $records = []): void
+    {
+        $this->user_id = $user_id;
+        $this->records = $records;
+
+        parent::openModal($id, $returnTo);
+    }
+
+    protected function initForm(): void
+    {
+        $this->form->reset();
+        $this->form->user_id = $this->user_id;
+        $this->form->transacted_at = Carbon::now('UTC')->toUserTimezone('Y-m-d H:i:s');
+    }
+
+    public function mount(): void
     {
         $this->form->user_id = $this->user_id;
         $this->form->transacted_at = Carbon::now('UTC')->toUserTimezone('Y-m-d H:i:s');
@@ -39,7 +59,7 @@ class CreateTransactionModal extends ModalComponent
         return null;
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate();
 

@@ -35,20 +35,20 @@
                 <!-- Community Dropdown -->
                 @if (Auth::user()->hasCommunities())
                     <div class="relative hidden ml-3 sm:flex sm:items-center">
-                        @livewire('community-manager::community-menu')
+                        @livewire('community-manager.community-menu')
                     </div>
                 @else
                     @can('create', jfsullivan\CommunityManager\Models\Community::class)
                         <div class="relative ml-3 mr-10">
                             <x-navbar.link href="{{ route('community.create') }}">
-                                {{ __('community-manager::labels.create-new') }}
+                                {{ __('community-manager.labels.create-new') }}
                             </x-navbar.link>
                         </div>
                     @endcan
                 @endif
 
                 <div class="relative ml-3 text-primary-50">
-                    @livewire('notifications::livewire.notifications', [
+                    @livewire('notifications', [
                         'triggerClasses' => 'bg-primary-600 text-primary-200 hover:bg-white/10 hover:text-white',
                         'notificationClasses' => 'bg-red-600 ring-2 ring-primary-600 text-white'
                     ])
@@ -60,21 +60,26 @@
 
                 <!-- Hamburger -->
                 <div class="flex items-center -mr-2 sm:hidden">
-                    @livewire('community-manager::responsive-navigation-menu')
-                    {{-- <button x-on:click="$dispatch('open-navigation-menu-slide-over')" class="inline-flex items-center justify-center p-2 text-gray-500 transition duration-150 ease-in-out rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-transparent focus:text-gray-500">
-                        <x-apexicon-open.menu class="w-6 h-6 text-white stroke-2" />
-                    </button> --}}
+                    @livewire('community-manager.responsive-navigation-menu')
                 </div>
             </div>
         </div>
     </div>
 
-    {{-- @livewire('community-manager::responsive-navigation-menu') --}}
+    {{-- @livewire('community-manager.responsive-navigation-menu') --}}
 
-    <!-- Slide Over Navigation Menu -->
+    <!-- Flyout Left Side Menu -->
     @if(isset($leftSlideOverMenu))
-        <x-slide-over id="left-side-menu" width="sm" position="left">
-            {{ $leftSlideOverMenu }}
-        </x-slide-over>
+        <flux:modal.trigger name="left-side-menu">
+            <span class="flex justify-center cursor-pointer">
+                <flux:icon name="apex-ui.menu" class="w-6 h-6 text-gray-500 stroke-2" />
+            </span>
+        </flux:modal.trigger>
+
+        <x-apex::drawer name="left-side-menu" position="left">
+            <div class="flex min-h-full w-full flex-col pwa-safe-area-adjustment">
+                {{ $leftSlideOverMenu }}
+            </div>
+        </x-apex::drawer>
     @endif
 </nav>

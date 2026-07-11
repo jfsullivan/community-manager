@@ -27,12 +27,12 @@ class MemberManagementPage extends MemberManagementPageComponent
 
     public function addMemberModal(): string
     {
-        return 'community-manager::memberships.modals.add-member-modal';
+        return 'community-manager.memberships.modals.add-member-modal';
     }
 
     public function importMembersModal(): string
     {
-        return 'community-manager::memberships.modals.import-members-modal';
+        return 'community-manager.memberships.modals.import-members-modal';
     }
 
     #[Computed]

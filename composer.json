@@ -28,21 +28,9 @@
             "type": "vcs",
             "url": "git@github.com:jfsullivan/member-manager"
         },
-        "modal": {
-            "type": "vcs",
-            "url": "git@github.com:jfsullivan/modal"
-        },
         "notifications": {
             "type": "vcs",
             "url": "git@github.com:jfsullivan/notifications"
-        },
-        "ui-kit": {
-            "type": "vcs",
-            "url": "git@github.com:jfsullivan/ui-kit"
-        },
-        "ui-kit-icons": {
-            "type": "vcs",
-            "url": "git@github.com:jfsullivan/ui-kit-icons"
         },
         "user-timezone": {
             "type": "vcs",
@@ -57,12 +45,9 @@
         "jfsullivan/article-manager": "^0.6",
         "jfsullivan/common-helpers": "^1.0",
         "jfsullivan/member-manager": "^0.6",
-        "jfsullivan/modal": "^4.0",
         "jfsullivan/notifications": "^0.4",
-        "jfsullivan/ui-kit": "^3.0",
-        "jfsullivan/ui-kit-icons": "^3.0",
         "jfsullivan/user-timezone": "^1.0",
-        "livewire/flux": "^1.0",
+        "livewire/flux": "^1.0||^2.0",
         "spatie/laravel-options": "^1.2",
         "spatie/laravel-package-tools": "^1.16.0",
         "spatie/laravel-sluggable": "^3.7"
