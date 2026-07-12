@@ -43,26 +43,26 @@
             <!-- Community Dashboard -->
             <x-community-manager::dropdown-link url="{{ route('community.dashboard') }}" show-arrow>
                 <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
-                {{ __('community-manager.labels.dashboard') }}
+                {{ __('community-manager::labels.dashboard') }}
             </x-community-manager::dropdown-link>
 
             <!-- Community News -->
             <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
                 <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
-                {{ __('community-manager.labels.news') }}
+                {{ __('community-manager::labels.news') }}
             </x-community-manager::dropdown-link>
 
             <!-- Community Documents -->
             {{-- <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
                 <x-slot name="icon"><flux:icon name="apex-ui.users" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
-                {{ __('community-manager.labels.members') }}
+                {{ __('community-manager::labels.members') }}
             </x-community-manager::dropdown-link> --}}
 
             @can('manage', Auth::user()->currentCommunity)
                 <!-- Community Admin Dashboard -->
                 <x-community-manager::dropdown-link url="{{ route('community.admin.index') }}" show-arrow>
                     <x-slot name="icon"><flux:icon name="apex-ui.settings" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
-                    {{ __('community-manager.labels.admin-tools') }}
+                    {{ __('community-manager::labels.admin-tools') }}
                 </x-community-manager::dropdown-link>
             @endcan
 
@@ -70,7 +70,7 @@
 
         @if (Auth::user()->hasCommunities())
             <x-community-manager::responsive-navigation-menu.section-header>
-                {{ __('community-manager.labels.switch-community') }}
+                {{ __('community-manager::labels.switch-community') }}
             </x-community-manager::responsive-navigation-menu.section-header>
 
             @foreach (Auth::user()->allCommunities() as $community)
@@ -81,7 +81,7 @@
         {{-- @can('create', jfsullivan\CommunityManager\Models\Community::class)
             <x-community-manager::dropdown-link url="{{ route('community.create') }}" show-arrow>
                 <x-slot name="icon"><flux:icon name="apex-ui.cube" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
-                {{ __('community-manager.labels.create-new') }}
+                {{ __('community-manager::labels.create-new') }}
             </x-community-manager::dropdown-link>
         @endcan --}}
 
