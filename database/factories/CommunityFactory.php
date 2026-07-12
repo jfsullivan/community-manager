@@ -26,6 +26,18 @@ class CommunityFactory extends Factory
             'password' => bin2hex(random_bytes(6)),
             'timezone' => $this->faker->timezone(),
             'track_member_balances' => $this->faker->boolean(50),
+            'is_personal' => false,
         ];
+    }
+
+    /**
+     * A personal (private, auto-provisioned) community.
+     */
+    public function personal()
+    {
+        return $this->state(fn () => [
+            'is_personal' => true,
+            'track_member_balances' => false,
+        ]);
     }
 }

@@ -46,10 +46,12 @@
                     </x-community-manager::dropdown-link>
 
                     <!-- Community News -->
-                    <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
-                        <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
-                        {{ __('community-manager::labels.news') }}
-                    </x-community-manager::dropdown-link>
+                    @if (Auth::user()->currentCommunity->isShared())
+                        <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
+                            <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                            {{ __('community-manager::labels.news') }}
+                        </x-community-manager::dropdown-link>
+                    @endif
 
                     <!-- Community Documents -->
                     {{-- <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>

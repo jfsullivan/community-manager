@@ -24,9 +24,17 @@ class Community extends Model
     use InvitesMembers;
     use TracksMemberBalances;
 
-    protected $fillable = ['name', 'user_id', 'join_id', 'password', 'track_member_balances', 'timezone'];
+    protected $fillable = ['name', 'user_id', 'join_id', 'password', 'track_member_balances', 'is_personal', 'timezone'];
 
     public $invitationMailable = 'jfsullivan\CommunityManager\Mail\CommunityInvitation';
+
+    protected function casts(): array
+    {
+        return [
+            'track_member_balances' => 'boolean',
+            'is_personal' => 'boolean',
+        ];
+    }
 
     /**************************************************************************
      * Model Factory
@@ -62,6 +70,39 @@ class Community extends Model
     public function scopeNotOwnedBy($query, $user_id)
     {
         return $query->where('communities.user_id', '!=', $user_id);
+    }
+
+    public function scopePersonal($query)
+    {
+        return $query->where('communities.is_personal', true);
+    }
+
+    public function scopeShared($query)
+    {
+        return $query->where('communities.is_personal', false);
+    }
+
+    /**************************************************************************
+     * Feature gating
+     *
+     * A personal community is the private, auto-provisioned default every user
+     * receives. It exists only to own that user's pools, so the shared-community
+     * management surfaces (members, invitations, transactions, articles) are not
+     * available on it — those belong to "real"/premium shared communities.
+    ***************************************************************************/
+    public function isPersonal(): bool
+    {
+        return (bool) $this->is_personal;
+    }
+
+    public function isShared(): bool
+    {
+        return ! $this->isPersonal();
+    }
+
+    public function canManageMembers(): bool
+    {
+        return $this->isShared();
     }
 
     /**************************************************************************
