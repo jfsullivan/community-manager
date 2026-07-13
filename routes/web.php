@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use jfsullivan\CommunityManager\Http\Controllers\ArticleController;
 use jfsullivan\CommunityManager\Http\Controllers\CommunityController;
 use jfsullivan\CommunityManager\Http\Controllers\CurrentCommunityController;
 use jfsullivan\CommunityManager\Http\Controllers\MemberController;
@@ -16,7 +15,6 @@ use jfsullivan\CommunityManager\Livewire\Articles\Pages\ArticleManagementPage as
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\CreateArticlePage as CommunityArticleCreatePage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\EditArticlePage as CommunityArticleEditPage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\ShowArticlePage as CommunityArticleShowPage;
-use jfsullivan\CommunityManager\Livewire\Articles\Show as ArticleShow;
 use jfsullivan\CommunityManager\Livewire\Articles\ShowPage as CommunityArticlesShowPage;
 use jfsullivan\CommunityManager\Livewire\Dashboard;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage as CommunityMemberManagementPage;
@@ -53,13 +51,6 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
             Route::get('articles', CommunityArticlesIndexPage::class)->name('articles.index');
             Route::get('articles/{article_id}', CommunityArticlesShowPage::class)->name('articles.show');
             Route::get('articles/{article_id}/edit', CommunityArticlesEditPage::class)->name('articles.edit');
-            // Route::get('articles/{id}', ArticleShow::class)->name('articles.show');
-            // Communities
-            // Route::get('community', [CommunityController::class, 'show'])->name('community.show');
-
-            // Articles/News
-            // Route::get('community/news/{article}', [ArticleController::class, 'show'])->name('organizations.articles.show');
-            // Route::get('community/news', [ArticleController::class, 'index'])->name('organizations.articles.index');
 
             Route::get('members/{user_id}/transactions', MemberTransactionHistoryPage::class)->name('members.transactions');
 
