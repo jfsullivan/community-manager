@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use jfsullivan\CommunityManager\Http\Controllers\CommunityController;
 use jfsullivan\CommunityManager\Http\Controllers\CurrentCommunityController;
 use jfsullivan\CommunityManager\Http\Controllers\MemberController;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\CommunityTransactionsPage;
