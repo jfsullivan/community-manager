@@ -10,7 +10,6 @@ use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberBalancesPage;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionHistoryPage;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionsPage;
 use jfsullivan\CommunityManager\Livewire\Admin\Dashboard as CommunityAdminDashboard;
-// use jfsullivan\CommunityManager\Livewire\Articles\CommunityArticlesIndexPage;
 use jfsullivan\CommunityManager\Livewire\Articles\EditPage as CommunityArticlesEditPage;
 use jfsullivan\CommunityManager\Livewire\Articles\IndexPage as CommunityArticlesIndexPage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\ArticleManagementPage as CommunityArticleManagementPage;
