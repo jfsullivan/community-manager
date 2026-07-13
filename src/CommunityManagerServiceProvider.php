@@ -7,6 +7,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\Compilers\BladeCompiler;
+use jfsullivan\ArticleManager\Policies\ArticlePolicy;
 use jfsullivan\CommunityManager\Commands\CommunityManagerCommand;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureIsCommunityAdmin;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureIsCommunityMember;
@@ -31,7 +32,6 @@ use jfsullivan\CommunityManager\Livewire\NavigationMenu;
 use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
 use jfsullivan\CommunityManager\Livewire\ResponsiveNavigationMenu;
 use jfsullivan\CommunityManager\Mixins\CustomMoney;
-use jfsullivan\CommunityManager\Policies\CommunityArticlePolicy;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -103,14 +103,7 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
         Gate::define('update-community-transaction', [$transactionPolicyClass, 'update']);
         Gate::define('delete-community-transaction', [$transactionPolicyClass, 'delete']);
 
-        Gate::define('view-community-article', [CommunityArticlePolicy::class, 'view']);
-        Gate::define('create-community-article', [CommunityArticlePolicy::class, 'create']);
-        Gate::define('edit-community-article', [CommunityArticlePolicy::class, 'edit']);
-        Gate::define('update-community-article', [CommunityArticlePolicy::class, 'update']);
-        Gate::define('delete-community-article', [CommunityArticlePolicy::class, 'delete']);
-        Gate::define('publish-community-article', [CommunityArticlePolicy::class, 'publish']);
-        Gate::define('unpublish-community-article', [CommunityArticlePolicy::class, 'unpublish']);
-        Gate::define('send-community-article', [CommunityArticlePolicy::class, 'send']);
+        ArticlePolicy::registerGates('community');
     }
 
     protected function configureComponents()
