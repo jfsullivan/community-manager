@@ -2,6 +2,16 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## 2.1.0 - 2026-07-13
+
+- Use article-manager's generic `ArticlePolicy` (`registerGates('community')`)
+  instead of a bespoke `CommunityArticlePolicy`.
+- Require `article-manager ^1.0` and `notifications ^1.0`; require `flux ^2.0`.
+- Remove dead legacy article code (`ArticleController`, `Articles\Show`, the
+  `CommunityArticlesIndexPage` that still contained a `dd('test')`, and the
+  non-Livewire `articles/{index,show}` views).
+- Fix the mobile admin sidebar reference and drop archived membership views.
+
 ## 2.0.0 - 2026-04-15
 
 Updated for Laravel 11
