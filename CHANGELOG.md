@@ -2,6 +2,15 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v2.1.0 - Generic article policy - 2026-07-14
+
+- Use article-manager's generic `ArticlePolicy` (`registerGates('community')`) instead of a bespoke `CommunityArticlePolicy`.
+- Require `article-manager ^1.0` and `notifications ^1.0`; require `flux ^2.0`.
+- Remove dead legacy article code (`ArticleController`, `Articles\Show`, the `CommunityArticlesIndexPage` that still contained a `dd('test')`, and the non-Livewire `articles/{index,show}` views).
+- Fix the mobile admin sidebar reference and drop archived membership views.
+
+**Full Changelog**: https://github.com/jfsullivan/community-manager/compare/v2.0.1...v2.1.0
+
 ## 2.1.0 - 2026-07-13
 
 - Use article-manager's generic `ArticlePolicy` (`registerGates('community')`)
