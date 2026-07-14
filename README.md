@@ -1,104 +1,95 @@
-# A package to manage a community or organization
+# Community Manager
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/jfsullivan/community-manager.svg?style=flat-square)](https://packagist.org/packages/jfsullivan/community-manager)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/jfsullivan/community-manager/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/jfsullivan/community-manager/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/jfsullivan/community-manager/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/jfsullivan/community-manager/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/jfsullivan/community-manager.svg?style=flat-square)](https://packagist.org/packages/jfsullivan/community-manager)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Community Manager adds multi-tenant **communities** (organizations/groups) to a Laravel
+app. A user can own communities and belong to them; each community has members, an
+optional accounting ledger with per-member balances, news articles, and an admin area.
+It ties together the sibling packages — [member-manager](https://github.com/jfsullivan/member-manager)
+for memberships, [article-manager](https://github.com/jfsullivan/article-manager) for
+news, and [notifications](https://github.com/jfsullivan/notifications) — behind a
+community-scoped UI.
+
+## Requirements
+
+- PHP 8.2+
+- Laravel 11 / 12
+- Livewire 3 / 4 + `livewire/flux` ^2.0 and the [apex-ui](https://github.com/jfsullivan/apex-ui) stack
+- Sibling packages: `jfsullivan/member-manager`, `jfsullivan/article-manager`,
+  `jfsullivan/notifications`, `jfsullivan/user-timezone`, `jfsullivan/common-helpers`
 
 ## Installation
-
-You can install the package via composer:
 
 ```bash
 composer require jfsullivan/community-manager
 ```
 
-You can publish and run the migrations with:
+Publish and run the migrations, then optionally the config/views:
 
 ```bash
 php artisan vendor:publish --tag="community-manager-migrations"
 php artisan migrate
-```
 
-You can publish the config file with:
-
-```bash
 php artisan vendor:publish --tag="community-manager-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
 php artisan vendor:publish --tag="community-manager-views"
 ```
 
-## Usage
+## Setup
 
-### Owning a Community
-Your Eloquent model, typically the `User` model, that owns a community should use the `jfsullivan\CommunityManager\Traits\OwnsCommunities` trait.
-
-Here's an example of how to implement the trait:
+Add the traits to your `User` model — one for owning communities, one for belonging to
+them:
 
 ```php
-namespace App\Models;
-
 use jfsullivan\CommunityManager\Traits\OwnsCommunities;
-use Illuminate\Database\Eloquent\Model;
-
-class User extends Model
-{
-    use OwnsCommunities;
-}
-```
-
-### Community Memberships
-Your Eloquent model, typically the `User` model, that has community memberships should use the `jfsullivan\CommunityManager\Traits\HasCommunityMemberships` trait.
-
-Here's an example of how to implement the trait:
-
-```php
-namespace App\Models;
-
 use jfsullivan\CommunityManager\Traits\HasCommunityMemberships;
-use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasCommunityMemberships;
+    use OwnsCommunities;         // ownsCommunity($community), owned communities
+    use HasCommunityMemberships; // the communities a user belongs to + current community
 }
 ```
 
-Your models' migrations should have a field to save the generated slug to.
+A community model (or your app's subclass of it) can additionally use
+`HasTransactions` / `TracksMemberBalances` to enable the accounting ledger and
+`ChecksForFeatures` for per-community feature flags.
 
-With its migration:
+## What it provides
+
+- **Communities** — a `Community` model, creation flow, a member/admin dashboard, and a
+  "current community" concept for multi-tenant scoping.
+- **Members** — member management (add / import / roles / types / invitations) via
+  member-manager, scoped to the community.
+- **Accounting** — an optional transactions ledger with per-member balances
+  (`brick/money`-backed amounts), member statements, and transaction admin.
+- **Articles** — community news via article-manager, authorized with the shared
+  `ArticlePolicy` (`registerGates('community')`).
+- **Feature flags** — communities can toggle features (e.g. member-balance tracking).
+
+Access is enforced with the `community-owner`, `community-admin`, and `community-member`
+middleware.
+
+## Configuration
+
+`config/community-manager.php` (key options):
 
 ```php
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-class CreateYourEloquentModelTable extends Migration
-{
-    public function up()
-    {
-        Schema::create('your_eloquent_models', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('slug'); // Field name same as your `saveSlugsTo`
-            $table->string('name');
-            $table->timestamps();
-        });
-    }
-}
-
+return [
+    'user_model'             => \App\Models\User::class,
+    'community_model'        => \App\Models\Community::class,
+    'community_policy'       => \App\Policies\CommunityPolicy::class,
+    'transaction_model'      => \App\Models\Transaction::class,
+    'transaction_policy'     => \App\Policies\TransactionPolicy::class,
+    'admin_layout'           => 'community-manager::components.layouts.admin',
+    'components' => [
+        'dashboard'       => /* Livewire component for the member dashboard */,
+        'admin_dashboard' => /* Livewire component for the admin dashboard */,
+        'show_article'    => /* article show page component */,
+    ],
+    'features'               => [ /* available feature flags */ ],
+    'track_member_balances'  => true,
+];
 ```
 
 ## Testing
@@ -109,13 +100,12 @@ composer test
 
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+See [CHANGELOG](CHANGELOG.md).
 
 ## Credits
 
 - [Jack Sullivan](https://github.com/jfsullivan)
-- [All Contributors](../../contributors)
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). See [License File](LICENSE.md).
