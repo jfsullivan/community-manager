@@ -48,7 +48,7 @@
 		</div>
 	</div>
     @isset($navigationMenu)
-        <div class="items-center justify-start hidden w-full bg-white shadow1 sm:flex shadow-gray-200">
+        <div class="items-center justify-start hidden w-full bg-white border-b border-gray-200 sm:flex">
             <div class="flex flex-col w-full px-2 mx-auto max-w-8xl xl:px-20">
                 {{ $navigationMenu }}
             </div>
