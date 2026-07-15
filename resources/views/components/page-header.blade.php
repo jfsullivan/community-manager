@@ -48,7 +48,9 @@
 		</div>
 	</div>
     @isset($navigationMenu)
-        <div class="items-center justify-start hidden w-full bg-white sm:flex">
+        {{-- Full-width bottom border under the menubar (spans edge-to-edge because this
+             wrapper is w-full; the inner container just constrains the links). --}}
+        <div class="items-center justify-start hidden w-full bg-white border-b border-gray-200 sm:flex">
             <div class="flex flex-col w-full px-2 mx-auto max-w-8xl xl:px-20">
                 {{ $navigationMenu }}
             </div>
