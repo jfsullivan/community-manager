@@ -23,27 +23,6 @@
                         </div>
 					</div>
 				</div>
-
-                <div class="flex items-center justify-around w-full sm:w-auto sm:space-x-6 sm:justify-center">
-
-                    @can('view-member-balance', $community)
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="flex text-xs text-gray-400">Your Balance</div>
-                            @livewire('community-manager.accounting.components.member-balance', ['size' => 'lg'])
-                        </div>
-                    @endcan
-
-                    @can('add-funds', $community)
-                        <x-community-manager::accounting.add-funds-button />
-                        {{-- <div class="flex justify-center mt-5 sm:mt-0">
-                            <a x-on:click="window.livewire.dispatch('openModal', 'accounting.payment-methods')" 
-                                class="flex items-center justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                            >
-                                Add Funds
-                            </a>
-                        </div> --}}
-                    @endcan
-                </div>
 			</div>
 		</div>
 	</div>
@@ -56,4 +35,14 @@
             </div>
         </div>
     @endisset
+
+    {{-- Member balance card below the menubar — shows on every community page that uses
+         the page-header, so the balance is consistently findable (not just on the home). --}}
+    @can('view-member-balance', $community)
+        <div class="flex justify-center w-full bg-white">
+            <div class="flex w-full px-2 py-4 mx-auto max-w-8xl md:px-4">
+                <x-community-manager::balance-card :community="$community" />
+            </div>
+        </div>
+    @endcan
 </div>
