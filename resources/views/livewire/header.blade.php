@@ -48,7 +48,7 @@
                 @else
                     @can('create', jfsullivan\CommunityManager\Models\Community::class)
                         <div class="relative ml-3 mr-10">
-                            <x-navbar.link href="{{ route('community.create') }}">
+                            <x-navbar.link href="{{ route('communities.create') }}">
                                 {{ __('community-manager::labels.create-new') }}
                             </x-navbar.link>
                         </div>

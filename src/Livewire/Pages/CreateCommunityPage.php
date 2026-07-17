@@ -20,6 +20,23 @@ class CreateCommunityPage extends Component
         return Auth::user();
     }
 
+    /**
+     * All timezone identifiers as select options (client-side searchable in the form).
+     *
+     * @return array<int, array{value: string, label: string}>
+     */
+    #[Computed]
+    public function timezoneOptions(): array
+    {
+        return collect(timezone_identifiers_list())
+            ->map(fn ($timezone) => [
+                'value' => $timezone,
+                'label' => str_replace('_', ' ', $timezone),
+            ])
+            ->values()
+            ->all();
+    }
+
     public function searchTimezones($searchTerm)
     {
         // $timestamp = time();
@@ -44,7 +61,6 @@ class CreateCommunityPage extends Component
         })->filter(function ($item) use ($searchTerm) {
             return stripos($item['value'], $searchTerm) !== false;
         })->sortBy('label')->groupBy('region')->toArray();
-        ray($timezones);
 
         return $timezones;
         // ray(Options::forModels($timezones, value: 'value')->toArray());
