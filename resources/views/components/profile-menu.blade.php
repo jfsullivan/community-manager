@@ -18,7 +18,7 @@
             </div>
 
             @can('manage-site')
-                <div class="block px-4 pt-2 text-xs text-gray-500">{{ __('Administration') }}</div>
+                <div class="block px-2 pt-2 text-xs text-gray-500">{{ __('Administration') }}</div>
 
                 <x-community-manager::dropdown-link url="{{ route('admin.dashboard') }}" show-arrow>
                     <x-slot name="icon">
@@ -29,7 +29,7 @@
             @endcan
 
             <!-- Account Management -->
-            <div class="block px-4 pt-2 text-xs text-gray-500">Account Details</div>
+            <div class="block px-2 pt-2 text-xs text-gray-500">Account Details</div>
 
             <x-community-manager::dropdown-link url="{{ route('home') }}" show-arrow>
                 <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
