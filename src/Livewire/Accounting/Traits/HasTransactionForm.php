@@ -12,6 +12,10 @@ trait HasTransactionForm
 {
     public TransactionForm $form;
 
+    public string $userSearchTerm = '';
+
+    public string $transferUserSearchTerm = '';
+
     #[Computed]
     public function user()
     {
@@ -59,14 +63,19 @@ trait HasTransactionForm
             ->limit(20);
     }
 
-    public function searchUsers($searchTerm)
+    #[Computed]
+    public function userOptions()
     {
-        return Options::forModels($this->usersSearchQuery($searchTerm), label: 'full_name')->toArray();
+        return Options::forModels($this->usersSearchQuery($this->userSearchTerm), label: 'full_name')->toArray();
     }
 
-    public function searchTransferUsers($searchTerm)
+    #[Computed]
+    public function transferUserOptions()
     {
-        return Options::forModels($this->usersSearchQuery($searchTerm)->where('id', '!=', $this->form->user_id)->ray(), label: 'full_name')->toArray();
+        return Options::forModels(
+            $this->usersSearchQuery($this->transferUserSearchTerm)->where('id', '!=', $this->form->user_id),
+            label: 'full_name'
+        )->toArray();
     }
 
     public function render()

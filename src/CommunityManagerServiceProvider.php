@@ -110,6 +110,9 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
         $this->callAfterResolving(BladeCompiler::class, function () {
             Blade::componentNamespace('jfsullivan\\CommunityManager\\View\\Components', 'community-manager');
 
+            // Global <x-money> component (replaces the retired ui-kit one used by the accounting views).
+            Blade::anonymousComponentPath(__DIR__.'/../resources/views/global-components');
+
             // $this->registerComponent('layouts.admin.index', 'layouts.admin');
             $this->registerComponent('layouts.admin.sidebar.index', 'layouts.admin.sidebar');
             $this->registerComponent('layouts.admin.sidebar.menu', 'layouts.admin.sidebar.menu');

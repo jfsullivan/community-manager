@@ -4,8 +4,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use jfsullivan\CommunityManager\Models\Community;
-use jfsullivan\CommunityManager\Models\User;
 use jfsullivan\CommunityManager\Tests\TestCase;
+use jfsullivan\CommunityManager\Tests\User;
 use jfsullivan\MemberManager\Models\Role;
 use jfsullivan\MemberManager\Models\Type;
 

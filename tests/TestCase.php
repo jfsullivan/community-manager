@@ -2,7 +2,8 @@
 
 namespace jfsullivan\CommunityManager\Tests;
 
-use BladeUI\Icons\BladeIconsServiceProvider;
+use Flux\FluxServiceProvider;
+use FluxPro\FluxProServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Blade;
@@ -16,8 +17,6 @@ use jfsullivan\CommunityManager\Tests\Components\AppLayout;
 use jfsullivan\MemberManager\MemberManagerServiceProvider;
 use jfsullivan\MemberManager\Models\Membership;
 use jfsullivan\MemberManager\Models\Role;
-use jfsullivan\UiKit\UiKitServiceProvider;
-use jfsullivan\UiKitIcons\UiKitIconsServiceProvider;
 use jfsullivan\UserTimezone\UserTimezoneServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -37,13 +36,12 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            BladeIconsServiceProvider::class,
             CommonHelpersServiceProvider::class,
             CommunityManagerServiceProvider::class,
             MemberManagerServiceProvider::class,
-            UiKitServiceProvider::class,
-            UiKitIconsServiceProvider::class,
             LivewireServiceProvider::class,
+            FluxServiceProvider::class,
+            FluxProServiceProvider::class,
             ApexUiServiceProvider::class,
             UserTimezoneServiceProvider::class,
             OptionsServiceProvider::class,
