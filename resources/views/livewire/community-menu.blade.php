@@ -53,6 +53,12 @@
                         </x-community-manager::dropdown-link>
                     @endif
 
+                    <!-- Community Pools -->
+                    <x-community-manager::dropdown-link url="{{ route('pools.index') }}" show-arrow>
+                        <x-slot name="icon"><flux:icon name="apex-ui.trophy" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                        {{ __('Pools') }}
+                    </x-community-manager::dropdown-link>
+
                     <!-- Community Documents -->
                     {{-- <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
                         <x-slot name="icon"><flux:icon name="apex-ui.users" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
@@ -66,27 +72,6 @@
                             {{ __('community-manager::labels.admin-tools') }}
                         </x-community-manager::dropdown-link>
                     @endcan
-
-                    {{-- Quick-jump to your pools in this community (the community menubar isn't
-                         shown on pool pages, so this is the fast path between pools). --}}
-                    @php
-                        $switcherPools = Auth::user()->currentCommunity
-                            ->pools()
-                            ->whereRelation('members', 'user_id', Auth::user()->id)
-                            ->orderByDesc('start_at')
-                            ->limit(6)
-                            ->get(['id', 'name']);
-                    @endphp
-                    @if ($switcherPools->isNotEmpty())
-                        <x-apex::menu.separator />
-                        <x-apex::menu.heading>{{ __('Your pools') }}</x-apex::menu.heading>
-                        @foreach ($switcherPools as $switcherPool)
-                            <x-community-manager::dropdown-link url="{{ route('pools.home', ['pool_id' => $switcherPool->id]) }}">
-                                <x-slot name="icon"><flux:icon name="apex-ui.trophy" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
-                                <span class="truncate">{{ $switcherPool->name }}</span>
-                            </x-community-manager::dropdown-link>
-                        @endforeach
-                    @endif
                 @endif
 
                 <x-apex::menu.separator />
