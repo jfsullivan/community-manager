@@ -40,7 +40,9 @@
          the page-header, so the balance is consistently findable (not just on the home). --}}
     @can('view-member-balance', $community)
         <div class="flex justify-center w-full bg-white">
-            <div class="flex w-full px-2 py-4 mx-auto max-w-8xl md:px-4">
+            {{-- Match the menubar's container (max-w-8xl xl:px-20) so the card lines up with
+                 the menubar links and the page content rather than running wider. --}}
+            <div class="flex w-full px-2 py-4 mx-auto max-w-8xl xl:px-20">
                 <x-community-manager::balance-card :community="$community" />
             </div>
         </div>
