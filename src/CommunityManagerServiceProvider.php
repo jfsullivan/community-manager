@@ -23,8 +23,6 @@ use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionsPage
 use jfsullivan\CommunityManager\Livewire\CommunityMenu;
 use jfsullivan\CommunityManager\Livewire\Dashboard;
 use jfsullivan\CommunityManager\Livewire\Header;
-use jfsullivan\CommunityManager\Livewire\Memberships\Modals\AddMemberModal;
-use jfsullivan\CommunityManager\Livewire\Memberships\Modals\ImportMembersModal;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage;
 use jfsullivan\CommunityManager\Livewire\Modals\JoinCommunity;
 use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
@@ -123,8 +121,6 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
             Livewire::component('community-manager.pages.create-community-page', CreateCommunityPage::class);
 
             Livewire::component('community-manager.memberships.pages.member-management-page', MemberManagementPage::class);
-            Livewire::component('community-manager.memberships.modals.add-member-modal', AddMemberModal::class);
-            Livewire::component('community-manager.memberships.modals.import-members-modal', ImportMembersModal::class);
 
             Livewire::component('community-manager.accounting.components.member-balance', MemberBalance::class);
             Livewire::component('community-manager.accounting.modals.add-funds-modal', AddFundsModal::class);

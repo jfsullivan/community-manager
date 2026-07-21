@@ -56,17 +56,10 @@ class MemberBalancesPage extends Component
         return $this->orderByMemberName($query, $dir);
     }
 
-    /** Order by the member's name (single or first/last), used as the primary and tie-breaking sort. */
+    /** Order by the member's name, used as the primary and tie-breaking sort. */
     protected function orderByMemberName($query, ?string $dir = null)
     {
-        $dir ??= $this->defaultSortDir['name'];
-
-        return $query->when(config('member-manager.name_type') == 'single', function ($query) use ($dir) {
-            $query->orderBy('users.name', $dir);
-        }, function ($query) use ($dir) {
-            $query->orderBy('users.first_name', $dir)
-                ->orderBy('users.last_name', $dir);
-        });
+        return $query->orderByFullName($dir ?? $this->defaultSortDir['name']);
     }
 
     #[Computed]

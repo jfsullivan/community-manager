@@ -62,7 +62,7 @@ class TestCase extends Orchestra
         config()->set('community-manager.user_model', User::class);
         config()->set('community-manager.community_model', Community::class);
         config()->set('community-manager.transaction_model', Transaction::class);
-        config()->set('community-manager.admin_layout', 'layouts.app');
+        config()->set('community-manager.admin_layout', 'components.layouts.admin');
         config()->set('member-manager.name_type', 'full_name');
         config()->set('member-manager.membership_model', Membership::class);
         config()->set('member-manager.role_model', Role::class);
