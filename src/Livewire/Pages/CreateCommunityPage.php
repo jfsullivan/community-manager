@@ -37,30 +37,19 @@ class CreateCommunityPage extends Component
 
     public function searchTimezones($searchTerm)
     {
-        // $timestamp = time();
-        // foreach (timezone_identifiers_list(\DateTimeZone::ALL) as $key => $value) {
-        //     date_default_timezone_set($value);
-        //     $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
-        // }
-        // $timezones = collect($timezone)->filter(function ($item) use ($searchTerm) {
-        //     return stripos($item, $searchTerm) !== false;
-        // })->sortKeys();
-
         $timestamp = time();
-        $timezones = collect(timezone_identifiers_list(\DateTimeZone::ALL))->map(function ($timezone) use ($timestamp) {
+
+        return collect(timezone_identifiers_list(\DateTimeZone::ALL))->map(function ($timezone) use ($timestamp) {
             date_default_timezone_set($timezone);
 
-            return collect([
+            return [
                 'region' => Str::before($timezone, '/'),
                 'value' => $timezone,
                 'label' => Str::of($timezone)->after('/')->replace('_', ' ').' (UTC '.date('P', $timestamp).')',
-            ])->toArray();
-
+            ];
         })->filter(function ($item) use ($searchTerm) {
             return stripos($item['value'], $searchTerm) !== false;
         })->sortBy('label')->groupBy('region')->toArray();
-
-        return $timezones;
     }
 
     public function save()
@@ -84,7 +73,6 @@ class CreateCommunityPage extends Component
         Auth::user()->switchCommunity($community);
 
         $this->redirect(route('community.dashboard'));
-
     }
 
     public function render()

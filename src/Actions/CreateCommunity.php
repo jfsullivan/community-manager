@@ -1,6 +1,6 @@
 <?php
 
-namespace jfsullivan\MemberManager\Actions;
+namespace jfsullivan\CommunityManager\Actions;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;

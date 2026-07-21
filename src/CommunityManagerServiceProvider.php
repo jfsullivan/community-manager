@@ -27,10 +27,8 @@ use jfsullivan\CommunityManager\Livewire\Memberships\Modals\AddMemberModal;
 use jfsullivan\CommunityManager\Livewire\Memberships\Modals\ImportMembersModal;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage;
 use jfsullivan\CommunityManager\Livewire\Modals\JoinCommunity;
-use jfsullivan\CommunityManager\Livewire\NavigationMenu;
 use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
 use jfsullivan\CommunityManager\Livewire\ResponsiveNavigationMenu;
-use jfsullivan\CommunityManager\Mixins\CustomMoney;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -55,11 +53,6 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
                 'member_manager_create_invitations_table',
             ])
             ->hasCommand(CommunityManagerCommand::class);
-    }
-
-    public function packageRegistered()
-    {
-        // Money::mixin(new CustomMoney());
     }
 
     public function packageBooted()
@@ -89,12 +82,6 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
 
         Gate::policy($communityClass, $communityPolicyClass);
 
-        // Gate::define('manage-site', function ($user) {
-        //     return $user->isSiteAdmin();
-        // });
-
-        // $communityPolicyClass = app(config('community-manager.transaction_policy'));
-
         $transactionPolicyClass = app(config('community-manager.transaction_policy'));
 
         Gate::define('create-community-transaction', [$transactionPolicyClass, 'create']);
@@ -113,15 +100,8 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
             // Global <x-money> component (replaces the retired ui-kit one used by the accounting views).
             Blade::anonymousComponentPath(__DIR__.'/../resources/views/global-components');
 
-            // $this->registerComponent('layouts.admin.index', 'layouts.admin');
             $this->registerComponent('layouts.admin.sidebar.index', 'layouts.admin.sidebar');
             $this->registerComponent('layouts.admin.sidebar.menu', 'layouts.admin.sidebar.menu');
-            // $this->registerComponent('layouts.admin.side-bar-item');
-            // $this->registerComponent('layouts.admin.side-bar-section-header');
-            // $this->registerComponent('layouts.admin.slide-over-menu');
-
-            // $this->registerComponent('application-logo');
-            // $this->registerComponent('application-mark');
 
             $this->registerComponent('selectable-community');
             $this->registerComponent('switchable-community');
@@ -129,26 +109,16 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
             $this->registerComponent('profile-menu');
             $this->registerComponent('profile-menu.link');
             $this->registerComponent('responsive-navigation-menu.section');
-
-            // Accounting
-            // $this->registerComponent('accounting.transactions.transaction-detail');
-
-            // $this->registerComponent('profile-menu.link');
         });
     }
 
     protected function configureLivewireComponents()
     {
         $this->callAfterResolving(BladeCompiler::class, function () {
-            // Livewire::component('community-manager.livewire.mail-preview', MailPreview::class);
-
-            // Livewire::component('community-manager.livewire.admin.site-admin-dashboard', SiteAdminDashboard::class);
-
             Livewire::component('community-manager.header', Header::class);
             Livewire::component('community-manager.dashboard', Dashboard::class);
             Livewire::component('community-manager.community-menu', CommunityMenu::class);
             Livewire::component('community-manager.responsive-navigation-menu', ResponsiveNavigationMenu::class);
-            // Livewire::component('community.navigation-menu', NavigationMenu::class);
             Livewire::component('community-manager.modals.join-community', JoinCommunity::class);
             Livewire::component('community-manager.pages.create-community-page', CreateCommunityPage::class);
 
@@ -164,15 +134,6 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
             Livewire::component('community-manager.accounting.pages.community-transactions-page', CommunityTransactionsPage::class);
             Livewire::component('community-manager.accounting.pages.member-balances-page', MemberBalancesPage::class);
             Livewire::component('community-manager.accounting.pages.member-transactions-page', MemberTransactionsPage::class);
-
-            // Livewire::component('community-manager.livewire.accounting.member-transactions-page', MemberTransactionsPage::class);
-
-            // Livewire::component('community-manager.community.create-community-form', CreateOrganizationForm::class);
-            // Livewire::component('community-manager.community.update-community-name-form', UpdateOrganizationNameForm::class);
-            // Livewire::component('community-manager.community.delete-community-form', DeleteOrganizationForm::class);
-
-            // Livewire::component('community-manager.livewire.communities.admin.configuration.settings', Settings::class);
-            // Livewire::component('community-manager.livewire.communities.admin.configuration.invitations', Invitations::class);
         });
     }
 
