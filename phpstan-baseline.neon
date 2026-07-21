@@ -352,66 +352,12 @@ parameters:
 			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
 			identifier: property.notFound
 			count: 1
-			path: src/Livewire/Articles/EditPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\EditPage\:\:\$community\.$#'
-			identifier: property.notFound
-			count: 2
-			path: src/Livewire/Articles/EditPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\EditPage\:\:\$layout\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Livewire/Articles/EditPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\EditPage\:\:\$model\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Livewire/Articles/EditPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\EditPage\:\:\$owningModel\.$#'
-			identifier: property.notFound
-			count: 3
-			path: src/Livewire/Articles/EditPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\EditPage\:\:\$owningModelAlias\.$#'
-			identifier: property.notFound
-			count: 2
-			path: src/Livewire/Articles/EditPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\EditPage\:\:\$pageTitle\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Livewire/Articles/EditPage.php
-
-		-
-			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
-			identifier: property.notFound
-			count: 1
 			path: src/Livewire/Articles/IndexPage.php
 
 		-
 			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\IndexPage\:\:\$community\.$#'
 			identifier: property.notFound
 			count: 2
-			path: src/Livewire/Articles/IndexPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\IndexPage\:\:\$layout\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Livewire/Articles/IndexPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\IndexPage\:\:\$pageTitle\.$#'
-			identifier: property.notFound
-			count: 1
 			path: src/Livewire/Articles/IndexPage.php
 
 		-
@@ -423,7 +369,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\Pages\\ArticleManagementPage\:\:\$community\.$#'
 			identifier: property.notFound
-			count: 1
+			count: 2
 			path: src/Livewire/Articles/Pages/ArticleManagementPage.php
 
 		-
@@ -478,18 +424,6 @@ parameters:
 			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\ShowPage\:\:\$community\.$#'
 			identifier: property.notFound
 			count: 2
-			path: src/Livewire/Articles/ShowPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\ShowPage\:\:\$layout\.$#'
-			identifier: property.notFound
-			count: 1
-			path: src/Livewire/Articles/ShowPage.php
-
-		-
-			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\ShowPage\:\:\$pageTitle\.$#'
-			identifier: property.notFound
-			count: 1
 			path: src/Livewire/Articles/ShowPage.php
 
 		-

@@ -2,49 +2,33 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Articles;
 
-use Illuminate\Support\Facades\Auth;
-use jfsullivan\ArticleManager\Livewire\IndexPage as ArticleIndexPage;
-use Livewire\Attributes\Computed;
+use jfsullivan\ArticleManager\Livewire\Pages\ArticleIndexPage;
+use jfsullivan\CommunityManager\Livewire\Concerns\ResolvesCommunity;
 
 class IndexPage extends ArticleIndexPage
 {
-    public $community_id;
+    use ResolvesCommunity;
 
-    #[Computed]
-    public function community()
-    {
-        $communityClass = app(config('community-manager.community_model'));
-
-        return ($this->community_id)
-            ? $communityClass::find($this->community_id)
-            : Auth::user()->currentCommunity;
-    }
-
-    #[Computed]
-    public function owningModel()
-    {
-        return $this->community;
-    }
-
-    #[Computed]
-    public function layout()
+    public function layout(): string
     {
         return 'community-manager::components.layouts.community';
     }
 
-    #[Computed]
-    public function pageTitle()
+    public function layoutProperties(): array
     {
-        return 'Community Articles';
+        return [
+            'community' => $this->community,
+            'selectedToolbarItem' => 'news',
+        ];
     }
 
-    public function render()
+    public function view(): string
     {
-        return view('community-manager::livewire.articles.index-page')
-            ->layout($this->layout, [
-                'community' => $this->community,
-                'selectedToolbarItem' => 'news',
-            ])
-            ->title($this->pageTitle);
+        return 'community-manager::livewire.articles.index-page';
+    }
+
+    public function pageTitle(): string
+    {
+        return 'Community Articles';
     }
 }

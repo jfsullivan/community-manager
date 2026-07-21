@@ -8,7 +8,6 @@ use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberBalancesPage;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionHistoryPage;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\MemberTransactionsPage;
 use jfsullivan\CommunityManager\Livewire\Admin\Dashboard as CommunityAdminDashboard;
-use jfsullivan\CommunityManager\Livewire\Articles\EditPage as CommunityArticlesEditPage;
 use jfsullivan\CommunityManager\Livewire\Articles\IndexPage as CommunityArticlesIndexPage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\ArticleManagementPage as CommunityArticleManagementPage;
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\CreateArticlePage as CommunityArticleCreatePage;
@@ -49,15 +48,11 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
 
             Route::get('articles', CommunityArticlesIndexPage::class)->name('articles.index');
             Route::get('articles/{article_id}', CommunityArticlesShowPage::class)->name('articles.show');
-            Route::get('articles/{article_id}/edit', CommunityArticlesEditPage::class)->name('articles.edit');
 
             Route::get('members/{user_id}/transactions', MemberTransactionHistoryPage::class)->name('members.transactions');
 
             // Community Members
             Route::get('members', [MemberController::class, 'index'])->name('members.index');
-
-            // Community Articles
-            Route::get('articles', CommunityArticlesIndexPage::class)->name('articles.index');
 
             /**************************************************************************
              * Admin Routes - community.admin.*

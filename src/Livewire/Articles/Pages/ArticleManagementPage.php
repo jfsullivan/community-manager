@@ -2,50 +2,20 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Articles\Pages;
 
-use Illuminate\Support\Facades\Auth;
-use jfsullivan\ArticleManager\Livewire\Pages\ArticleManagementPage as ArticleManagementPageComponent;
-use Livewire\Attributes\Computed;
+use jfsullivan\ArticleManager\Livewire\Pages\ArticleManagementPage as BaseArticleManagementPage;
+use jfsullivan\CommunityManager\Livewire\Concerns\ResolvesCommunity;
 
-class ArticleManagementPage extends ArticleManagementPageComponent
+class ArticleManagementPage extends BaseArticleManagementPage
 {
-    public $community_id;
-
-    public function owningModel(): mixed
-    {
-        return $this->community;
-    }
+    use ResolvesCommunity;
 
     public function layout(): string
     {
         return config('community-manager.admin_layout');
     }
 
-    // public function addMemberModal(): string
-    // {
-    //     return 'community-manager::memberships.modals.add-member-modal';
-    // }
-
-    // public function importMembersModal(): string
-    // {
-    //     return 'community-manager::memberships.modals.import-members-modal';
-    // }
-
-    #[Computed]
-    public function community()
+    public function layoutProperties(): array
     {
-        $communityClass = app(config('community-manager.community_model'));
-
-        return ($this->community_id)
-            ? $communityClass::find($this->community_id)
-            : Auth::user()->currentCommunity;
+        return ['community' => $this->community];
     }
-
-    // #[On('member-created')]
-    // #[On('member-deleted')]
-    // #[On('member-updated')]
-    // public function render()
-    // {
-    //     return view('community-manager::livewire.memberships.pages.member-management-page')
-    //         ->layout(config('community-manager.admin_layout'));
-    // }
 }
