@@ -14,7 +14,7 @@ class CommunityPolicy
 
     public function before(Authenticatable $user, string $ability): ?bool
     {
-        if ($user->ownsCommunity(auth()->user()->currentCommunity)) {
+        if ($user->ownsCommunity($user->currentCommunity)) {
             return true;
         }
 
