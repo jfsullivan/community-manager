@@ -74,9 +74,9 @@ class MemberTransactionsPage extends Component
     {
         $userClass = app(config('community-manager.user_model'));
 
-        return ($this->user_id)
-            ? $userClass::select('id', 'email', 'first_name', 'last_name')->withFullName()->findOrFail($this->user_id)
-            : $userClass::select('id', 'email', 'first_name', 'last_name')->withFullName()->findOrFail(Auth::user()->id);
+        return $userClass::select('id', 'email', 'first_name', 'last_name')
+            ->withFullName()
+            ->findOrFail($this->user_id ?: Auth::id());
     }
 
     #[Computed]
@@ -127,7 +127,7 @@ class MemberTransactionsPage extends Component
     #[On('transaction-updated')]
     public function clearSelectedTransactions()
     {
-        $this->clearSelected();
+        $this->selected = [];
     }
 
     public function render()

@@ -4,11 +4,9 @@ namespace jfsullivan\CommunityManager\Livewire\Pages;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Jackiedo\Timezonelist\Facades\Timezonelist;
 use jfsullivan\CommunityManager\Livewire\Forms\CommunityForm;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
-use Spatie\LaravelOptions\Options;
 
 class CreateCommunityPage extends Component
 {
@@ -20,56 +18,38 @@ class CreateCommunityPage extends Component
         return Auth::user();
     }
 
+    /**
+     * All timezone identifiers as select options (client-side searchable in the form).
+     *
+     * @return array<int, array{value: string, label: string}>
+     */
+    #[Computed]
+    public function timezoneOptions(): array
+    {
+        return collect(timezone_identifiers_list())
+            ->map(fn ($timezone) => [
+                'value' => $timezone,
+                'label' => str_replace('_', ' ', $timezone),
+            ])
+            ->values()
+            ->all();
+    }
+
     public function searchTimezones($searchTerm)
     {
-        // $timestamp = time();
-        // foreach (timezone_identifiers_list(\DateTimeZone::ALL) as $key => $value) {
-        //     date_default_timezone_set($value);
-        //     $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
-        // }
-        // $timezones = collect($timezone)->filter(function ($item) use ($searchTerm) {
-        //     return stripos($item, $searchTerm) !== false;
-        // })->sortKeys();
-
         $timestamp = time();
-        $timezones = collect(timezone_identifiers_list(\DateTimeZone::ALL))->map(function ($timezone) use ($timestamp) {
+
+        return collect(timezone_identifiers_list(\DateTimeZone::ALL))->map(function ($timezone) use ($timestamp) {
             date_default_timezone_set($timezone);
 
-            return collect([
+            return [
                 'region' => Str::before($timezone, '/'),
                 'value' => $timezone,
                 'label' => Str::of($timezone)->after('/')->replace('_', ' ').' (UTC '.date('P', $timestamp).')',
-            ])->toArray();
-
+            ];
         })->filter(function ($item) use ($searchTerm) {
             return stripos($item['value'], $searchTerm) !== false;
         })->sortBy('label')->groupBy('region')->toArray();
-        ray($timezones);
-
-        return $timezones;
-        // ray(Options::forModels($timezones, value: 'value')->toArray());
-        // ->append(fn($timezone) => [
-        //     'region' => $timezone['region'],
-        // ])
-        // ->toArray())->groupBy('region');
-        // return collect(Options::forModels($timezones, value: 'value')->append(fn($timezone) => [
-        //     'region' => $timezone['region'],
-        // ])->toArray())->groupBy('region');
-
-        // ray($timezones);
-
-        // return $timezones;
-        // $timezones = collect($timezone)->filter(function ($item) use ($searchTerm) {
-        //     return stripos($item, $searchTerm) !== false;
-        // })->sortKeys();
-
-        // $timezoneList = Timezonelist::toArray(false);
-        // $timezoneList = collect($timezoneList)->map(function($timezoneGroupOptions) {
-        //     return Options::forArray($timezoneGroupOptions)->toArray();
-        // })->toArray();
-        // ray($timezoneList);
-        // return $timezoneList;
-        return Options::forModels($timezones)->toArray();
     }
 
     public function save()
@@ -93,7 +73,6 @@ class CreateCommunityPage extends Component
         Auth::user()->switchCommunity($community);
 
         $this->redirect(route('community.dashboard'));
-
     }
 
     public function render()

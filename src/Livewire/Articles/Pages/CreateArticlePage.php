@@ -2,40 +2,20 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Articles\Pages;
 
-use Illuminate\Support\Facades\Auth;
 use jfsullivan\ArticleManager\Livewire\Pages\CreateArticlePage as BaseCreateArticlePage;
-use Livewire\Attributes\Computed;
+use jfsullivan\CommunityManager\Livewire\Concerns\ResolvesCommunity;
 
 class CreateArticlePage extends BaseCreateArticlePage
 {
-    public $community_id;
-
-    #[Computed]
-    public function community()
-    {
-        $communityClass = app(config('community-manager.community_model'));
-
-        return ($this->community_id)
-            ? $communityClass::find($this->community_id)
-            : Auth::user()->currentCommunity;
-    }
-
-    #[Computed]
-    public function owningModel(): mixed
-    {
-        return $this->community;
-    }
+    use ResolvesCommunity;
 
     public function layout(): string
     {
         return config('community-manager.admin_layout');
     }
 
-    public function render()
+    public function layoutProperties(): array
     {
-        return view('article-manager::livewire.pages.create-article-page')
-            ->layout($this->layout(), [
-                'community' => $this->community,
-            ]);
+        return ['community' => $this->community];
     }
 }

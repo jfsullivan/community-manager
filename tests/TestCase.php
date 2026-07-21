@@ -2,11 +2,13 @@
 
 namespace jfsullivan\CommunityManager\Tests;
 
-use BladeUI\Icons\BladeIconsServiceProvider;
+use Flux\FluxServiceProvider;
+use FluxPro\FluxProServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
 use jfsullivan\ApexUi\ApexUiServiceProvider;
 use jfsullivan\CommonHelpers\CommonHelpersServiceProvider;
 use jfsullivan\CommunityManager\CommunityManagerServiceProvider;
@@ -16,8 +18,6 @@ use jfsullivan\CommunityManager\Tests\Components\AppLayout;
 use jfsullivan\MemberManager\MemberManagerServiceProvider;
 use jfsullivan\MemberManager\Models\Membership;
 use jfsullivan\MemberManager\Models\Role;
-use jfsullivan\UiKit\UiKitServiceProvider;
-use jfsullivan\UiKitIcons\UiKitIconsServiceProvider;
 use jfsullivan\UserTimezone\UserTimezoneServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -32,18 +32,22 @@ class TestCase extends Orchestra
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'jfsullivan\\CommunityManager\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
+
+        // The view factory's finder is built before getEnvironmentSetUp's
+        // config('view.paths') applies, so register the test views on the
+        // live finder (needed for the components.layouts.* page layouts).
+        View::addLocation(__DIR__.'/resources/views');
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            BladeIconsServiceProvider::class,
             CommonHelpersServiceProvider::class,
             CommunityManagerServiceProvider::class,
             MemberManagerServiceProvider::class,
-            UiKitServiceProvider::class,
-            UiKitIconsServiceProvider::class,
             LivewireServiceProvider::class,
+            FluxServiceProvider::class,
+            FluxProServiceProvider::class,
             ApexUiServiceProvider::class,
             UserTimezoneServiceProvider::class,
             OptionsServiceProvider::class,
@@ -54,11 +58,11 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
-        config()->set('view.paths', [__DIR__.'/resources/views', __DIR__.'/tests/resources/views']);
+        config()->set('view.paths', [__DIR__.'/resources/views']);
         config()->set('community-manager.user_model', User::class);
         config()->set('community-manager.community_model', Community::class);
         config()->set('community-manager.transaction_model', Transaction::class);
-        config()->set('community-manager.admin_layout', 'layouts.app');
+        config()->set('community-manager.admin_layout', 'components.layouts.admin');
         config()->set('member-manager.name_type', 'full_name');
         config()->set('member-manager.membership_model', Membership::class);
         config()->set('member-manager.role_model', Role::class);

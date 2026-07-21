@@ -42,7 +42,7 @@ class AddFundsModal extends FormModalComponent
     #[Computed]
     public function paymentMethods()
     {
-        return $this->community?->paymentMethods ?? collect();
+        return $this->community->paymentMethods ?? collect();
     }
 
     public function render()

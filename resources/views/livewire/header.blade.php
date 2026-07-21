@@ -33,14 +33,22 @@
             <div class="flex items-center justify-end sm:ml-6">
 
                 <!-- Community Dropdown -->
+                @php
+                    // The community switcher is only relevant inside a community context
+                    // (community or pool/entry pages). Hide it on the user home and other
+                    // non-community pages so it doesn't clutter them.
+                    $inCommunityContext = request()->routeIs('community.*', 'pools.*', 'entries.*');
+                @endphp
                 @if (Auth::user()->hasCommunities())
-                    <div class="relative hidden ml-3 sm:flex sm:items-center">
-                        @livewire('community-manager.community-menu')
-                    </div>
+                    @if ($inCommunityContext)
+                        <div class="relative hidden ml-3 sm:flex sm:items-center">
+                            @livewire('community-manager.community-menu')
+                        </div>
+                    @endif
                 @else
                     @can('create', jfsullivan\CommunityManager\Models\Community::class)
                         <div class="relative ml-3 mr-10">
-                            <x-navbar.link href="{{ route('community.create') }}">
+                            <x-navbar.link href="{{ route('communities.create') }}">
                                 {{ __('community-manager::labels.create-new') }}
                             </x-navbar.link>
                         </div>

@@ -20,16 +20,11 @@
             }
         }"
     >
-        <x-input.group for="user_id" label="User" required class="col-span-6" :error="$errors->first('form.user_id')">
-            <x-input.combobox
-                id="user"
-                placeholder="Select User"
-                wire:model="form.user_id"
-                wire:search="searchUsers"
-                :searchTerm="$this->userSearchTerm"
-                :error="$errors->first('form.user_id')"
-            >{{ $this->userSearchTerm ?? '' }}</x-input.combobox>
-        </x-input.group>
+        <x-apex::input.select label="User" placeholder="Select User" wire:model="form.user_id" searchable wire:search="userSearchTerm" required class="col-span-6">
+            @foreach ($this->userOptions as $option)
+                <x-apex::input.select.option :value="$option['value']">{{ $option['label'] }}</x-apex::input.select.option>
+            @endforeach
+        </x-apex::input.select>
 
         <x-apex::input.date-picker label="Date" wire:model="form.transacted_at" class="col-span-6" />
 
@@ -40,16 +35,11 @@
         </x-apex::input.select>
 
         <div x-show="isTranferTransaction" class="flex w-full col-span-6">
-            <x-input.group for="transfer_user_id" label="Transfer" required :error="$errors->first('form.transfer_user_id')">
-                <x-input.combobox
-                    id="transfer_user_id"
-                    placeholder="Select User"
-                    wire:model="form.transfer_user_id"
-                    wire:search="searchTransferUsers"
-                    :searchTerm="$this->transferUserSearchTerm"
-                    :error="$errors->first('form.transfer_user_id')"
-                />
-            </x-input.group>
+            <x-apex::input.select label="Transfer" placeholder="Select User" wire:model="form.transfer_user_id" searchable wire:search="transferUserSearchTerm" required class="w-full">
+                @foreach ($this->transferUserOptions as $option)
+                    <x-apex::input.select.option :value="$option['value']">{{ $option['label'] }}</x-apex::input.select.option>
+                @endforeach
+            </x-apex::input.select>
         </div>
 
         <x-apex::input.text label="Description" wire:model="form.description" class="col-span-6" />

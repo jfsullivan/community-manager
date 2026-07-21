@@ -79,7 +79,7 @@
         @endif
 
         {{-- @can('create', jfsullivan\CommunityManager\Models\Community::class)
-            <x-community-manager::dropdown-link url="{{ route('community.create') }}" show-arrow>
+            <x-community-manager::dropdown-link url="{{ route('communities.create') }}" show-arrow>
                 <x-slot name="icon"><flux:icon name="apex-ui.cube" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
                 {{ __('community-manager::labels.create-new') }}
             </x-community-manager::dropdown-link>

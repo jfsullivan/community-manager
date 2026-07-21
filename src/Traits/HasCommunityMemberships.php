@@ -95,11 +95,7 @@ trait HasCommunityMemberships
 
     public function allCommunities()
     {
-        if (method_exists($this, 'ownedCommunities')) {
-            return $this->communities->merge($this->ownedCommunities)->sortBy('name');
-        }
-
-        return $this->communities->sortBy('name');
+        return $this->communities->merge($this->ownedCommunities)->sortBy('name');
     }
 
     public function belongsToCommunity($community)

@@ -14,7 +14,7 @@ class CommunityPolicy
 
     public function before(Authenticatable $user, string $ability): ?bool
     {
-        if ($user->ownsCommunity(auth()->user()->currentCommunity)) {
+        if ($user->ownsCommunity($user->currentCommunity)) {
             return true;
         }
 
@@ -68,7 +68,7 @@ class CommunityPolicy
 
     public function manage($user, Community $community)
     {
-        return $this->create($user, $community)
+        return $this->create($user)
                 || $this->update($user, $community)
                 || $this->delete($user, $community);
     }

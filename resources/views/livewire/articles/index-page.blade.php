@@ -1,9 +1,13 @@
-<div class="flex flex-col items-center justify-center w-full px-2 mx-auto max-w-7xl md:px-4">
-    <div class="flex flex-col w-full">
-        <x-community-manager::navigation-menu selected="articles" />
+<div class="flex flex-col items-center w-full">
+    {{-- Full-width menubar bar: the border spans edge-to-edge (matching the community
+         home/pools pages), while the inner container keeps the links aligned. --}}
+    <div class="flex w-full bg-white border-b border-gray-200">
+        <div class="flex flex-col w-full px-2 mx-auto max-w-7xl md:px-4">
+            <x-community-manager::navigation-menu selected="articles" />
+        </div>
     </div>
 
-    <div class="w-full flex flex-col py-8">
+    <div class="flex flex-col w-full px-2 mx-auto max-w-7xl md:px-4 py-8">
         <div class="flex flex-col w-full">
             <div class="flex w-full text-lg font-semibold">Recent Articles</div>
         </div>

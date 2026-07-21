@@ -81,6 +81,7 @@ class UpdateTransactionAction
         $companionTypeId = match ($mainTransactionType->id) {
             5 => 6, // Transfer Out -> Transfer In
             6 => 5, // Transfer In -> Transfer Out
+            default => throw new \InvalidArgumentException('Companion transactions only apply to transfer types.'),
         };
 
         $companionTransactionType = TransactionType::find($companionTypeId);

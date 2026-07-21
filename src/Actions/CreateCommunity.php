@@ -1,6 +1,6 @@
 <?php
 
-namespace jfsullivan\MemberManager\Actions;
+namespace jfsullivan\CommunityManager\Actions;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
 use jfsullivan\MemberManager\Models\Role;
-use jfsullivan\MemberManager\Models\Status;
+use jfsullivan\MemberManager\Models\Type;
 use Spatie\MailTemplates\Models\MailTemplate;
 
 class CreateCommunity
@@ -31,12 +31,13 @@ class CreateCommunity
         ]));
 
         $memberRoleId = Role::where('slug', 'admin')->value('id');
-        $memberStatusId = Status::where('slug', 'active')->value('id');
+        $memberTypeId = Type::where('slug', 'standard')->value('id');
 
         $community->members()->attach(auth()->user()->id, [
             'created_at' => Carbon::now(),
             'role_id' => $memberRoleId,
-            'status_id' => $memberStatusId,
+            'type_id' => $memberTypeId,
+            'start_at' => Carbon::now(),
         ]);
 
         $systemMailTemplate = MailTemplate::find(1);

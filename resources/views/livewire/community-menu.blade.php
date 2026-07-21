@@ -53,6 +53,12 @@
                         </x-community-manager::dropdown-link>
                     @endif
 
+                    <!-- Community Pools -->
+                    <x-community-manager::dropdown-link url="{{ route('pools.index') }}" show-arrow>
+                        <x-slot name="icon"><flux:icon name="apex-ui.trophy" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                        {{ __('Pools') }}
+                    </x-community-manager::dropdown-link>
+
                     <!-- Community Documents -->
                     {{-- <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
                         <x-slot name="icon"><flux:icon name="apex-ui.users" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>

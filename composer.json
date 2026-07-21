@@ -16,25 +16,33 @@
         }
     ],
     "repositories": {
+        "flux-pro": {
+            "type": "composer",
+            "url": "https://composer.fluxui.dev"
+        },
+        "apex-ui": {
+            "type": "vcs",
+            "url": "https://github.com/jfsullivan/apex-ui"
+        },
         "article-manager": {
             "type": "vcs",
-            "url": "git@github.com:jfsullivan/article-manager"
+            "url": "https://github.com/jfsullivan/article-manager"
         },
         "common-helpers": {
             "type": "vcs",
-            "url": "git@github.com:jfsullivan/common-helpers"
+            "url": "https://github.com/jfsullivan/common-helpers"
         },
         "member-manager": {
             "type": "vcs",
-            "url": "git@github.com:jfsullivan/member-manager"
+            "url": "https://github.com/jfsullivan/member-manager"
         },
         "notifications": {
             "type": "vcs",
-            "url": "git@github.com:jfsullivan/notifications"
+            "url": "https://github.com/jfsullivan/notifications"
         },
         "user-timezone": {
             "type": "vcs",
-            "url": "git@github.com:jfsullivan/user-timezone"
+            "url": "https://github.com/jfsullivan/user-timezone"
         }
     },
     "require": {
@@ -42,9 +50,9 @@
         "brick/money": "^0.8.1",
         "illuminate/contracts": "^11.0||^12.0",
         "jackiedo/timezonelist": "^5.1",
-        "jfsullivan/article-manager": "^1.0",
+        "jfsullivan/article-manager": "^2.0",
         "jfsullivan/common-helpers": "^1.0",
-        "jfsullivan/member-manager": "^0.6",
+        "jfsullivan/member-manager": "^0.7",
         "jfsullivan/notifications": "^1.0",
         "jfsullivan/user-timezone": "^1.0",
         "livewire/flux": "^2.0",
@@ -53,17 +61,18 @@
         "spatie/laravel-sluggable": "^3.7"
     },
     "require-dev": {
-        "laravel/pint": "^1.0",
-        "nunomaduro/collision": "^8.1",
-        "larastan/larastan": "^2.9",
-        "orchestra/testbench": "^9.0",
-        "pestphp/pest": "^2.0",
-        "pestphp/pest-plugin-arch": "^2.0",
-        "pestphp/pest-plugin-laravel": "^2.0",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "spatie/laravel-ray": "^1.26"
+        "laravel/pint": "^1.14",
+        "livewire/flux-pro": "^2.0",
+        "nunomaduro/collision": "^8.6",
+        "larastan/larastan": "^3.0",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-arch": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "spatie/laravel-ray": "^1.35"
     },
     "autoload": {
         "psr-4": {

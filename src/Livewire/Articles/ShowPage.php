@@ -2,55 +2,33 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Articles;
 
-use Illuminate\Support\Facades\Auth;
-use jfsullivan\ArticleManager\Livewire\ShowPage as ArticleShowPage;
-use Livewire\Attributes\Computed;
+use jfsullivan\ArticleManager\Livewire\Pages\ArticleShowPage;
+use jfsullivan\CommunityManager\Livewire\Concerns\ResolvesCommunity;
 
 class ShowPage extends ArticleShowPage
 {
-    public $community_id;
+    use ResolvesCommunity;
 
-    #[Computed]
-    public function community()
-    {
-        $communityClass = app(config('community-manager.community_model'));
-
-        return ($this->community_id)
-            ? $communityClass::find($this->community_id)
-            : Auth::user()->currentCommunity;
-    }
-
-    #[Computed]
-    public function redirectOnDelete(): string
-    {
-        return route('community.articles.index');
-    }
-
-    #[Computed]
-    public function owningModel()
-    {
-        return $this->community;
-    }
-
-    #[Computed]
     public function layout(): string
     {
         return 'community-manager::components.layouts.community';
     }
 
-    #[Computed]
+    public function layoutProperties(): array
+    {
+        return [
+            'community' => $this->community,
+            'selectedToolbarItem' => 'news',
+        ];
+    }
+
     public function pageTitle(): string
     {
         return 'Community Articles - '.$this->article->title;
     }
 
-    public function render()
+    public function redirectOnDelete(): string
     {
-        return view('article-manager::livewire.show-page')
-            ->layout($this->layout, [
-                'community' => $this->community,
-                'selectedToolbarItem' => 'news',
-            ])
-            ->title($this->pageTitle);
+        return route('community.articles.index');
     }
 }

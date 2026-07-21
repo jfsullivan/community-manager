@@ -23,32 +23,13 @@
                         </div>
 					</div>
 				</div>
-
-                <div class="flex items-center justify-around w-full sm:w-auto sm:space-x-6 sm:justify-center">
-
-                    @can('view-member-balance', $community)
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="flex text-xs text-gray-400">Your Balance</div>
-                            @livewire('community-manager.accounting.components.member-balance', ['size' => 'lg'])
-                        </div>
-                    @endcan
-
-                    @can('add-funds', $community)
-                        <x-community-manager::accounting.add-funds-button />
-                        {{-- <div class="flex justify-center mt-5 sm:mt-0">
-                            <a x-on:click="window.livewire.dispatch('openModal', 'accounting.payment-methods')" 
-                                class="flex items-center justify-center px-3 py-2 text-sm font-semibold text-gray-900 bg-white rounded-md shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                            >
-                                Add Funds
-                            </a>
-                        </div> --}}
-                    @endcan
-                </div>
 			</div>
 		</div>
 	</div>
     @isset($navigationMenu)
-        <div class="items-center justify-start hidden w-full bg-white shadow1 sm:flex shadow-gray-200">
+        {{-- Full-width bottom border under the menubar (spans edge-to-edge because this
+             wrapper is w-full; the inner container just constrains the links). --}}
+        <div class="items-center justify-start hidden w-full bg-white border-b border-gray-200 sm:flex">
             <div class="flex flex-col w-full px-2 mx-auto max-w-8xl xl:px-20">
                 {{ $navigationMenu }}
             </div>

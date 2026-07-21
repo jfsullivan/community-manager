@@ -8,7 +8,6 @@ use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
 use jfsullivan\ApexUi\Livewire\Traits\WithSearchFilter;
 use jfsullivan\ApexUi\Livewire\Traits\WithSorting;
 use jfsullivan\CommunityManager\Livewire\Filters\BalanceFilter;
-use jfsullivan\CommunityManager\Models\Community;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -48,41 +47,19 @@ class MemberBalancesPage extends Component
 
     public function setSort($query, $key = '', $dir = null)
     {
-        switch ($key) {
-            case 'name':
-            default:
-                $query->when((config('member-manager.name_type') == 'single'), function ($query) {
-                    $query->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
-                }, function ($query) {
-                    $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['name'])
-                        ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['name']);
-                });
-
-                break;
-            case 'balance':
-                $query->orderByRaw('IFNULL(balance, 0) '.$dir ?? $this->defaultSortDir['balance'])
-                    ->when((config('member-manager.name_type') == 'single'), function ($query) {
-                        $query->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
-                    }, function ($query) {
-                        $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['name'])
-                            ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['name']);
-                    });
-
-                break;
-
-            case 'last_activity':
-                $query->orderBy('last_accessed_at', $dir ?? $this->defaultSortDir['last_accessed_at'])
-                    ->when((config('member-manager.name_type') == 'single'), function ($query) {
-                        $query->orderBy('users.name', $dir ?? $this->defaultSortDir['name']);
-                    }, function ($query) {
-                        $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['name'])
-                            ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['name']);
-                    });
-
-                break;
+        if ($key === 'balance') {
+            $query->orderByRaw('IFNULL(balance, 0) '.($dir ?? $this->defaultSortDir['balance']));
+        } elseif ($key === 'last_activity') {
+            $query->orderBy('last_accessed_at', $dir ?? $this->defaultSortDir['last_activity']);
         }
 
-        return $query;
+        return $this->orderByMemberName($query, $dir);
+    }
+
+    /** Order by the member's name, used as the primary and tie-breaking sort. */
+    protected function orderByMemberName($query, ?string $dir = null)
+    {
+        return $query->orderByFullName($dir ?? $this->defaultSortDir['name']);
     }
 
     #[Computed]
@@ -103,18 +80,6 @@ class MemberBalancesPage extends Component
             ->when($this->balanceFilter == 'negative', fn ($query) => $query->where('balance', '<', 0))
             ->when($this->searchFilter, fn ($query, $searchTerm) => $query->searchByFullName($searchTerm));
 
-        // $query = $this->community->memberships()->with(['user' => function($query) {
-        //         $query->withFullName()->select(['id', 'name', 'profile_photo_path']);
-        //     }])
-        //     ->withMemberBalances($this->community)
-        //     ->select(['balances.*', 'memberships.user_id'])
-        //     // ->select(['users.id', 'users.profile_photo_path', 'balances.*', 'memberships.user_id'])
-        //     // ->withFullName()
-        //     ->when($this->filters['balance'] == 'non-zero', fn ($query) => $query->where('balances.balance', '!=', 0))
-        //     ->when($this->filters['balance'] == 'positive', fn ($query) => $query->where('balances.balance', '>', 0))
-        //     ->when($this->filters['balance'] == 'negative', fn ($query) => $query->where('balances.balance', '<', 0))
-        //     ->when($this->filters['search'], fn ($query, $searchTerm) => $query->where('users.name', 'LIKE', '%'.$searchTerm.'%'));
-
         return $this->applySorting($query);
     }
 
@@ -129,7 +94,6 @@ class MemberBalancesPage extends Component
     #[On('transaction-updated')]
     public function render()
     {
-        // ray($this->records->first());
         return view('community-manager::livewire.accounting.pages.member-balances-page')
             ->layout(config('community-manager.admin_layout'));
     }

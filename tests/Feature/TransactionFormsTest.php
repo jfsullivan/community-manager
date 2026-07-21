@@ -185,10 +185,10 @@ class TransactionFormsTest extends TestCase
 
         $component = Livewire::test(CreateTransactionModal::class, [
             'user_id' => $this->user->id,
-        ]);
+        ])
+            ->set('userSearchTerm', 'John');
 
-        // Test the search functionality by calling the method directly
-        $results = $component->instance()->searchUsers('John');
+        $results = $component->instance()->userOptions;
 
         $this->assertNotEmpty($results);
         $this->assertContains($searchUser->id, array_column($results, 'value'));
@@ -241,10 +241,10 @@ class TransactionFormsTest extends TestCase
         ]);
 
         // Set form user_id first to test transfer user filtering
-        $component->set('form.user_id', $this->user->id);
+        $component->set('form.user_id', $this->user->id)
+            ->set('transferUserSearchTerm', $this->transferUser->first_name);
 
-        // Test the search functionality by calling the method directly
-        $results = $component->instance()->searchTransferUsers($this->transferUser->first_name);
+        $results = $component->instance()->transferUserOptions;
 
         $this->assertNotEmpty($results);
         $this->assertContains($this->transferUser->id, array_column($results, 'value'));
@@ -308,18 +308,20 @@ class TransactionFormsTest extends TestCase
     }
 
     /** @test */
-    public function it_displays_correct_user_search_term_in_create_modal()
+    public function it_pre_selects_the_user_in_the_create_modal()
     {
         $component = Livewire::test(CreateTransactionModal::class, [
             'user_id' => $this->user->id,
         ]);
 
-        $searchTerm = $component->get('userSearchTerm');
-        $this->assertEquals($this->user->full_name, $searchTerm);
+        // The selection lives in form.user_id (the apex select renders the
+        // label from its options), not in the search field.
+        $this->assertEquals($this->user->id, $component->get('form.user_id'));
+        $this->assertContains($this->user->id, array_column($component->instance()->userOptions, 'value'));
     }
 
     /** @test */
-    public function it_displays_correct_user_search_terms_in_update_modal()
+    public function it_pre_selects_the_users_in_the_update_modal()
     {
         $transaction = Transaction::factory()->create([
             'community_id' => $this->community->id,
@@ -334,11 +336,12 @@ class TransactionFormsTest extends TestCase
             'transaction_id' => $transaction->id,
         ]);
 
-        $userSearchTerm = $component->get('userSearchTerm');
-        $transferUserSearchTerm = $component->get('transferUserSearchTerm');
-
-        $this->assertEquals($this->user->full_name, $userSearchTerm);
-        $this->assertEquals($this->transferUser->full_name, $transferUserSearchTerm);
+        // The selections live in the form state (the apex selects render
+        // labels from their options), not in the search fields.
+        $this->assertEquals($this->user->id, $component->get('form.user_id'));
+        $this->assertEquals($this->transferUser->id, $component->get('form.transfer_user_id'));
+        $this->assertContains($this->user->id, array_column($component->instance()->userOptions, 'value'));
+        $this->assertContains($this->transferUser->id, array_column($component->instance()->transferUserOptions, 'value'));
     }
 
     /** @test */

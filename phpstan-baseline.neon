@@ -1,0 +1,595 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property Spatie\\MailTemplates\\Models\\MailTemplate\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/CreateCommunity.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\MailTemplates\\Models\\MailTemplate\:\:\$model_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/CreateCommunity.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\MailTemplates\\Models\\MailTemplate\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/CreateCommunity.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, jfsullivan\\CommunityManager\\Models\\TransactionType\>\|jfsullivan\\CommunityManager\\Models\\TransactionType\:\:\$direction\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/CreateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/CreateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\TransactionType\:\:\$direction\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/CreateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, jfsullivan\\CommunityManager\\Models\\TransactionType\>\|jfsullivan\\CommunityManager\\Models\\TransactionType\:\:\$direction\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$community_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$transacted_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$transfer_user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$type\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\TransactionType\:\:\$direction\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Actions/UpdateTransactionAction.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Controllers/CommunityController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:switchCommunity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Controllers/CurrentCommunityController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Http/Controllers/MemberController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureIsCommunityAdmin.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:hasCurrentCommunity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureIsCommunityAdmin.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$current_community_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Http/Middleware/EnsureIsCommunityMember.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:communities\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureIsCommunityMember.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:isMember\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureIsCommunityMember.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:ownsCommunity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureIsCommunityMember.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, jfsullivan\\CommunityManager\\Models\\Community\>\|jfsullivan\\CommunityManager\\Models\\Community\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureIsCommunityOwner.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureIsCommunityOwner.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Components/MemberBalance.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Components\\MemberBalance\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Components/MemberBalance.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Components\\MemberBalance\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Components/MemberBalance.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$current_community_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Forms/TransactionForm.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$absoluteAmountValue\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Forms/TransactionForm.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Forms/TransactionForm.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$transacted_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Forms/TransactionForm.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$transfer_user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Forms/TransactionForm.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$type_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Forms/TransactionForm.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Forms/TransactionForm.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Modals/AddFundsModal.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Modals\\CreateTransactionModal\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Modals/CreateTransactionModal.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Modals\\CreateTransactionModal\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Modals/CreateTransactionModal.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\TransactionType\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Modals/CreateTransactionModal.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Modals\\UpdateTransactionModal\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Modals/UpdateTransactionModal.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Modals\\UpdateTransactionModal\:\:\$transaction\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Modals/UpdateTransactionModal.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Modals\\UpdateTransactionModal\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Modals/UpdateTransactionModal.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\TransactionType\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Modals/UpdateTransactionModal.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/CommunityTransactionsPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\CommunityTransactionsPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Pages/CommunityTransactionsPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\CommunityTransactionsPage\:\:\$transactionQuery\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/CommunityTransactionsPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/MemberBalancesPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberBalancesPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/Livewire/Accounting/Pages/MemberBalancesPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberBalancesPage\:\:\$recordsQuery\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/MemberBalancesPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/MemberTransactionHistoryPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberTransactionHistoryPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Pages/MemberTransactionHistoryPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberTransactionHistoryPage\:\:\$recordQuery\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/MemberTransactionHistoryPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberTransactionHistoryPage\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Pages/MemberTransactionHistoryPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/MemberTransactionsPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberTransactionsPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Pages/MemberTransactionsPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberTransactionsPage\:\:\$recordQuery\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Accounting/Pages/MemberTransactionsPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Pages\\MemberTransactionsPage\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Accounting/Pages/MemberTransactionsPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$current_community_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Admin/Dashboard.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Articles/IndexPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\IndexPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Articles/IndexPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Articles/Pages/ArticleManagementPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\Pages\\ArticleManagementPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Articles/Pages/ArticleManagementPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Articles/Pages/CreateArticlePage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\Pages\\CreateArticlePage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Articles/Pages/CreateArticlePage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Articles/Pages/EditArticlePage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\Pages\\EditArticlePage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Articles/Pages/EditArticlePage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Articles/Pages/ShowArticlePage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\Pages\\ShowArticlePage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Articles/Pages/ShowArticlePage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Articles/ShowPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\ShowPage\:\:\$article\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Articles/ShowPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Articles\\ShowPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Articles/ShowPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Dashboard\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Dashboard.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Dashboard\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Dashboard.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Memberships/Pages/MemberManagementPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Memberships\\Pages\\MemberManagementPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Memberships/Pages/MemberManagementPage.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Livewire/Modals/JoinCommunity.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:switchCommunity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Livewire/Pages/CreateCommunityPage.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\MailTemplates\\Interfaces\\MailTemplateInterface\:\:\$sender_email\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Mail/BaseMailable.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\MailTemplates\\Interfaces\\MailTemplateInterface\:\:\$sender_name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Mail/BaseMailable.php
+
+		-
+			message: '#^Access to an undefined property Spatie\\MailTemplates\\Interfaces\\MailTemplateInterface\:\:\$subject\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Mail/BaseMailable.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$invitationMailTemplate\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Mail/CommunityInvitation.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Mail/CommunityInvitation.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$owner\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Mail/CommunityInvitation.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\MemberManager\\Models\\Invitation\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Mail/CommunityInvitation.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\MemberManager\\Models\\Invitation\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Mail/CommunityInvitation.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Mail\\Mailable\:\:getCommunityId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Mail/Templates/CommunityInvitationMailTemplate.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$is_personal\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Community.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$owner\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Community.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$user_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Community.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$users\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/Community.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\TransactionType\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/TransactionType.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\User\:\:\$communities\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Models/User.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\User\:\:\$current_community_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\User\:\:\$ownedCommunities\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Policies/CommunityPolicy.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Community\:\:\$track_member_balances\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Policies/CommunityPolicy.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:ownsCommunity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Policies/CommunityPolicy.php
+
+		-
+			message: '#^Trait jfsullivan\\CommunityManager\\Traits\\HasTransactions is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: src/Traits/HasTransactions.php
