@@ -70,6 +70,21 @@ A community model (or your app's subclass of it) can additionally use
 Access is enforced with the `community-owner`, `community-admin`, and `community-member`
 middleware.
 
+## Extensibility
+
+Three mechanisms, each with one job:
+
+1. **Subclass an abstract Page** (from article-manager / member-manager) to reuse a
+   screen with the community as owner. The `Livewire\Concerns\ResolvesCommunity` trait
+   supplies `community_id` → `community()` → `owningModel()`; add `layout()` +
+   `layoutProperties()` and you're done — never override `render()`. See
+   `Livewire\Articles\Pages\*` and `Livewire\Memberships\Pages\MemberManagementPage`.
+2. **Config component-swap** (`community-manager.components.*`) when an app replaces an
+   entire screen wholesale (e.g. the dashboards) — routes resolve the class from config.
+3. **Modal context via props** — member-manager's modals receive
+   `owning_model_type` / `owning_model_id`; no subclassing needed (the `community`
+   morph alias is registered by this package).
+
 ## Configuration
 
 `config/community-manager.php` (key options):
