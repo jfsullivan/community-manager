@@ -123,24 +123,22 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertCount(10, $firstPageItems);
         $this->assertTrue($firstPageRecords->hasPages());
 
-        // Get the cursor for next page and navigate
-        if ($firstPageRecords->hasMorePages()) {
-            $nextCursor = $firstPageRecords->nextCursor();
+        // Navigate to the next page (standard page-based pagination)
+        $this->assertTrue($firstPageRecords->hasMorePages());
 
-            $component->call('nextPage', $nextCursor->encode());
+        $component->call('nextPage');
 
-            $secondPageRecords = $component->get('records');
-            $secondPageItems = $secondPageRecords->items();
+        $secondPageRecords = $component->get('records');
+        $secondPageItems = $secondPageRecords->items();
 
-            // Should get different transactions on second page
-            $this->assertCount(10, $secondPageItems);
+        // Should get different transactions on second page
+        $this->assertCount(10, $secondPageItems);
 
-            // Verify that the items are different (different IDs)
-            $firstPageIds = collect($firstPageItems)->pluck('id')->sort()->values();
-            $secondPageIds = collect($secondPageItems)->pluck('id')->sort()->values();
+        // Verify that the items are different (different IDs)
+        $firstPageIds = collect($firstPageItems)->pluck('id')->sort()->values();
+        $secondPageIds = collect($secondPageItems)->pluck('id')->sort()->values();
 
-            $this->assertNotEquals($firstPageIds, $secondPageIds);
-        }
+        $this->assertNotEquals($firstPageIds, $secondPageIds);
     }
 
     /** @test */

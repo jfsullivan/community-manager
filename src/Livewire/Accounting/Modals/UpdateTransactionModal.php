@@ -12,7 +12,7 @@ class UpdateTransactionModal extends FormModalComponent
 
     public string $modalName = 'update-transaction';
 
-    /** @deprecated mount-time id kept for backwards compatibility; opening passes the id on the open event. */
+    /** Mount-time id kept for backwards compatibility; opening normally passes the id on the open event. */
     public $transaction_id;
 
     public function mount(): void
@@ -47,30 +47,6 @@ class UpdateTransactionModal extends FormModalComponent
         $transactionClass = app(config('community-manager.transaction_model'));
 
         return $transactionClass::find($transactionId);
-    }
-
-    #[Computed]
-    public function userSearchTerm()
-    {
-        if (! $this->transaction) {
-            return null;
-        }
-
-        return $this->transaction->user()->withFullName()->first()->full_name;
-    }
-
-    #[Computed]
-    public function transferUserSearchTerm()
-    {
-        if (! $this->transaction) {
-            return null;
-        }
-
-        if (! $this->transaction->transferPartner()->exists()) {
-            return null;
-        }
-
-        return $this->transaction->transferPartner()->withFullName()->first()->full_name;
     }
 
     public function save(): void

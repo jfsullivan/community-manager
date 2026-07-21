@@ -5,7 +5,6 @@ namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 use Illuminate\Support\Carbon;
 use jfsullivan\ApexUi\Modal\FormModalComponent;
 use jfsullivan\CommunityManager\Livewire\Accounting\Traits\HasTransactionForm;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 
 class CreateTransactionModal extends FormModalComponent
@@ -39,24 +38,6 @@ class CreateTransactionModal extends FormModalComponent
     {
         $this->form->user_id = $this->user_id;
         $this->form->transacted_at = Carbon::now('UTC')->toUserTimezone('Y-m-d H:i:s');
-    }
-
-    #[Computed]
-    public function userSearchTerm()
-    {
-        if (! $this->user_id) {
-            return null;
-        }
-
-        $userClass = app(config('community-manager.user_model'));
-
-        return $userClass::withFullName()->where('id', $this->user_id)->value('full_name');
-    }
-
-    #[Computed]
-    public function transferUserSearchTerm()
-    {
-        return null;
     }
 
     public function save(): void

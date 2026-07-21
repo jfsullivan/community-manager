@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
 use jfsullivan\ApexUi\ApexUiServiceProvider;
 use jfsullivan\CommonHelpers\CommonHelpersServiceProvider;
 use jfsullivan\CommunityManager\CommunityManagerServiceProvider;
@@ -31,6 +32,11 @@ class TestCase extends Orchestra
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'jfsullivan\\CommunityManager\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
+
+        // The view factory's finder is built before getEnvironmentSetUp's
+        // config('view.paths') applies, so register the test views on the
+        // live finder (needed for the components.layouts.* page layouts).
+        View::addLocation(__DIR__.'/resources/views');
     }
 
     protected function getPackageProviders($app)
@@ -52,7 +58,7 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
         config()->set('app.key', 'base64:'.base64_encode(random_bytes(32)));
-        config()->set('view.paths', [__DIR__.'/resources/views', __DIR__.'/tests/resources/views']);
+        config()->set('view.paths', [__DIR__.'/resources/views']);
         config()->set('community-manager.user_model', User::class);
         config()->set('community-manager.community_model', Community::class);
         config()->set('community-manager.transaction_model', Transaction::class);

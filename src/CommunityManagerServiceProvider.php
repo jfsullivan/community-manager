@@ -181,7 +181,7 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
         if (! empty($class)) {
             Blade::component('community-manager::'.$component, $class);
         } else {
-            Blade::component('community-manager::components.'.$component, 'community-manager::'.$name ?? $component);
+            Blade::component('community-manager::components.'.$component, 'community-manager::'.($name ?? $component));
         }
     }
 }

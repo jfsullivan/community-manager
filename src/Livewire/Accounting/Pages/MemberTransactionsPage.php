@@ -127,7 +127,7 @@ class MemberTransactionsPage extends Component
     #[On('transaction-updated')]
     public function clearSelectedTransactions()
     {
-        $this->clearSelected();
+        $this->selected = [];
     }
 
     public function render()

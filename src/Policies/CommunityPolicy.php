@@ -68,7 +68,7 @@ class CommunityPolicy
 
     public function manage($user, Community $community)
     {
-        return $this->create($user, $community)
+        return $this->create($user)
                 || $this->update($user, $community)
                 || $this->delete($user, $community);
     }

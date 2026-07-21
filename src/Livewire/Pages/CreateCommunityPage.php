@@ -4,11 +4,9 @@ namespace jfsullivan\CommunityManager\Livewire\Pages;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Jackiedo\Timezonelist\Facades\Timezonelist;
 use jfsullivan\CommunityManager\Livewire\Forms\CommunityForm;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
-use Spatie\LaravelOptions\Options;
 
 class CreateCommunityPage extends Component
 {
@@ -63,29 +61,6 @@ class CreateCommunityPage extends Component
         })->sortBy('label')->groupBy('region')->toArray();
 
         return $timezones;
-        // ray(Options::forModels($timezones, value: 'value')->toArray());
-        // ->append(fn($timezone) => [
-        //     'region' => $timezone['region'],
-        // ])
-        // ->toArray())->groupBy('region');
-        // return collect(Options::forModels($timezones, value: 'value')->append(fn($timezone) => [
-        //     'region' => $timezone['region'],
-        // ])->toArray())->groupBy('region');
-
-        // ray($timezones);
-
-        // return $timezones;
-        // $timezones = collect($timezone)->filter(function ($item) use ($searchTerm) {
-        //     return stripos($item, $searchTerm) !== false;
-        // })->sortKeys();
-
-        // $timezoneList = Timezonelist::toArray(false);
-        // $timezoneList = collect($timezoneList)->map(function($timezoneGroupOptions) {
-        //     return Options::forArray($timezoneGroupOptions)->toArray();
-        // })->toArray();
-        // ray($timezoneList);
-        // return $timezoneList;
-        return Options::forModels($timezones)->toArray();
     }
 
     public function save()
