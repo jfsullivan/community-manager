@@ -30,7 +30,7 @@ class TransactionForm extends Form
     #[Validate('required|date', onUpdate: false)]
     public $transacted_date = null;
 
-    #[Validate('required', onUpdate: false)]
+    /** Not exposed in the UI; preserves the stored time-of-day across edits. */
     public $transacted_time = null;
 
     #[Validate('nullable|string|max:255', onUpdate: false)]
