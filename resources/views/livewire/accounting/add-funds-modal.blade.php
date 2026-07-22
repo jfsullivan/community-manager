@@ -3,6 +3,7 @@
     width="w-full sm:max-w-md"
     heading="Payment Methods"
     loading-target="openModal"
+    :bordered="false"
 >
     <x-slot name="icon">
         <x-icons.featured-double class="bg-green-50" inner-color="bg-green-100">
