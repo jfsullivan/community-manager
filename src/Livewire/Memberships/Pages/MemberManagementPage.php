@@ -18,4 +18,9 @@ class MemberManagementPage extends BaseMemberManagementPage
     {
         return ['community' => $this->community];
     }
+
+    public function breadcrumbsView(): ?string
+    {
+        return 'community-manager::livewire.memberships.partials.breadcrumbs';
+    }
 }
