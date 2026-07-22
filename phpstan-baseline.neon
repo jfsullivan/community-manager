@@ -189,7 +189,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Models\\Transaction\:\:\$transacted_at\.$#'
 			identifier: property.notFound
-			count: 1
+			count: 2
 			path: src/Livewire/Accounting/Forms/TransactionForm.php
 
 		-

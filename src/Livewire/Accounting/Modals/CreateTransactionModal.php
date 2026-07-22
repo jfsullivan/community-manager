@@ -31,13 +31,15 @@ class CreateTransactionModal extends FormModalComponent
     {
         $this->form->reset();
         $this->form->user_id = $this->user_id;
-        $this->form->transacted_at = Carbon::now('UTC')->toUserTimezone('Y-m-d H:i:s');
+        $this->form->transacted_date = Carbon::now('UTC')->toUserTimezone('Y-m-d');
+        $this->form->transacted_time = Carbon::now('UTC')->toUserTimezone('H:i');
     }
 
     public function mount(): void
     {
         $this->form->user_id = $this->user_id;
-        $this->form->transacted_at = Carbon::now('UTC')->toUserTimezone('Y-m-d H:i:s');
+        $this->form->transacted_date = Carbon::now('UTC')->toUserTimezone('Y-m-d');
+        $this->form->transacted_time = Carbon::now('UTC')->toUserTimezone('H:i');
     }
 
     public function save(): void

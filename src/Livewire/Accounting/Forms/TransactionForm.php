@@ -2,16 +2,18 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Forms;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\CommunityManager\Actions\CreateTransactionAction;
 use jfsullivan\CommunityManager\Actions\UpdateTransactionAction;
 use jfsullivan\CommunityManager\Models\Transaction;
+use jfsullivan\UserTimezone\Concerns\SplitsDateTimes;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class TransactionForm extends Form
 {
+    use SplitsDateTimes;
+
     public $transaction;
 
     public $community_id = null;
@@ -26,7 +28,10 @@ class TransactionForm extends Form
     public $transfer_user_id = null;
 
     #[Validate('required|date', onUpdate: false)]
-    public $transacted_at = null;
+    public $transacted_date = null;
+
+    #[Validate('required', onUpdate: false)]
+    public $transacted_time = null;
 
     #[Validate('nullable|string|max:255', onUpdate: false)]
     public $description = null;
@@ -43,7 +48,8 @@ class TransactionForm extends Form
         $this->type_id = $this->transaction->type_id;
         $this->user_id = $this->transaction->user_id;
         $this->transfer_user_id = $this->transaction->transfer_user_id;
-        $this->transacted_at = Carbon::parse($this->transaction->transacted_at)->toUserTimezone('Y-m-d H:i:s');
+        $this->transacted_date = $this->toUserDate($this->transaction->transacted_at);
+        $this->transacted_time = $this->toUserTime($this->transaction->transacted_at);
         $this->description = $this->transaction->description;
 
         // str_replace($amount->getCurrency()->getSymbol(), '', $amount->formatTo('en_US'))
@@ -53,7 +59,6 @@ class TransactionForm extends Form
     public function store()
     {
         $this->community_id = Auth::user()->current_community_id;
-        $this->transacted_at = Carbon::parse($this->transacted_at)->toAppTimezone()->toDateTimeString();
 
         $createAction = new CreateTransactionAction;
 
@@ -62,7 +67,7 @@ class TransactionForm extends Form
             'type_id' => $this->type_id,
             'user_id' => $this->user_id,
             'transfer_user_id' => $this->transfer_user_id,
-            'transacted_at' => $this->transacted_at,
+            'transacted_at' => $this->combinedAppDateTime($this->transacted_date, $this->transacted_time),
             'description' => $this->description,
             'amount' => $this->amount,
         ]);
@@ -70,8 +75,6 @@ class TransactionForm extends Form
 
     public function update()
     {
-        $this->transacted_at = Carbon::parse($this->transacted_at)->toAppTimezone()->toDateTimeString();
-
         $updateAction = new UpdateTransactionAction;
 
         return $updateAction->execute($this->transaction, [
@@ -79,7 +82,7 @@ class TransactionForm extends Form
             'type_id' => $this->type_id,
             'user_id' => $this->user_id,
             'transfer_user_id' => $this->transfer_user_id,
-            'transacted_at' => $this->transacted_at,
+            'transacted_at' => $this->combinedAppDateTime($this->transacted_date, $this->transacted_time),
             'description' => $this->description,
             'amount' => $this->amount,
         ]);

@@ -26,7 +26,9 @@
             @endforeach
         </x-apex::input.select>
 
-        <x-apex::input.date-picker label="Date" wire:model="form.transacted_at" class="col-span-6" />
+        <x-apex::input.date-picker label="Date" wire:model="form.transacted_date" class="col-span-6 sm:col-span-4" />
+
+        <x-apex::input.time-picker label="Time" wire:model="form.transacted_time" class="col-span-6 sm:col-span-2" />
 
         <x-apex::input.select label="Type" placeholder="Select Type" wire:model="form.type_id" class="col-span-6">
             @foreach($this->transactionTypes as $option)
@@ -44,7 +46,7 @@
 
         <x-apex::input.text label="Description" wire:model="form.description" class="col-span-6" />
 
-        <x-apex::input.money label="Amount" wire:model="form.amount" class="col-span-2" />
+        <x-apex::input.money label="Amount" wire:model="form.amount" class="col-span-6 sm:col-span-3" />
     </div>
 
     <x-slot name="actions">

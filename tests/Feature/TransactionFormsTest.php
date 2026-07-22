@@ -75,7 +75,8 @@ class TransactionFormsTest extends TestCase
             'form.user_id' => $this->user->id,
             'form.amount' => '100.00',
             'form.description' => 'Test withdrawal',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -132,7 +133,8 @@ class TransactionFormsTest extends TestCase
             'form.user_id' => $this->user->id,
             'form.amount' => '100.00',
             'form.description' => 'Test withdrawal',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -151,7 +153,8 @@ class TransactionFormsTest extends TestCase
             'form.user_id' => $this->user->id,
             'form.amount' => '50.00',
             'form.description' => 'Test deposit',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -221,7 +224,8 @@ class TransactionFormsTest extends TestCase
             'form.user_id' => $this->user->id,
             'form.amount' => '100.00',
             'form.description' => 'Transfer test',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
             // Missing transfer_user_id
         ];
 
@@ -262,7 +266,8 @@ class TransactionFormsTest extends TestCase
             'form.transfer_user_id' => $this->transferUser->id,
             'form.amount' => '100.00',
             'form.description' => 'Transfer to friend',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -289,7 +294,8 @@ class TransactionFormsTest extends TestCase
             'form.transfer_user_id' => $this->transferUser->id,
             'form.amount' => '100.00',
             'form.description' => 'Transfer from friend',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -347,14 +353,13 @@ class TransactionFormsTest extends TestCase
     /** @test */
     public function it_handles_timezone_conversion_correctly()
     {
-        $localTime = Carbon::now()->format('Y-m-d H:i:s');
-
         $transactionData = [
             'form.type_id' => 1,
             'form.user_id' => $this->user->id,
             'form.amount' => '100.00',
             'form.description' => 'Timezone test',
-            'form.transacted_at' => $localTime,
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -378,7 +383,8 @@ class TransactionFormsTest extends TestCase
             'form.user_id' => $this->user->id,
             'form.amount' => '100.00',
             'form.description' => 'Event test',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -422,7 +428,8 @@ class TransactionFormsTest extends TestCase
             'form.user_id' => $this->user->id,
             'form.amount' => '100.00',
             'form.description' => 'Modal close test',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         $component = Livewire::test(CreateTransactionModal::class, [
@@ -444,14 +451,16 @@ class TransactionFormsTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        $transactedAt = $component->get('form.transacted_at');
+        $transactedDate = $component->get('form.transacted_date');
+        $transactedTime = $component->get('form.transacted_time');
 
-        $this->assertNotNull($transactedAt);
+        $this->assertNotNull($transactedDate);
+        $this->assertNotNull($transactedTime);
 
-        // Should be approximately the current time (within a few seconds)
+        // Should be approximately the current time (within a minute)
         $currentTime = Carbon::now();
-        $formTime = Carbon::parse($transactedAt);
-        $this->assertTrue((int) $formTime->diffInSeconds($currentTime, true) < 5);
+        $formTime = Carbon::parse($transactedDate.' '.$transactedTime);
+        $this->assertTrue((int) $formTime->diffInMinutes($currentTime, true) <= 1);
     }
 
     /**
@@ -470,7 +479,8 @@ class TransactionFormsTest extends TestCase
             'form.transfer_user_id' => $this->transferUser->id,
             'form.amount' => '100.00',
             'form.description' => 'Transfer to friend',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -510,7 +520,8 @@ class TransactionFormsTest extends TestCase
             'form.transfer_user_id' => $this->transferUser->id,
             'form.amount' => '100.00',
             'form.description' => 'Transfer from friend',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
@@ -601,7 +612,8 @@ class TransactionFormsTest extends TestCase
             'form.user_id' => $this->user->id,
             'form.amount' => '100.00',
             'form.description' => 'Regular withdrawal',
-            'form.transacted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            'form.transacted_time' => Carbon::now()->format('H:i'),
         ];
 
         Livewire::test(CreateTransactionModal::class, [
