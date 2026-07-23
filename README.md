@@ -59,8 +59,12 @@ A community model (or your app's subclass of it) can additionally use
 
 - **Communities** — a `Community` model, creation flow, a member/admin dashboard, and a
   "current community" concept for multi-tenant scoping.
-- **Members** — member management (add / import / roles / types / invitations) via
-  member-manager, scoped to the community.
+- **Members** — member management via member-manager, scoped to the community: the
+  members list (filters popover, invite-first header), a member details page
+  (`community.admin.members.show` — contact, status history, invited-by, balance +
+  recent transactions, swappable via `components.member_details_page`), and a pending
+  invitations page (`community.admin.members.invitations` with resend/cancel), all
+  linked from the admin sidebar's Member Management section.
 - **Accounting** — an optional transactions ledger with per-member balances
   (`brick/money`-backed amounts), member statements, and transaction admin.
 - **Articles** — community news via article-manager, authorized with the shared
@@ -78,7 +82,8 @@ Three mechanisms, each with one job:
    screen with the community as owner. The `Livewire\Concerns\ResolvesCommunity` trait
    supplies `community_id` → `community()` → `owningModel()`; add `layout()` +
    `layoutProperties()` and you're done — never override `render()`. See
-   `Livewire\Articles\Pages\*` and `Livewire\Memberships\Pages\MemberManagementPage`.
+   `Livewire\Articles\Pages\*` and `Livewire\Memberships\Pages\{MemberManagementPage,
+   MemberDetailsPage, InvitationManagementPage}`.
 2. **Config component-swap** (`community-manager.components.*`) when an app replaces an
    entire screen wholesale (e.g. the dashboards) — routes resolve the class from config.
 3. **Modal context via props** — member-manager's modals receive
@@ -98,9 +103,10 @@ return [
     'transaction_policy'     => \App\Policies\TransactionPolicy::class,
     'admin_layout'           => 'community-manager::components.layouts.admin',
     'components' => [
-        'dashboard'       => /* Livewire component for the member dashboard */,
-        'admin_dashboard' => /* Livewire component for the admin dashboard */,
-        'show_article'    => /* article show page component */,
+        'dashboard'           => /* Livewire component for the member dashboard */,
+        'admin_dashboard'     => /* Livewire component for the admin dashboard */,
+        'show_article'        => /* article show page component */,
+        'member_details_page' => /* member details page (subclass to add app activity panels) */,
     ],
     'features'               => [ /* available feature flags */ ],
     'track_member_balances'  => true,

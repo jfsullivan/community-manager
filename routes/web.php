@@ -15,6 +15,7 @@ use jfsullivan\CommunityManager\Livewire\Articles\Pages\EditArticlePage as Commu
 use jfsullivan\CommunityManager\Livewire\Articles\Pages\ShowArticlePage as CommunityArticleShowPage;
 use jfsullivan\CommunityManager\Livewire\Articles\ShowPage as CommunityArticlesShowPage;
 use jfsullivan\CommunityManager\Livewire\Dashboard;
+use jfsullivan\CommunityManager\Livewire\Memberships\Pages\InvitationManagementPage as CommunityInvitationManagementPage;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberDetailsPage as CommunityMemberDetailsPage;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage as CommunityMemberManagementPage;
 use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
@@ -78,6 +79,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
 
                 // Community Member Administration
                 Route::get('members', CommunityMemberManagementPage::class)->name('members.index');
+                Route::get('members/invitations', CommunityInvitationManagementPage::class)->name('members.invitations');
                 Route::get('members/{user_id}', config('community-manager.components.member_details_page', CommunityMemberDetailsPage::class))->name('members.show');
                 // Route::get('members', [MemberController::class, 'manage'])->name('members.manage');
                 //     Route::get('members/invitations', [InvitationController::class, 'index'])->name('members.invitations');

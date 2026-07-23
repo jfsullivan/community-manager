@@ -23,9 +23,17 @@
             <x-apex::sidebar.nav.item
                 icon="apex-ui.users"
                 href="{{ route('community.admin.members.index') }}"
-                :current="request()->routeIs('community.admin.member.*')"
+                :current="request()->routeIs('community.admin.members.index', 'community.admin.members.show')"
             >
                 Members
+            </x-apex::sidebar.nav.item>
+
+            <x-apex::sidebar.nav.item
+                icon="apex-ui.mail"
+                href="{{ route('community.admin.members.invitations') }}"
+                :current="request()->routeIs('community.admin.members.invitations')"
+            >
+                Invitations
             </x-apex::sidebar.nav.item>
         </x-apex::sidebar.nav.group>
     @endif

@@ -1,9 +1,5 @@
 <x-layouts.admin>
 
-    <x-slot name="leftSlideOverMenu">
-        <x-community-manager::layouts.admin.slide-over-menu />
-    </x-slot>
-
     <x-slot name="sidebar">
         <x-community-manager::layouts.admin.sidebar />
     </x-slot>

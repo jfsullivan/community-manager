@@ -10,13 +10,9 @@
             <div class="flex">
 
                 @if ($hasLeftMenu)
-                    <!-- Flyout Left Side Menu Trigger -->
+                    <!-- Sidebar flyout toggle (Flux moves the page sidebar off-canvas on mobile) -->
                     <div class="flex items-center md:hidden">
-                        <flux:modal.trigger name="left-side-menu">
-                            <span class="flex justify-center p-2 -ml-2 cursor-pointer">
-                                <flux:icon name="apex-ui.menu" class="w-6 h-6 text-primary-200 stroke-2" />
-                            </span>
-                        </flux:modal.trigger>
+                        <flux:sidebar.toggle icon="apex-ui.menu" class="-ml-1 bg-transparent! text-primary-200! hover:bg-white/10! hover:text-white!" />
                     </div>
                 @endif
 
