@@ -13,7 +13,7 @@
         <x-email.section-heading>Need a {{ config('app.name') }} account?</x-email.section-heading>
         <x-email.paragraph>Create a {{ config('app.name') }} account by clicking the button below. Use the same email address that this message was sent to in order to accept the invitation.  After creating an account, you may accept the invitation from your {{ config('app.name') }} home page.</x-email.paragraph>
 
-        <x-email.button url="{{ $registerUrl }}">
+        <x-email.button :url="$registerUrl">
             Create Account
         </x-email.button>
     @else
@@ -21,7 +21,7 @@
         {{-- <x-email.section-heading>Already have a {{ config('app.name') }} account?</x-email.section-heading> --}}
         {{-- <x-email.paragraph>Accept this invitation by clicking the button below.</x-email.paragraph> --}}
 
-        <x-email.button url="{{ $acceptUrl }}">
+        <x-email.button :url="$acceptUrl">
             Accept Invitation
         </x-email.button>
 
