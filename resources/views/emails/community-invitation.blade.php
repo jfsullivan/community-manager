@@ -16,6 +16,8 @@
         <x-email.button :url="$registerUrl">
             Create Account
         </x-email.button>
+
+        <x-email.action-url :url="$registerUrl" />
     @else
 
         {{-- <x-email.section-heading>Already have a {{ config('app.name') }} account?</x-email.section-heading> --}}
@@ -24,6 +26,8 @@
         <x-email.button :url="$acceptUrl">
             Accept Invitation
         </x-email.button>
+
+        <x-email.action-url :url="$acceptUrl" />
 
     @endif
 
