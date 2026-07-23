@@ -52,7 +52,7 @@
         "jackiedo/timezonelist": "^5.1",
         "jfsullivan/article-manager": "^2.0",
         "jfsullivan/common-helpers": "^1.0",
-        "jfsullivan/member-manager": "^0.7",
+        "jfsullivan/member-manager": "^0.8",
         "jfsullivan/notifications": "^1.0",
         "jfsullivan/user-timezone": "^1.0",
         "livewire/flux": "^2.0",

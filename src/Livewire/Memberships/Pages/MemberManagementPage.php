@@ -23,4 +23,9 @@ class MemberManagementPage extends BaseMemberManagementPage
     {
         return 'community-manager::livewire.memberships.partials.breadcrumbs';
     }
+
+    public function memberDetailsUrl($member): ?string
+    {
+        return route('community.admin.members.show', ['user_id' => $member->user_id]);
+    }
 }

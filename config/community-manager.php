@@ -59,6 +59,7 @@ return [
         'dashboard' => Dashboard::class,
         'admin_dashboard' => jfsullivan\CommunityManager\Livewire\Admin\Dashboard::class,
         'show_article' => Show::class,
+        'member_details_page' => jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberDetailsPage::class,
     ],
 
     /*
