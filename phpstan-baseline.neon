@@ -442,6 +442,30 @@ parameters:
 			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
 			identifier: property.notFound
 			count: 1
+			path: src/Livewire/Memberships/Pages/InvitationManagementPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Memberships\\Pages\\InvitationManagementPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 2
+			path: src/Livewire/Memberships/Pages/InvitationManagementPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Livewire/Memberships/Pages/MemberDetailsPage.php
+
+		-
+			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Memberships\\Pages\\MemberDetailsPage\:\:\$community\.$#'
+			identifier: property.notFound
+			count: 4
+			path: src/Livewire/Memberships/Pages/MemberDetailsPage.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
 			path: src/Livewire/Memberships/Pages/MemberManagementPage.php
 
 		-
