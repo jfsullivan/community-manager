@@ -10,9 +10,13 @@
             <div class="flex">
 
                 @if ($hasLeftMenu)
-                    <!-- Sidebar flyout toggle (Flux moves the page sidebar off-canvas on mobile) -->
-                    <div class="flex items-center md:hidden">
-                        <flux:sidebar.toggle icon="apex-ui.menu" class="-ml-1 bg-transparent! text-primary-200! hover:bg-white/10! hover:text-white!" />
+                    <!-- Sidebar flyout toggle (Flux moves the page sidebar off-canvas on mobile).
+                         Plain button: flux:sidebar.toggle's icon attr doesn't render custom icon names. -->
+                    <div class="flex items-center -ml-2 mr-1 md:hidden">
+                        <button type="button" x-data x-on:click="$dispatch('flux-sidebar-toggle')" aria-label="Toggle sidebar"
+                            class="inline-flex items-center justify-center p-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100/10 focus:outline-hidden focus:bg-transparent">
+                            <flux:icon name="apex-ui.menu" class="w-6 h-6 text-white stroke-2" />
+                        </button>
                     </div>
                 @endif
 
