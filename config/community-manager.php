@@ -2,6 +2,7 @@
 
 use jfsullivan\ArticleManager\Livewire\Articles\Show;
 use jfsullivan\CommunityManager\Livewire\Dashboard;
+use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberDetailsPage;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Models\TransactionType;
@@ -59,7 +60,7 @@ return [
         'dashboard' => Dashboard::class,
         'admin_dashboard' => jfsullivan\CommunityManager\Livewire\Admin\Dashboard::class,
         'show_article' => Show::class,
-        'member_details_page' => jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberDetailsPage::class,
+        'member_details_page' => MemberDetailsPage::class,
     ],
 
     /*
