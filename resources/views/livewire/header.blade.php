@@ -9,6 +9,17 @@
         <div class="flex justify-between h-16">
             <div class="flex">
 
+                @if ($hasLeftMenu)
+                    <!-- Flyout Left Side Menu Trigger -->
+                    <div class="flex items-center md:hidden">
+                        <flux:modal.trigger name="left-side-menu">
+                            <span class="flex justify-center p-2 -ml-2 cursor-pointer">
+                                <flux:icon name="apex-ui.menu" class="w-6 h-6 text-primary-200 stroke-2" />
+                            </span>
+                        </flux:modal.trigger>
+                    </div>
+                @endif
+
                 <!-- Logo -->
                 <div class="flex items-center w-64 px-4 -mx-4 shrink-0">
                     <a href="{{ route('index') }}">
@@ -75,19 +86,4 @@
     </div>
 
     {{-- @livewire('community-manager.responsive-navigation-menu') --}}
-
-    <!-- Flyout Left Side Menu -->
-    @if(isset($leftSlideOverMenu))
-        <flux:modal.trigger name="left-side-menu">
-            <span class="flex justify-center cursor-pointer">
-                <flux:icon name="apex-ui.menu" class="w-6 h-6 text-gray-500 stroke-2" />
-            </span>
-        </flux:modal.trigger>
-
-        <x-apex::drawer name="left-side-menu" position="left">
-            <div class="flex min-h-full w-full flex-col pwa-safe-area-adjustment">
-                {{ $leftSlideOverMenu }}
-            </div>
-        </x-apex::drawer>
-    @endif
 </nav>
