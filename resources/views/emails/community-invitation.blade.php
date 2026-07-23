@@ -1,4 +1,5 @@
-<x-email.layout site-name="{{ config('app.name') }}" :no-reply="$no_reply">
+{{-- Replies go to the inviter (Reply-To), so no "do not reply" footer. --}}
+<x-email.layout site-name="{{ config('app.name') }}" :no_reply="false">
 
     <x-email.title-heading>You've been invited!</x-email.title-heading>
 

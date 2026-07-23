@@ -7,11 +7,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\MemberManager\Mail\BaseMailable;
+use jfsullivan\MemberManager\Mail\Concerns\SendsOnBehalfOfInviter;
 use jfsullivan\MemberManager\Models\Invitation;
 
 class CommunityInvitation extends BaseMailable implements ShouldQueue
 {
     use Queueable;
+    use SendsOnBehalfOfInviter;
     use SerializesModels;
 
     private $community;
@@ -53,6 +55,11 @@ class CommunityInvitation extends BaseMailable implements ShouldQueue
     public function getInvitationId(): int
     {
         return $this->invitation->id;
+    }
+
+    protected function getInviter()
+    {
+        return $this->invitation->sentBy;
     }
 
     public function getHtmlLayout(): string
