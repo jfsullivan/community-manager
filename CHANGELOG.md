@@ -2,6 +2,16 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v0.8.0 - Member details, invitations page, invite-first emails - 2026-07-24
+
+### Community member experience overhaul
+
+- **Member details page** (`community.admin.members.show`) — contact info, membership facts, status-history timeline, invited-by, and an Account panel (balance + recent transactions). Swappable via `community-manager.components.member_details_page`.
+- **Invitations page** (`community.admin.members.invitations`) — pending invitations with resend/cancel, linked from the Member Management sidebar group.
+- **Invite-first emails** — invitations send on behalf of the inviter (From stays on the app domain, Reply-To goes to the inviter); copy/paste URL fallback under buttons; signed-URL double-escaping fixed.
+- **Native sidebar flyout** — the mobile hamburger now uses Flux's off-canvas sidebar (full height, full labels).
+- Requires `jfsullivan/member-manager` ^0.9.
+
 ## v2.1.0 - Generic article policy - 2026-07-14
 
 - Use article-manager's generic `ArticlePolicy` (`registerGates('community')`) instead of a bespoke `CommunityArticlePolicy`.
