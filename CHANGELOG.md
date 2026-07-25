@@ -2,6 +2,14 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v0.8.1 - Transaction user select fix + shared header components - 2026-07-25
+
+### What's Changed
+
+- **Transaction edit shows its user again**: the searchable selects only load the first 20 alphabetical members, so a bound user outside that page rendered as empty. The selected user (and transfer user) is now always merged into the options. Regression-tested with 25+ members.
+- Community Transactions and Member Balances pages use the shared `<x-apex::section-header>` with `size="sm" variant="primary"` action buttons.
+- Member Balances filter group now uses `<x-apex::button-group>` (requires apex-ui ^1.6).
+
 ## v0.8.0 - Member details, invitations page, invite-first emails - 2026-07-24
 
 ### Community member experience overhaul
