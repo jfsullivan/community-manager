@@ -5,21 +5,18 @@
         <x-apex::breadcrumbs.item>Transactions</x-apex::breadcrumbs.item>
     </x-slot>
 
-    <div class="flex justify-center w-full bg-white border-b border-gray-200">
-        <div class="w-full flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white">
-            <div class="w-full flex flex-col">
-                <x-apex::heading size="xl" class="mb-0! font-semibold!">Community Transactions</x-apex::heading>
-                <x-apex::text>Manage all transactions for your community.</x-apex::text>
-            </div>
-            <div class="flex items-center space-x-2">
-                @if(Gate::allows('create-community-transaction', $this->community))
-                    <x-apex::button size="sm" icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction')">
-                        Add Transaction
-                    </x-apex::button>
-                @endif
-            </div>
-        </div>
-    </div>
+    <x-apex::section-header
+        heading="Community Transactions"
+        subheading="Manage all transactions for your community."
+    >
+        <x-slot:actions>
+            @if(Gate::allows('create-community-transaction', $this->community))
+                <x-apex::button size="sm" variant="primary" icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction')">
+                    Add Transaction
+                </x-apex::button>
+            @endif
+        </x-slot:actions>
+    </x-apex::section-header>
 
     <div class="flex flex-col w-full">
         <x-apex::grid flush selectable striped searchable

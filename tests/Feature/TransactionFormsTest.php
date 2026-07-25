@@ -351,6 +351,54 @@ class TransactionFormsTest extends TestCase
     }
 
     /** @test */
+    public function it_includes_the_selected_user_even_when_outside_the_first_page_of_options()
+    {
+        // Fill the first 20 alphabetical slots so the transaction's user falls
+        // outside the search query's page and would otherwise be missing.
+        foreach (range(1, 25) as $i) {
+            $member = User::factory()->create([
+                'first_name' => 'Aaron',
+                'last_name' => sprintf('Alpha%02d', $i),
+                'current_community_id' => $this->community->id,
+            ]);
+
+            $this->community->members()->attach($member->id, [
+                'role_id' => 1,
+                'type_id' => 1,
+            ]);
+        }
+
+        $zUser = User::factory()->create([
+            'first_name' => 'Zed',
+            'last_name' => 'Zulu',
+            'current_community_id' => $this->community->id,
+        ]);
+
+        $this->community->members()->attach($zUser->id, [
+            'role_id' => 1,
+            'type_id' => 1,
+        ]);
+
+        $transaction = Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $zUser->id,
+            'type_id' => 1,
+            'amount' => Money::of('25.00', 'USD')->multipliedBy(-1)->getMinorAmount()->toInt(),
+            'transacted_at' => Carbon::now(),
+        ]);
+
+        $component = Livewire::test(UpdateTransactionModal::class, [
+            'transaction_id' => $transaction->id,
+        ]);
+
+        $options = $component->instance()->userOptions;
+
+        $this->assertEquals($zUser->id, $component->get('form.user_id'));
+        $this->assertContains($zUser->id, array_column($options, 'value'));
+        $this->assertContains('Zed Zulu', array_column($options, 'label'));
+    }
+
+    /** @test */
     public function it_handles_timezone_conversion_correctly()
     {
         $transactionData = [

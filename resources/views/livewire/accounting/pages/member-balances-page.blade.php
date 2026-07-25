@@ -5,21 +5,18 @@
         <x-apex::breadcrumbs.item>Member Balances</x-apex::breadcrumbs.item>
     </x-slot>
 
-    <div class="flex justify-center w-full bg-white border-b border-gray-200">
-        <div class="w-full flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white">
-            <div class="w-full flex flex-col">
-                <x-apex::heading size="xl" class="mb-0! font-semibold!">Member Balances</x-apex::heading>
-                <x-apex::text>Current account balance for each member of this community.</x-apex::text>
-            </div>
-            <div class="flex items-center space-x-2">
-                @if(Gate::allows('create-community-transaction', $this->community))
-                    <x-apex::button size="sm" icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction')">
-                        Add Transaction
-                    </x-apex::button>
-                @endif
-            </div>
-        </div>
-    </div>
+    <x-apex::section-header
+        heading="Member Balances"
+        subheading="Current account balance for each member of this community."
+    >
+        <x-slot:actions>
+            @if(Gate::allows('create-community-transaction', $this->community))
+                <x-apex::button size="sm" variant="primary" icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction')">
+                    Add Transaction
+                </x-apex::button>
+            @endif
+        </x-slot:actions>
+    </x-apex::section-header>
 
     <div class="flex flex-col w-full">
         <x-apex::grid flush selectable striped searchable
@@ -31,20 +28,20 @@
             </x-slot:bulkActions>
 
             <x-slot name="filterButtons">
-                <x-button-group wire:model.live="balanceFilter" class="grid grid-cols-4">
-                    <x-button-group.button name="all" class="text-xs text-gray-800 sm:text-sm ring-gray-200 hover:bg-gray-50 ">
+                <x-apex::button-group wire:model.live="balanceFilter" class="grid grid-cols-4">
+                    <x-apex::button-group.button name="all">
                         <span class="py-px">View All</span>
-                    </x-button-group.button>
-                    <x-button-group.button name="positive" class="text-xs text-gray-800 sm:text-sm ring-gray-200 hover:bg-gray-50">
+                    </x-apex::button-group.button>
+                    <x-apex::button-group.button name="positive">
                         <span class="py-px">Positive</span>
-                    </x-button-group.button>
-                    <x-button-group.button name="negative" class="text-xs text-gray-800 sm:text-sm ring-gray-200 hover:bg-gray-50">
+                    </x-apex::button-group.button>
+                    <x-apex::button-group.button name="negative">
                         <span class="py-px">Negative</span>
-                    </x-button-group.button>
-                    <x-button-group.button name="zero" class="text-xs text-gray-800 sm:text-sm ring-gray-200 hover:bg-gray-50">
+                    </x-apex::button-group.button>
+                    <x-apex::button-group.button name="zero">
                         <span class="py-px">No Balance</span>
-                    </x-button-group.button>
-                </x-button-group>
+                    </x-apex::button-group.button>
+                </x-apex::button-group>
             </x-slot>
 
             <x-slot:header actions-variant="icon">

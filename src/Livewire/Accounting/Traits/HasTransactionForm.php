@@ -66,16 +66,45 @@ trait HasTransactionForm
     #[Computed]
     public function userOptions()
     {
-        return Options::forModels($this->usersSearchQuery($this->userSearchTerm), label: 'full_name')->toArray();
+        $options = Options::forModels($this->usersSearchQuery($this->userSearchTerm), label: 'full_name')->toArray();
+
+        return $this->withSelectedUserOption($options, $this->form->user_id);
     }
 
     #[Computed]
     public function transferUserOptions()
     {
-        return Options::forModels(
+        $options = Options::forModels(
             $this->usersSearchQuery($this->transferUserSearchTerm)->where('id', '!=', $this->form->user_id),
             label: 'full_name'
         )->toArray();
+
+        return $this->withSelectedUserOption($options, $this->form->transfer_user_id);
+    }
+
+    /**
+     * The search query only returns the first 20 matches, so when editing, the
+     * bound user may fall outside them and the select would render empty.
+     * Prepend the selected user whenever the options don't already include it.
+     *
+     * @param  array<int, array{label: string, value: mixed}>  $options
+     * @return array<int, array{label: string, value: mixed}>
+     */
+    protected function withSelectedUserOption(array $options, $userId): array
+    {
+        if (! $userId || collect($options)->contains(fn ($option) => (string) $option['value'] === (string) $userId)) {
+            return $options;
+        }
+
+        $userClass = config('community-manager.user_model');
+
+        $selected = $userClass::select('id')->withFullName()->whereKey($userId)->first();
+
+        if (! $selected) {
+            return $options;
+        }
+
+        return array_merge([['label' => $selected->full_name, 'value' => $selected->id]], $options);
     }
 
     public function render()
