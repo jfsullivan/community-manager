@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.1.1 - Laravel 13 support - 2026-08-27
+
+Widen `illuminate/contracts` to allow Laravel 13 (`||^13.0`). No code changes.
+
 ## v3.1.0 - Restore 3.x versioning - 2026-08-27
 
 The v0.8.0 and v0.8.1 releases below were accidentally numbered beneath v3.0.0, so version
