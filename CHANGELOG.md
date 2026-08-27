@@ -2,6 +2,23 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.1.0 - Restore 3.x versioning - 2026-08-27
+
+The v0.8.0 and v0.8.1 releases below were accidentally numbered beneath v3.0.0, so version
+constraints like `^3.0` resolved to v3.0.0 and skipped them. v3.1.0 re-releases that work
+under the correct version line; it contains everything in v0.8.1 (no new changes). The
+v0.8.x tags remain in place but should not be used.
+
+### What's Changed (since v3.0.0 — the v0.8.0 + v0.8.1 content)
+
+- **Member details page** (`community.admin.members.show`) — contact info, membership facts, status-history timeline, invited-by, and an Account panel (balance + recent transactions).
+- **Invitations page** (`community.admin.members.invitations`) — pending invitations with resend/cancel.
+- **Invite-first emails** — invitations send on behalf of the inviter (Reply-To), copy/paste URL fallback, signed-URL double-escaping fix.
+- **Native sidebar flyout** for the mobile hamburger.
+- **Transaction edit shows its user again** — selected user/transfer user always merged into the searchable select options.
+- Community Transactions and Member Balances pages use shared `<x-apex::section-header>` and `<x-apex::button-group>` components.
+- Requires `jfsullivan/member-manager` ^0.9 and `apex-ui` ^1.6.
+
 ## v0.8.1 - Transaction user select fix + shared header components - 2026-07-25
 
 ### What's Changed
