@@ -4,7 +4,7 @@ All notable changes to `community-manager` will be documented in this file.
 
 ## v3.1.1 - Laravel 13 support - 2026-08-27
 
-Widen `illuminate/contracts` to allow Laravel 13 (`||^13.0`) and `brick/money` to allow 0.14 (Laravel 13 requires `brick/math` >= 0.14, which brick/money 0.8 cannot use). No code changes.
+Widen `illuminate/contracts` to allow Laravel 13 (`||^13.0`) and `brick/money` to allow 0.14 (Laravel 13 requires `brick/math` >= 0.14, which brick/money 0.8 cannot use). Migrate `Transaction` amount formatting off `Money::formatWith()` (removed in brick/money 0.14) to `MoneyNumberFormatter`.
 
 ## v3.1.0 - Restore 3.x versioning - 2026-08-27
 

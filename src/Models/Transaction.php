@@ -2,6 +2,7 @@
 
 namespace jfsullivan\CommunityManager\Models;
 
+use Brick\Money\Formatter\MoneyNumberFormatter;
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -110,7 +111,7 @@ class Transaction extends Model
         $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
 
         return Attribute::make(
-            get: fn ($value, $attributes) => Money::ofMinor($attributes['amount'], 'USD')->abs()->formatWith($formatter),
+            get: fn ($value, $attributes) => (new MoneyNumberFormatter($formatter))->format(Money::ofMinor($attributes['amount'], 'USD')->abs()),
         );
     }
 
@@ -120,7 +121,7 @@ class Transaction extends Model
         $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
 
         return Attribute::make(
-            get: fn ($value, $attributes) => Money::ofMinor($attributes['amount'], 'USD')->formatWith($formatter),
+            get: fn ($value, $attributes) => (new MoneyNumberFormatter($formatter))->format(Money::ofMinor($attributes['amount'], 'USD')),
         );
     }
 
