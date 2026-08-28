@@ -10,6 +10,7 @@ use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\CommunityManager\Tests\TestCase;
 use jfsullivan\CommunityManager\Tests\User;
 use Livewire\Livewire;
+use PHPUnit\Framework\Attributes\Test;
 
 class CommunityTransactionsPageTest extends TestCase
 {
@@ -42,7 +43,7 @@ class CommunityTransactionsPageTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    /** @test */
+    #[Test]
     public function it_displays_transactions_page()
     {
         Livewire::test(CommunityTransactionsPage::class, [
@@ -52,7 +53,7 @@ class CommunityTransactionsPageTest extends TestCase
             ->assertOk();
     }
 
-    /** @test */
+    #[Test]
     public function it_paginates_transactions_correctly()
     {
         // Create more transactions than the default per page (100)
@@ -77,7 +78,7 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertTrue($records->hasPages());
     }
 
-    /** @test */
+    #[Test]
     public function it_changes_per_page_setting()
     {
         // Create enough transactions to test pagination
@@ -101,7 +102,7 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertTrue($records->hasPages());
     }
 
-    /** @test */
+    #[Test]
     public function it_navigates_to_next_page()
     {
         // Create transactions with specific data to verify different pages
@@ -141,7 +142,7 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertNotEquals($firstPageIds, $secondPageIds);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_transactions_and_maintains_pagination()
     {
         // Create transactions with different types
@@ -180,7 +181,7 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertTrue($filteredRecords->hasPages());
     }
 
-    /** @test */
+    #[Test]
     public function it_searches_transactions_and_maintains_pagination()
     {
         // Create transactions with searchable descriptions
@@ -213,7 +214,7 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertTrue($searchResults->hasPages());
     }
 
-    /** @test */
+    #[Test]
     public function it_sorts_transactions_and_maintains_pagination()
     {
         // Create transactions with different dates
@@ -246,7 +247,7 @@ class CommunityTransactionsPageTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_displays_community_balance()
     {
         // Create some transactions with different amounts
@@ -275,7 +276,7 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertNotEmpty($memberBalance);
     }
 
-    /** @test */
+    #[Test]
     public function it_filters_by_community_correctly()
     {
         // Create another community with transactions

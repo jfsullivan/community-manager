@@ -13,6 +13,7 @@ use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\CommunityManager\Tests\TestCase;
 use jfsullivan\CommunityManager\Tests\User;
 use Livewire\Livewire;
+use PHPUnit\Framework\Attributes\Test;
 
 class TransactionFormsTest extends TestCase
 {
@@ -67,7 +68,7 @@ class TransactionFormsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_transaction()
     {
         $transactionData = [
@@ -93,7 +94,7 @@ class TransactionFormsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_a_transaction()
     {
         $transaction = Transaction::factory()->create([
@@ -124,7 +125,7 @@ class TransactionFormsTest extends TestCase
         $this->assertEquals(Money::of('75.00', 'USD')->getMinorAmount()->toInt(), $transaction->amount->getMinorAmount()->toInt());
     }
 
-    /** @test */
+    #[Test]
     public function it_applies_correct_amount_based_on_transaction_direction()
     {
         // Test withdrawal (negative direction)
@@ -168,7 +169,7 @@ class TransactionFormsTest extends TestCase
         $this->assertEquals(5000, $deposit->amount->getMinorAmount()->toInt()); // $50.00
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_for_users()
     {
 
@@ -200,7 +201,7 @@ class TransactionFormsTest extends TestCase
         $this->assertContains('John Doe', array_column($results, 'label'));
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_required_fields()
     {
         // Test by explicitly clearing required fields
@@ -216,7 +217,7 @@ class TransactionFormsTest extends TestCase
             ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_transfer_user_id_for_transfer_transactions()
     {
         $transferData = [
@@ -237,7 +238,7 @@ class TransactionFormsTest extends TestCase
             ->assertHasErrors(['form.transfer_user_id']);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_search_for_transfer_users()
     {
         $component = Livewire::test(CreateTransactionModal::class, [
@@ -257,7 +258,7 @@ class TransactionFormsTest extends TestCase
         $this->assertNotContains($this->user->id, array_column($results, 'value'));
     }
 
-    /** @test */
+    #[Test]
     public function it_creates_transfer_out_transaction()
     {
         $transferData = [
@@ -285,7 +286,7 @@ class TransactionFormsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_creates_transfer_in_transaction()
     {
         $transferData = [
@@ -313,7 +314,7 @@ class TransactionFormsTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function it_pre_selects_the_user_in_the_create_modal()
     {
         $component = Livewire::test(CreateTransactionModal::class, [
@@ -326,7 +327,7 @@ class TransactionFormsTest extends TestCase
         $this->assertContains($this->user->id, array_column($component->instance()->userOptions, 'value'));
     }
 
-    /** @test */
+    #[Test]
     public function it_pre_selects_the_users_in_the_update_modal()
     {
         $transaction = Transaction::factory()->create([
@@ -350,7 +351,7 @@ class TransactionFormsTest extends TestCase
         $this->assertContains($this->transferUser->id, array_column($component->instance()->transferUserOptions, 'value'));
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_the_selected_user_even_when_outside_the_first_page_of_options()
     {
         // Fill the first 20 alphabetical slots so the transaction's user falls
@@ -398,7 +399,7 @@ class TransactionFormsTest extends TestCase
         $this->assertContains('Zed Zulu', array_column($options, 'label'));
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_timezone_conversion_correctly()
     {
         $transactionData = [
@@ -423,7 +424,7 @@ class TransactionFormsTest extends TestCase
         $this->assertInstanceOf(Carbon::class, $transaction->transacted_at);
     }
 
-    /** @test */
+    #[Test]
     public function it_dispatches_transaction_created_event()
     {
         $transactionData = [
@@ -443,7 +444,7 @@ class TransactionFormsTest extends TestCase
             ->assertDispatched('transaction-created');
     }
 
-    /** @test */
+    #[Test]
     public function it_dispatches_transaction_updated_event()
     {
         $transaction = Transaction::factory()->create([
@@ -468,7 +469,7 @@ class TransactionFormsTest extends TestCase
             ->assertDispatched('transaction-updated');
     }
 
-    /** @test */
+    #[Test]
     public function it_closes_modal_after_successful_save()
     {
         $transactionData = [
@@ -492,7 +493,7 @@ class TransactionFormsTest extends TestCase
         $component->assertHasNoErrors();
     }
 
-    /** @test */
+    #[Test]
     public function it_pre_fills_transacted_at_with_current_time()
     {
         $component = Livewire::test(CreateTransactionModal::class, [
@@ -516,8 +517,7 @@ class TransactionFormsTest extends TestCase
      * The CreateTransactionAction and UpdateTransactionAction classes handle
      * creating and updating companion transactions for transfer transactions.
      */
-
-    /** @test */
+    #[Test]
     public function it_should_create_companion_transaction_for_transfer_out()
     {
         // This test verifies the transfer companion transaction logic
@@ -558,7 +558,7 @@ class TransactionFormsTest extends TestCase
         $this->assertDatabaseCount('transactions', 2);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_create_companion_transaction_for_transfer_in()
     {
         // This test verifies the transfer companion transaction logic
@@ -599,7 +599,7 @@ class TransactionFormsTest extends TestCase
         $this->assertDatabaseCount('transactions', 2);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_update_companion_transaction_when_updating_transfer_transaction()
     {
         // Create initial transfer transactions (main + companion)
@@ -652,7 +652,7 @@ class TransactionFormsTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_should_not_create_companion_transaction_for_non_transfer_types()
     {
         $transactionData = [
