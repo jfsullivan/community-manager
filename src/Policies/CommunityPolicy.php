@@ -28,7 +28,9 @@ class CommunityPolicy
 
     public function view(Authenticatable $user, Community $community)
     {
-        return $community->hasMember($user->id);
+        // Confirmed members only — a pending (start_at IS NULL) row does not
+        // grant view access until an admin confirms it.
+        return $community->hasConfirmedMember($user->id);
     }
 
     public function create(Authenticatable $user)

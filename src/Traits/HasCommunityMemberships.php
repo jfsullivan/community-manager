@@ -24,6 +24,23 @@ trait HasCommunityMemberships
         return $this->morphedByMany($this->communityClass(), 'model', 'memberships')->withTimestamps();
     }
 
+    /**
+     * Communities the user is a CONFIRMED member of — the pivot has a `start_at`
+     * in the past and has not ended. Pending (start_at IS NULL) memberships are
+     * excluded, so they never grant access or appear as switchable. The raw
+     * `communities()` relation stays unfiltered for rosters/admin surfaces.
+     */
+    public function confirmedCommunities()
+    {
+        return $this->morphedByMany($this->communityClass(), 'model', 'memberships')
+            ->withTimestamps()
+            ->wherePivotNotNull('start_at')
+            ->wherePivot('start_at', '<=', now())
+            ->where(function ($query) {
+                $query->whereNull('memberships.end_at')->orWhere('memberships.end_at', '>=', now());
+            });
+    }
+
     /**************************************************************************
      * Model Scopes
     ***************************************************************************/
@@ -95,12 +112,14 @@ trait HasCommunityMemberships
 
     public function allCommunities()
     {
-        return $this->communities->merge($this->ownedCommunities)->sortBy('name');
+        // Confirmed memberships only — a pending community is not one the user
+        // can access or switch into, so it must not surface in the home list.
+        return $this->confirmedCommunities->merge($this->ownedCommunities)->sortBy('name');
     }
 
     public function belongsToCommunity($community)
     {
-        return $this->communities->contains(function ($org) use ($community) {
+        return $this->confirmedCommunities->contains(function ($org) use ($community) {
             return $org->id === $community->id;
         }) || $this->ownsCommunity($community);
     }

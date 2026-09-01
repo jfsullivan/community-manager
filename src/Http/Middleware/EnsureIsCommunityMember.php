@@ -22,7 +22,10 @@ class EnsureIsCommunityMember
             return redirect()->route('home');
         }
 
-        if (! $request->user()->isMember($community) && ! $request->user()->ownsCommunity($community)) {
+        // A pending (start_at IS NULL) membership must NOT grant access — the
+        // request is still awaiting admin confirmation. Only a confirmed member
+        // (or the owner) may enter the community.
+        if (! $request->user()->isConfirmedMember($community) && ! $request->user()->ownsCommunity($community)) {
             abort(403, 'Unauthorized action');
         }
 

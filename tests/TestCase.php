@@ -22,6 +22,7 @@ use jfsullivan\UserTimezone\UserTimezoneServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelOptions\OptionsServiceProvider;
+use Spatie\ModelStatus\ModelStatusServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -51,6 +52,7 @@ class TestCase extends Orchestra
             ApexUiServiceProvider::class,
             UserTimezoneServiceProvider::class,
             OptionsServiceProvider::class,
+            ModelStatusServiceProvider::class,
         ];
     }
 
@@ -105,6 +107,11 @@ class TestCase extends Orchestra
         $migration->up();
 
         $migration = include __DIR__.'/../database/migrations/member_manager_create_memberships_table.php.stub';
+        $migration->up();
+
+        // Membership status history (spatie/laravel-model-status). The stub lives
+        // in the member-manager package; membership setStatus() writes here.
+        $migration = include __DIR__.'/../vendor/jfsullivan/member-manager/database/migrations/member_manager_create_statuses_table.php.stub';
         $migration->up();
 
         $migration = include __DIR__.'/../database/migrations/member_manager_create_mail_templates_table.php.stub';

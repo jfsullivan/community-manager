@@ -49,8 +49,16 @@ class JoinCommunity extends FormModalComponent
             return;
         }
 
-        if ($community->members()->where('user_id', Auth::user()->id)->exists()) {
-            $this->addError('form', 'You are already a member of that community.');
+        $existing = $community->members()->where('user_id', Auth::user()->id)->first();
+
+        if ($existing) {
+            // A pending row means an earlier request is still awaiting admin
+            // confirmation — say so rather than "already a member".
+            if (is_null($existing->membership->start_at)) {
+                $this->addError('form', 'Your request to join that community is pending an admin\'s confirmation.');
+            } else {
+                $this->addError('form', 'You are already a member of that community.');
+            }
 
             return;
         }
@@ -58,11 +66,19 @@ class JoinCommunity extends FormModalComponent
         $memberRoleId = Role::where('slug', 'member')->value('id');
         $memberTypeId = Type::where('slug', 'standard')->value('id');
 
+        // Self-joins are PENDING: attach with no start_at so the membership does
+        // not grant access until an admin confirms it.
         $community->members()->attach(Auth::user()->id, [
             'role_id' => $memberRoleId,
             'type_id' => $memberTypeId,
+            'start_at' => null,
             'created_at' => Carbon::now(),
         ]);
+
+        $community->memberships()
+            ->where('user_id', Auth::user()->id)
+            ->first()
+            ?->setStatus('joined', 'pending-self-join');
 
         $community->load('members');
 
@@ -70,9 +86,9 @@ class JoinCommunity extends FormModalComponent
             $this->dispatch('refresh-community-list');
 
             $this->dispatch('notify',
-                title: 'Successfully Joined Community',
+                title: 'Request Sent',
                 type: 'success',
-                message: 'You can now access the community from your community list below.',
+                message: 'Your request to join has been sent. You\'ll get access once an admin confirms it.',
             );
         }
 

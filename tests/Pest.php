@@ -52,6 +52,8 @@ function addCommunityMember(Community $community, User $user)
     $community->members()->attach($user->id, [
         'role_id' => $memberRole->id,
         'type_id' => $memberType->id,
+        // Confirmed member: start_at set so it passes the confirmed-access gate.
+        'start_at' => now(),
     ]);
 
     $user->current_community_id = $community->id;
