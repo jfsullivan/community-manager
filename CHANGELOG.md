@@ -2,6 +2,22 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.2.0 - Pending membership: confirmed-only gates, pending joins, confirm/reject UI - 2026-09-01
+
+### What's new
+
+Supports the app's invitation-management feature by making community access require a **confirmed** membership and adding an admin approval flow for pending members.
+
+- **Confirmed-only access gates** — `EnsureIsCommunityMember` middleware and `CommunityPolicy::view` now require a confirmed membership (a membership row with `start_at` set), not merely an existing row. A pending membership (`start_at IS NULL`) no longer grants access.
+- **Pending self-join** — the `JoinCommunity` modal's id+password join now creates a **pending** membership (`start_at NULL`, status `pending-self-join`) with awaiting-confirmation messaging and a pending-aware "already a member" guard.
+- **`confirmedCommunities()`** relation on `HasCommunityMemberships`; `allCommunities()` and `belongsToCommunity()`/`switchCommunity()` are based on it. Raw `communities()` is unchanged for rosters/admin queries.
+- **Confirm / reject roster actions** on the community `MemberManagementPage`: `confirmMembership()` (sets `start_at`, status `confirmed-by-admin`) and `rejectMembership()` (tombstone: `removed` status + `end_at`, row preserved so prior-removed members stay detectable), both gated by `updateCommunityMember`. A Pending roster segment and a member-row partial with Confirm/Reject actions are included.
+
+### Compatibility
+
+- Requires `jfsullivan/member-manager ^0.9` (uses the `isConfirmedMember` / `hasConfirmedMember` helpers from **v0.9.10**).
+- **Behavior change:** any consumer relying on the middleware/policy granting access to a membership row with a null `start_at` must backfill `start_at` for existing members before upgrading, or those members will be treated as pending. (The BracketBrain app ships a backfill migration for this.)
+
 ## v3.1.1 - Laravel 13 support - 2026-08-27
 
 Widen `illuminate/contracts` to allow Laravel 13 (`||^13.0`) and `brick/money` to allow 0.14 (Laravel 13 requires `brick/math` >= 0.14, which brick/money 0.8 cannot use). Migrate `Transaction` amount formatting off `Money::formatWith()` (removed in brick/money 0.14) to `MoneyNumberFormatter`.
