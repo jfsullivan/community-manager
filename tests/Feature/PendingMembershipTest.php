@@ -160,6 +160,51 @@ it('forbids a non-owner from confirming or rejecting', function () {
         ->assertForbidden();
 });
 
+it('surfaces banned members under the banned filter and lifts bans', function () {
+    $userClass = config('community-manager.user_model');
+
+    $owner = $userClass::factory()->create();
+    $community = createCommunity($owner);
+    addCommunityMember($community, $owner);
+    $owner->update(['current_community_id' => $community->id]);
+
+    $banned = $userClass::factory()->create(['first_name' => 'Bella', 'last_name' => 'Banished']);
+    attachMember($community, $banned, now()->subMonth());
+    $community->banMember($banned->id, 'conduct');
+
+    Livewire::actingAs($owner)
+        ->test(MemberManagementPage::class, ['community_id' => $community->id])
+        ->set('statusFilter', 'banned')
+        ->assertSee('Bella')
+        ->assertSee('Banned')
+        ->assertSee('Lift Ban')
+        ->call('liftBan', $banned->id)
+        ->assertDispatched('refresh-members-list');
+
+    expect($community->hasBannedMember($banned->id))->toBeFalse();
+});
+
+it('forbids a non-owner from lifting a ban', function () {
+    $userClass = config('community-manager.user_model');
+
+    $owner = $userClass::factory()->create();
+    $community = createCommunity($owner);
+
+    $member = $userClass::factory()->create(['current_community_id' => $community->id]);
+    attachMember($community, $member, now());
+
+    $banned = $userClass::factory()->create();
+    attachMember($community, $banned, now()->subMonth());
+    $community->banMember($banned->id);
+
+    Livewire::actingAs($member)
+        ->test(MemberManagementPage::class, ['community_id' => $community->id])
+        ->call('liftBan', $banned->id)
+        ->assertForbidden();
+
+    expect($community->hasBannedMember($banned->id))->toBeTrue();
+});
+
 it('shows join status instead of a role for unconfirmed members', function () {
     $userClass = config('community-manager.user_model');
 

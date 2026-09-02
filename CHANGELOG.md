@@ -2,6 +2,16 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.3.0 - Banned members surface - 2026-09-02
+
+### What's new
+
+Builds on member-manager v0.9.22's ban primitives:
+
+- The community members page gains a **Banned** status segment; banned rows show a red **Banned** badge and a **Lift Ban** action (other roster actions hidden while banned).
+- Lifting a ban is gated like confirm/reject (`updateCommunityMember`).
+- Requires `jfsullivan/member-manager` ^0.9.22.
+
 ## v3.2.1 - Join status instead of role for unconfirmed members - 2026-09-02
 
 ### Changed

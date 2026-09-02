@@ -24,8 +24,11 @@
     @if ($this->showsColumn('role'))
         <x-apex::grid.item.column class="hidden md:flex md:col-span-2 justify-start">
             {{-- An unconfirmed member's role isn't meaningful yet — show where
-                 they are in the join flow instead (mirrors member-manager's row). --}}
-            @if ($member->membership_status == 'pending')
+                 they are in the join flow instead (mirrors member-manager's row).
+                 Banned takes precedence. --}}
+            @if (($member->latest_status_name ?? null) === 'banned')
+                <x-apex::badge color="red" size="sm">Banned</x-apex::badge>
+            @elseif ($member->membership_status == 'pending')
                 @if (! is_null($member->invitation_id) && is_null($member->invitation_accepted_at))
                     <x-apex::badge color="amber" size="sm">Invited</x-apex::badge>
                 @else
@@ -81,24 +84,28 @@
 
     <x-slot:actions>
         <x-apex::grid.item.column.actions.dropdown>
-            @if ($member->membership_status == 'pending')
-                <x-apex::menu.item icon="apex-ui.check" wire:click="confirmMembership({{ $member->user_id }})">Confirm Request</x-apex::menu.item>
-                <x-apex::menu.item icon="apex-ui.x-close" wire:click="rejectMembership({{ $member->user_id }})">Reject Request</x-apex::menu.item>
-            @endif
+            @if (($member->latest_status_name ?? null) === 'banned')
+                <x-apex::menu.item icon="apex-ui.check" wire:click="liftBan({{ $member->user_id }})">Lift Ban</x-apex::menu.item>
+            @else
+                @if ($member->membership_status == 'pending')
+                    <x-apex::menu.item icon="apex-ui.check" wire:click="confirmMembership({{ $member->user_id }})">Confirm Request</x-apex::menu.item>
+                    <x-apex::menu.item icon="apex-ui.x-close" wire:click="rejectMembership({{ $member->user_id }})">Reject Request</x-apex::menu.item>
+                @endif
 
-            @if ($this->showsColumn('role'))
-                <x-apex::menu.item icon="apex-ui.user-settings" wire:click="$dispatch('open-change-member-role', { record_id: '{{ $member->user_id }}' })">Change Role</x-apex::menu.item>
-            @endif
+                @if ($this->showsColumn('role'))
+                    <x-apex::menu.item icon="apex-ui.user-settings" wire:click="$dispatch('open-change-member-role', { record_id: '{{ $member->user_id }}' })">Change Role</x-apex::menu.item>
+                @endif
 
-            @if ($this->showsColumn('type'))
-                <x-apex::menu.item icon="apex-ui.passport" wire:click="$dispatch('open-change-membership-type', { record_id: '{{ $member->user_id }}' })">Change Membership</x-apex::menu.item>
-            @endif
+                @if ($this->showsColumn('type'))
+                    <x-apex::menu.item icon="apex-ui.passport" wire:click="$dispatch('open-change-membership-type', { record_id: '{{ $member->user_id }}' })">Change Membership</x-apex::menu.item>
+                @endif
 
-            @if ($member->membership_status == 'former')
-                <x-apex::menu.item icon="apex-ui.refresh" wire:click="restartMembership({{ $member->user_id }})">Restart Membership</x-apex::menu.item>
-            @endif
+                @if ($member->membership_status == 'former')
+                    <x-apex::menu.item icon="apex-ui.refresh" wire:click="restartMembership({{ $member->user_id }})">Restart Membership</x-apex::menu.item>
+                @endif
 
-            <x-apex::menu.item icon="apex-ui.users-x" wire:click="$dispatch('open-remove-members', { id: {{ $member->user_id }} })">Remove Member</x-apex::menu.item>
+                <x-apex::menu.item icon="apex-ui.users-x" wire:click="$dispatch('open-remove-members', { id: {{ $member->user_id }} })">Remove Member</x-apex::menu.item>
+            @endif
         </x-apex::grid.item.column.actions.dropdown>
     </x-slot:actions>
 </x-apex::grid.item>

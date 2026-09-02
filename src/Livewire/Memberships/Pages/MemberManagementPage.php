@@ -28,7 +28,14 @@ class MemberManagementPage extends BaseMemberManagementPage
             'current' => 'Current',
             'pending' => 'Pending',
             'former' => 'Former',
+            'banned' => 'Banned',
         ];
+    }
+
+    /** Lifting a ban is a member-management act — same gate as confirm/reject. */
+    protected function authorizeLiftBan($user_id): void
+    {
+        Gate::authorize('updateCommunityMember', $this->owningModel());
     }
 
     /** Row partial adds Confirm/Reject affordances to pending community rows. */
