@@ -160,6 +160,27 @@ it('forbids a non-owner from confirming or rejecting', function () {
         ->assertForbidden();
 });
 
+it('shows join status instead of a role for unconfirmed members', function () {
+    $userClass = config('community-manager.user_model');
+
+    $owner = $userClass::factory()->create();
+    $community = createCommunity($owner);
+    addCommunityMember($community, $owner);
+    $owner->update(['current_community_id' => $community->id]);
+
+    $invited = $userClass::factory()->create(['first_name' => 'Ivy', 'last_name' => 'Iota', 'email' => 'ivy@example.test']);
+    attachMember($community, $invited, null);
+    $community->invitations()->create(['email' => 'ivy@example.test', 'user_id' => $invited->id, 'last_sent_at' => now()]);
+
+    $pending = $userClass::factory()->create(['first_name' => 'Penny', 'last_name' => 'Quill']);
+    attachMember($community, $pending, null);
+
+    Livewire::actingAs($owner)
+        ->test(MemberManagementPage::class, ['community_id' => $community->id])
+        ->set('statusFilter', 'pending')
+        ->assertSeeInOrder(['Ivy Iota', 'Invited', 'Penny Quill', 'Pending']);
+});
+
 it('surfaces only pending rows under the pending filter', function () {
     $userClass = config('community-manager.user_model');
 

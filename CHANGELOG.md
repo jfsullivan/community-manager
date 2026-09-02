@@ -2,6 +2,14 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.2.1 - Join status instead of role for unconfirmed members - 2026-09-02
+
+### Changed
+
+The community member row now shows a member's join status in the Role column while their membership is unconfirmed (`start_at IS NULL`): **Invited** (amber) when they have an outstanding invitation, otherwise **Pending** (zinc). Confirmed members are unchanged. Mirrors the same change in member-manager v0.9.16's default row — this row overrides it and needed the same treatment.
+
+Fully backward compatible; dependents on `^3.2` require no changes.
+
 ## v3.2.0 - Pending membership: confirmed-only gates, pending joins, confirm/reject UI - 2026-09-01
 
 ### What's new

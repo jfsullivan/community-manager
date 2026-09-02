@@ -23,7 +23,17 @@
 
     @if ($this->showsColumn('role'))
         <x-apex::grid.item.column class="hidden md:flex md:col-span-2 justify-start">
-            <x-apex::badge :color="$member->member_role_color ?? 'blue'" size="sm">{{ $member->member_role_name }}</x-apex::badge>
+            {{-- An unconfirmed member's role isn't meaningful yet — show where
+                 they are in the join flow instead (mirrors member-manager's row). --}}
+            @if ($member->membership_status == 'pending')
+                @if (! is_null($member->invitation_id) && is_null($member->invitation_accepted_at))
+                    <x-apex::badge color="amber" size="sm">Invited</x-apex::badge>
+                @else
+                    <x-apex::badge color="zinc" size="sm">Pending</x-apex::badge>
+                @endif
+            @else
+                <x-apex::badge :color="$member->member_role_color ?? 'blue'" size="sm">{{ $member->member_role_name }}</x-apex::badge>
+            @endif
         </x-apex::grid.item.column>
     @endif
 
