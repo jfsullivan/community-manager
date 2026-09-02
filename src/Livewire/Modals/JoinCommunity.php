@@ -49,36 +49,54 @@ class JoinCommunity extends FormModalComponent
             return;
         }
 
-        $existing = $community->members()->where('user_id', Auth::user()->id)->first();
-
-        if ($existing) {
-            // A pending row means an earlier request is still awaiting admin
-            // confirmation — say so rather than "already a member".
-            if (is_null($existing->membership->start_at)) {
-                $this->addError('form', 'Your request to join that community is pending an admin\'s confirmation.');
-            } else {
-                $this->addError('form', 'You are already a member of that community.');
-            }
+        // A ban blocks rejoining until an admin lifts it.
+        if ($community->hasBannedMember(Auth::user()->id)) {
+            $this->addError('form', 'You are unable to join that community.');
 
             return;
         }
 
-        $memberRoleId = Role::where('slug', 'member')->value('id');
-        $memberTypeId = Type::where('slug', 'standard')->value('id');
+        $existing = $community->members()->where('user_id', Auth::user()->id)->first();
 
-        // Self-joins are PENDING: attach with no start_at so the membership does
-        // not grant access until an admin confirms it.
-        $community->members()->attach(Auth::user()->id, [
-            'role_id' => $memberRoleId,
-            'type_id' => $memberTypeId,
-            'start_at' => null,
-            'created_at' => Carbon::now(),
-        ]);
+        if ($existing && is_null($existing->membership->start_at)) {
+            // A pending row means an earlier request is still awaiting admin
+            // confirmation — say so rather than "already a member".
+            $this->addError('form', 'Your request to join that community is pending an admin\'s confirmation.');
 
-        $community->memberships()
-            ->where('user_id', Auth::user()->id)
-            ->first()
-            ?->setStatus('joined', 'pending-self-join');
+            return;
+        }
+
+        if ($existing && (is_null($existing->membership->end_at) || Carbon::parse($existing->membership->end_at)->isFuture())) {
+            $this->addError('form', 'You are already a member of that community.');
+
+            return;
+        }
+
+        if ($existing) {
+            // Former member rejoining: reactivate the row as PENDING again
+            // (community self-joins always await admin confirmation). The
+            // status log keeps the full timeline.
+            $membership = $community->memberships()->where('user_id', Auth::user()->id)->first();
+            $membership?->update(['start_at' => null, 'end_at' => null]);
+            $membership?->setStatus('rejoin-requested', 'pending-self-join');
+        } else {
+            $memberRoleId = Role::where('slug', 'member')->value('id');
+            $memberTypeId = Type::where('slug', 'standard')->value('id');
+
+            // Self-joins are PENDING: attach with no start_at so the membership
+            // does not grant access until an admin confirms it.
+            $community->members()->attach(Auth::user()->id, [
+                'role_id' => $memberRoleId,
+                'type_id' => $memberTypeId,
+                'start_at' => null,
+                'created_at' => Carbon::now(),
+            ]);
+
+            $community->memberships()
+                ->where('user_id', Auth::user()->id)
+                ->first()
+                ?->setStatus('joined', 'pending-self-join');
+        }
 
         $community->load('members');
 

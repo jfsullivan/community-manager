@@ -2,6 +2,16 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.3.1 - Ban + rejoin handling on the password join path - 2026-09-02
+
+### Changed
+
+`JoinCommunity` (id + password modal):
+
+- Banned members are blocked ("You are unable to join that community.") until the ban is lifted.
+- A **former** member re-requesting membership now reactivates their existing row as PENDING (`start_at`/`end_at` cleared, `rejoin-requested` appended to the status history) instead of being told "already a member". No duplicate rows.
+- "Already a member" is now scoped to current memberships only.
+
 ## v3.3.0 - Banned members surface - 2026-09-02
 
 ### What's new

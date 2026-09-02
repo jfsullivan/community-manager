@@ -82,6 +82,50 @@ it('records a direct community join as pending', function () {
     expect($membership->latestStatus()->reason)->toBe('pending-self-join');
 });
 
+it('blocks a banned member from rejoining by password', function () {
+    $userClass = config('community-manager.user_model');
+
+    $joiner = $userClass::factory()->create();
+    $community = createCommunity();
+    $community->update(['join_id' => 'ABC12345', 'password' => 'secret']);
+    attachMember($community, $joiner, now()->subYear());
+    $community->banMember($joiner->id, 'conduct');
+
+    Livewire::actingAs($joiner)
+        ->test(JoinCommunity::class)
+        ->set('join_id', 'ABC12345')
+        ->set('password', 'secret')
+        ->call('save')
+        ->assertHasErrors('form');
+
+    expect($community->hasBannedMember($joiner->id))->toBeTrue();
+});
+
+it('lets a former member re-request membership as pending with history preserved', function () {
+    $userClass = config('community-manager.user_model');
+
+    $joiner = $userClass::factory()->create();
+    $community = createCommunity();
+    $community->update(['join_id' => 'ABC12345', 'password' => 'secret']);
+    attachMember($community, $joiner, now()->subYear());
+    $community->memberships()->where('user_id', $joiner->id)->first()->update(['end_at' => now()->subMonth()]);
+
+    Livewire::actingAs($joiner)
+        ->test(JoinCommunity::class)
+        ->set('join_id', 'ABC12345')
+        ->set('password', 'secret')
+        ->call('save')
+        ->assertHasNoErrors();
+
+    $membership = $community->memberships()->where('user_id', $joiner->id)->first();
+
+    // Reactivated as PENDING (awaits admin confirmation), not duplicated.
+    expect($community->memberships()->where('user_id', $joiner->id)->count())->toBe(1);
+    expect($membership->start_at)->toBeNull();
+    expect($membership->end_at)->toBeNull();
+    expect($membership->latestStatus()->name)->toBe('rejoin-requested');
+});
+
 it('tells a user their existing request is pending rather than already a member', function () {
     $userClass = config('community-manager.user_model');
 
