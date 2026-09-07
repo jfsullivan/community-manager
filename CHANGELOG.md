@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.3.2 - Allow article-manager v3 - 2026-09-07
+
+Widens the jfsullivan/article-manager constraint to ^2.0||^3.0 so consumers can upgrade to article-manager v3.0.0 (comment approval removed). No code changes; the package only consumes ArticlePolicy and the Livewire page base classes, all unchanged in v3. Package suite verified green against v3.0.0 (48 passed).
+
 ## v3.3.1 - Ban + rejoin handling on the password join path - 2026-09-02
 
 ### Changed
