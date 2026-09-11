@@ -8,18 +8,18 @@
 @if ($community->track_member_balances)
     @php $memberBalanceCents = (int) $community->memberBalance(auth()->user()); @endphp
 
-    <div {{ $attributes->class('flex flex-col items-start w-full gap-3 p-4 bg-white border rounded-lg border-gray-200 sm:flex-row sm:items-center sm:justify-between') }}>
+    <div {{ $attributes->class('flex flex-col items-start w-full gap-3 p-4 bg-white dark:bg-zinc-800 border rounded-lg border-gray-200 dark:border-zinc-700 sm:flex-row sm:items-center sm:justify-between') }}>
         <div class="flex items-center gap-3">
-            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 shrink-0">
-                <flux:icon name="apex-ui.scales" class="w-5 h-5 text-primary-600 stroke-1.5" />
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-500/15 shrink-0">
+                <flux:icon name="apex-ui.scales" class="w-5 h-5 text-primary-600 dark:text-primary-400 stroke-1.5" />
             </span>
             <div>
-                <div class="text-2xs uppercase tracking-wide text-gray-400">Your balance in {{ $community->name }}</div>
+                <div class="text-2xs uppercase tracking-wide text-gray-400 dark:text-zinc-500">Your balance in {{ $community->name }}</div>
                 <div @class([
                     'text-xl font-semibold',
-                    'text-green-600' => $memberBalanceCents > 0,
-                    'text-red-600' => $memberBalanceCents < 0,
-                    'text-gray-900' => $memberBalanceCents === 0,
+                    'text-green-600 dark:text-green-400' => $memberBalanceCents > 0,
+                    'text-red-600 dark:text-red-400' => $memberBalanceCents < 0,
+                    'text-gray-900 dark:text-zinc-100' => $memberBalanceCents === 0,
                 ])>
                     {{ $memberBalanceCents < 0 ? '-' : '' }}${{ number_format(abs($memberBalanceCents) / 100, 2) }}
                 </div>

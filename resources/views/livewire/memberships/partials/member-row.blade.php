@@ -11,9 +11,9 @@
                 @else
                     <span>{{ $member->full_name }}</span>
                 @endif
-                <span class="flex items-center text-xs font-normal text-gray-500">
+                <span class="flex items-center text-xs font-normal text-gray-500 dark:text-zinc-400">
                     <span class="hidden sm:inline">
-                        <x-apex::icon name="apex-ui.mail" class="mr-1.5 h-4 w-4 text-gray-500 stroke-1.5" />
+                        <x-apex::icon name="apex-ui.mail" class="mr-1.5 h-4 w-4 text-gray-500 dark:text-zinc-400 stroke-1.5" />
                     </span>
                     <a href="mailto:{{ $member->email }}" class="w-full truncate max-w-fit hover:underline">{{ $member->email }}</a>
                 </span>
@@ -61,18 +61,18 @@
                 </div>
             @elseif(is_null($member->last_accessed_at))
                 @if(is_null($member->invitation_id))
-                    <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, null)" class="text-xs text-primary-600 hover:text-primary-700">Send Invite</x-apex::button>
+                    <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, null)" class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">Send Invite</x-apex::button>
                 @else
                     @if(!is_null($member->invitation_accepted_at))
                         <div class="flex flex-col items-end">
-                            <div class="text-xs text-gray-500">Invitation Accepted</div>
-                            <div class="text-xs text-gray-500">{{ \Illuminate\Support\Carbon::parse($member->invitation_accepted_at)->diffForHumans() }}</div>
+                            <div class="text-xs text-gray-500 dark:text-zinc-400">Invitation Accepted</div>
+                            <div class="text-xs text-gray-500 dark:text-zinc-400">{{ \Illuminate\Support\Carbon::parse($member->invitation_accepted_at)->diffForHumans() }}</div>
                         </div>
                     @else
                         <div class="flex flex-col items-end">
-                            <div class="text-xs text-gray-500">Invitation Sent</div>
-                            <div class="text-xs text-gray-500">{{ \Illuminate\Support\Carbon::parse($member->invitation_last_sent_at)->diffForHumans() }}</div>
-                            <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, {{ $member->invitation_id }})" class="text-xs text-primary-600 hover:text-primary-700">Resend</x-apex::button>
+                            <div class="text-xs text-gray-500 dark:text-zinc-400">Invitation Sent</div>
+                            <div class="text-xs text-gray-500 dark:text-zinc-400">{{ \Illuminate\Support\Carbon::parse($member->invitation_last_sent_at)->diffForHumans() }}</div>
+                            <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, {{ $member->invitation_id }})" class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">Resend</x-apex::button>
                         </div>
                     @endif
                 @endif

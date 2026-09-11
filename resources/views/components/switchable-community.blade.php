@@ -11,7 +11,7 @@
         
             <x-slot name="icon">
                 @if (Auth::user()->isCurrentCommunity($community))
-                    <flux:icon name="apex-ui.check-circle" class="h-5 w-5 text-green-500 stroke-1.5" />
+                    <flux:icon name="apex-ui.check-circle" class="h-5 w-5 text-green-500 dark:text-green-400 stroke-1.5" />
 
                 @else
                     <flux:icon name="apex-ui.check-circle" class="h-5 w-5 text-transparent stroke-1.5" />

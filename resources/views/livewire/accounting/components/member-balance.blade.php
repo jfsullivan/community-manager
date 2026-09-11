@@ -16,9 +16,9 @@
     <a href="{{ route('community.members.transactions', [Auth::user()->id]) }}"
         @class([
             'font-semibold hover:underline flex items-center',
-            'text-green-500' => $formatted && $this->memberBalance->isGreaterThan(0),
-            'text-red-500' => $formatted && $this->memberBalance->isLessThan(0),
-            'text-gray-900' =>  $formatted && $this->memberBalance->isEqualTo(0),
+            'text-green-500 dark:text-green-400' => $formatted && $this->memberBalance->isGreaterThan(0),
+            'text-red-500 dark:text-red-400' => $formatted && $this->memberBalance->isLessThan(0),
+            'text-gray-900 dark:text-zinc-100' =>  $formatted && $this->memberBalance->isEqualTo(0),
             $class
         ])
     >

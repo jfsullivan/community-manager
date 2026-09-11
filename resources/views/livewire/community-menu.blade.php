@@ -14,7 +14,7 @@
             @if(Auth::check())
                 @if(Auth::user()->currentCommunity)
 
-                    <div class="flex flex-col items-center justify-center w-full px-3 pt-4 pb-0 space-y-2 border-b border-gray-200">
+                    <div class="flex flex-col items-center justify-center w-full px-3 pt-4 pb-0 space-y-2 border-b border-gray-200 dark:border-zinc-700">
                         <div class="flex items-center w-full space-x-3">
                             <div class="flex items-center justify-center">
                                 @if(Auth::user()->currentCommunity->hasMedia('logo'))
@@ -25,13 +25,13 @@
                             </div>
                             <div class="flex flex-col justify-center grow">
                                 <div class="text-sm font-semibold">{{ Auth::user()->currentCommunity->name }}</div>
-                                <div class="text-xs text-gray-500">{{ Auth::user()->currentCommunity->owner->name }}</div>
+                                <div class="text-xs text-gray-500 dark:text-zinc-400">{{ Auth::user()->currentCommunity->owner->name }}</div>
                             </div>
                         </div>
                         @if (Auth::user()->currentCommunity->track_member_balances)
                             <div class="flex justify-between w-full pb-2">
                                 <div class="flex flex-col items-start justify-center text-xs">
-                                    <div class="flex text-xs text-gray-400">Balance</div>
+                                    <div class="flex text-xs text-gray-400 dark:text-zinc-500">Balance</div>
                                     @livewire('community-manager.accounting.components.member-balance', ['label' => 'Balance'])
                                 </div>
                                 <x-community-manager::accounting.add-funds-button size="xs" />
@@ -41,21 +41,21 @@
 
                     <!-- Community Dashboard -->
                     <x-community-manager::dropdown-link url="{{ route('community.dashboard') }}" show-arrow>
-                        <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                        <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                         {{ __('community-manager::labels.dashboard') }}
                     </x-community-manager::dropdown-link>
 
                     <!-- Community News -->
                     @if (Auth::user()->currentCommunity->isShared())
                         <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
-                            <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                            <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                             {{ __('community-manager::labels.news') }}
                         </x-community-manager::dropdown-link>
                     @endif
 
                     <!-- Community Pools -->
                     <x-community-manager::dropdown-link url="{{ route('pools.index') }}" show-arrow>
-                        <x-slot name="icon"><flux:icon name="apex-ui.trophy" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                        <x-slot name="icon"><flux:icon name="apex-ui.trophy" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                         {{ __('Pools') }}
                     </x-community-manager::dropdown-link>
 
@@ -68,7 +68,7 @@
                     <!-- Community Admin Dashboard -->
                     @can('manage', auth()->user()->currentCommunity)
                         <x-community-manager::dropdown-link url="{{ route('community.admin.index') }}" show-arrow>
-                            <x-slot name="icon"><flux:icon name="apex-ui.settings" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                            <x-slot name="icon"><flux:icon name="apex-ui.settings" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                             {{ __('community-manager::labels.admin-tools') }}
                         </x-community-manager::dropdown-link>
                     @endcan

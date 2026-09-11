@@ -1,12 +1,12 @@
 <div class="w-full flex flex-col items-center pb-8">
-    <div class="w-full flex justify-center bg-white border-b border-gray-200">
-        <div class="w-full flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white">
+    <div class="w-full flex justify-center bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
+        <div class="w-full flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white dark:bg-zinc-900">
             <div class="w-full flex items-center space-x-4">
                 <x-profile-photo class="h-14 w-14" :url="$this->user->profile_photo_url" :name="$this->user->name" />
                 <div class="flex flex-col">
                     <x-apex::heading size="xl" class="mb-0! font-semibold!">{{ $this->user->name }}</x-apex::heading>
-                    <div class="flex items-center text-sm text-gray-600">
-                        <flux:icon name="apex-ui.mail" class="mr-1.5 h-5 w-5 shrink-0 text-gray-500" />
+                    <div class="flex items-center text-sm text-gray-600 dark:text-zinc-300">
+                        <flux:icon name="apex-ui.mail" class="mr-1.5 h-5 w-5 shrink-0 text-gray-500 dark:text-zinc-400" />
                         {{ $this->user->email }}
                     </div>
                 </div>
@@ -15,7 +15,7 @@
             <div class="w-full md:w-auto flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0">
                 @can('view-member-balance', $this->community)
                     <div class="flex flex-col items-center justify-center mx-4 sm:ml-0">
-                        <div class="flex text-gray-400 text-xs whitespace-nowrap">Account Balance</div>
+                        <div class="flex text-gray-400 dark:text-zinc-500 text-xs whitespace-nowrap">Account Balance</div>
                         @livewire('community-manager.accounting.components.member-balance', ['size' => 'lg'])
                     </div>
                 @endcan
@@ -48,7 +48,7 @@
                 @forelse ($this->records as $transaction)
                     <x-apex::grid.item wire:key="transaction-{{ $transaction->id }}">
                         <x-apex::grid.item.column class="pl-2 sm:pl-4 col-span-3 justify-start">
-                            <div class="w-full flex flex-col items-start justify-start lg:hidden text-gray-500">
+                            <div class="w-full flex flex-col items-start justify-start lg:hidden text-gray-500 dark:text-zinc-400">
                                 <p class="whitespace-nowrap text-xs sm:text-sm font-medium leading-5 sm:leading-6">
                                     @displayDate($transaction->transacted_at, 'M j')
                                 </p>
@@ -56,7 +56,7 @@
                                     @displayDate($transaction->transacted_at, 'Y')
                                 </p>
                             </div>
-                            <div class="w-full hidden lg:block text-sm whitespace-nowrap text-gray-500">
+                            <div class="w-full hidden lg:block text-sm whitespace-nowrap text-gray-500 dark:text-zinc-400">
                                 @displayDate($transaction->transacted_at, 'M j, Y')
                             </div>
                         </x-apex::grid.item.column>
@@ -64,7 +64,7 @@
                             <div class="hidden lg:inline">
                                 <x-community-manager::accounting.transactions.transaction-type-icon :type="$transaction->type->slug" />
                             </div>
-                            <x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" class="text-gray-900 font-medium" />
+                            <x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" class="text-gray-900 dark:text-zinc-100 font-medium" />
                         </x-apex::grid.item.column>
                         <div class="col-span-4 w-full flex flex-col-reverse lg:grid lg:grid-cols-2 lg:gap-x-2 items-center justify-end">
                             <x-apex::grid.item.column class="flex justify-end lg:justify-start text-sm">

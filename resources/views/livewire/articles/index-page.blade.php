@@ -1,7 +1,7 @@
 <div class="flex flex-col items-center w-full">
     {{-- Full-width menubar bar: the border spans edge-to-edge (matching the community
          home/pools pages), while the inner container keeps the links aligned. --}}
-    <div class="flex w-full bg-white border-b border-gray-200">
+    <div class="flex w-full bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
         <div class="flex flex-col w-full px-2 mx-auto max-w-7xl md:px-4">
             <x-community-manager::navigation-menu selected="articles" />
         </div>
@@ -29,7 +29,7 @@
                     ])
                 >
                     <x-article-manager.article-card.vertical
-                        class="bg-white"
+                        class="bg-white dark:bg-zinc-800"
                         :article="$article"
                         :url="route($this->baseRouteName.'.articles.show', collect($this->routeParameters)->merge(['article_id' => $article->id])->toArray())"
                     />
@@ -44,7 +44,7 @@
                     ])
                 >
                     <x-article-manager.article-card.horizontal
-                        class="bg-white"
+                        class="bg-white dark:bg-zinc-800"
                         :article="$article"
                         :url="route($this->baseRouteName.'.articles.show', collect($this->routeParameters)->merge(['article_id' => $article->id])->toArray())"
                     />
@@ -69,21 +69,21 @@
                         @if($loop->count === 1)
                             <div class="hidden w-full sm:flex">
                                 <x-article-manager.article-card.horizontal
-                                    class="bg-white"
+                                    class="bg-white dark:bg-zinc-800"
                                     :article="$article"
                                     :url="route($this->baseRouteName.'.articles.show', collect($this->routeParameters)->merge(['article_id' => $article->id])->toArray())"
                                 />
                             </div>
                             <div class="flex w-full sm:hidden">
                                 <x-article-manager.article-card.vertical
-                                    class="bg-white"
+                                    class="bg-white dark:bg-zinc-800"
                                     :article="$article"
                                     :url="route($this->baseRouteName.'.articles.show', collect($this->routeParameters)->merge(['article_id' => $article->id])->toArray())"
                                 />
                             </div>
                         @else
                             <x-article-manager.article-card.vertical
-                                class="bg-white"
+                                class="bg-white dark:bg-zinc-800"
                                 :article="$article"
                                 :url="route($this->baseRouteName.'.articles.show', collect($this->routeParameters)->merge(['article_id' => $article->id])->toArray())"
                             />

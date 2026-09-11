@@ -7,12 +7,12 @@
         </button>
     </flux:modal.trigger>
 
-    <x-apex::drawer name="navigation-menu" class="bg-white">
+    <x-apex::drawer name="navigation-menu" class="bg-white dark:bg-zinc-800">
     <div class="flex min-h-full w-full flex-col pwa-safe-area-adjustment">
     @if(Auth::check())
         @if(Auth::user()->currentCommunity)
 
-            <div class="flex flex-col w-full border-b border-gray-200">
+            <div class="flex flex-col w-full border-b border-gray-200 dark:border-zinc-700">
                 <div class="flex items-center p-4">
                     <div class="shrink-0">
                         @if(Auth::user()->currentCommunity->hasMedia('logo'))
@@ -22,14 +22,14 @@
                         @endif
                     </div>
                     <div class="ml-3">
-                        <div class="text-base font-medium text-gray-800">{{ Auth::user()->currentCommunity->name }}</div>
-                        <div class="text-sm text-gray-500">{{ Auth::user()->currentCommunity->owner->name }}</div>
+                        <div class="text-base font-medium text-gray-800 dark:text-zinc-200">{{ Auth::user()->currentCommunity->name }}</div>
+                        <div class="text-sm text-gray-500 dark:text-zinc-400">{{ Auth::user()->currentCommunity->owner->name }}</div>
                     </div>
                 </div>
                 <div class="flex justify-between w-full px-2 pb-2">
                     @can('view-member-balance', Auth::user()->currentCommunity)
                         <div class="flex flex-col items-center justify-center">
-                            <div class="flex text-xs text-gray-400">Your Balance</div>
+                            <div class="flex text-xs text-gray-400 dark:text-zinc-500">Your Balance</div>
                             @livewire('community-manager.accounting.components.member-balance')
                         </div>
                     @endcan
@@ -42,13 +42,13 @@
 
             <!-- Community Dashboard -->
             <x-community-manager::dropdown-link url="{{ route('community.dashboard') }}" show-arrow>
-                <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                 {{ __('community-manager::labels.dashboard') }}
             </x-community-manager::dropdown-link>
 
             <!-- Community News -->
             <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
-                <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                 {{ __('community-manager::labels.news') }}
             </x-community-manager::dropdown-link>
 
@@ -61,7 +61,7 @@
             @can('manage', Auth::user()->currentCommunity)
                 <!-- Community Admin Dashboard -->
                 <x-community-manager::dropdown-link url="{{ route('community.admin.index') }}" show-arrow>
-                    <x-slot name="icon"><flux:icon name="apex-ui.settings" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                    <x-slot name="icon"><flux:icon name="apex-ui.settings" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                     {{ __('community-manager::labels.admin-tools') }}
                 </x-community-manager::dropdown-link>
             @endcan
@@ -92,7 +92,7 @@
 
             <div class="space-y-1 px2-2">
                 <x-community-manager::dropdown-link url="{{ route('admin.dashboard') }}" show-arrow>
-                    <x-slot name="icon"><flux:icon name="apex-ui.settings" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                    <x-slot name="icon"><flux:icon name="apex-ui.settings" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                     {{ config('app.name') }} {{ __('Admin') }}
                 </x-community-manager::dropdown-link>
             </div>
@@ -103,23 +103,23 @@
         </x-community-manager::responsive-navigation-menu.section-header>
 
         <div class="flex flex-col w-full">
-            <div class="flex items-center p-4 border-b border-gray-200">
+            <div class="flex items-center p-4 border-b border-gray-200 dark:border-zinc-700">
                 <div class="shrink-0">
                     <x-profile-photo class="w-10 h-10" url="{{ Auth::user()->profile_photo_url }}" name="{{ Auth::user()->name }}" />
                 </div>
                 <div class="ml-3">
-                    <div class="text-base font-medium text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    <div class="text-base font-medium text-gray-800 dark:text-zinc-200">{{ Auth::user()->name }}</div>
+                    <div class="text-sm text-gray-500 dark:text-zinc-400">{{ Auth::user()->email }}</div>
                 </div>
             </div>
 
             <x-community-manager::dropdown-link url="{{ route('home') }}" show-arrow>
-                <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                <x-slot name="icon"><flux:icon name="apex-ui.home" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                 {{ __('Home Page') }}
             </x-community-manager::dropdown-link>
 
             <x-community-manager::dropdown-link url="{{ route('profile.show') }}" show-arrow>
-                <x-slot name="icon"><flux:icon name="apex-ui.user-settings" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                <x-slot name="icon"><flux:icon name="apex-ui.user-settings" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                 {{ __('Your Profile') }}
             </x-community-manager::dropdown-link>
 
@@ -128,7 +128,7 @@
                 @csrf
 
                 <x-community-manager::dropdown-link url="{{ route('home') }}" onclick="event.preventDefault(); this.closest('form').submit();">
-                    <x-slot name="icon"><flux:icon name="apex-ui.logout" class="h-5 w-5 text-gray-500 stroke-1.5" /></x-slot>
+                    <x-slot name="icon"><flux:icon name="apex-ui.logout" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                     {{ __('Sign Out') }}
                 </x-community-manager::dropdown-link>
             </form>

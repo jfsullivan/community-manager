@@ -6,14 +6,14 @@
         <x-apex::breadcrumbs.item>{{ $this->user->full_name }} Transactions</x-apex::breadcrumbs.item>
     </x-slot>
 
-    <div class="flex justify-center w-full bg-white border-b border-gray-200">
-        <div class="w-full flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white">
+    <div class="flex justify-center w-full bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
+        <div class="w-full flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white dark:bg-zinc-900">
             <div class="w-full flex items-center space-x-4">
                 <x-profile-photo class="h-14 w-14" :url="$this->user->profile_photo_url" :name="$this->user->full_name" />
                 <div class="flex flex-col">
                     <x-apex::heading size="xl" class="mb-0! font-semibold!">{{ $this->user->full_name }}</x-apex::heading>
-                    <div class="flex items-center text-sm text-gray-600">
-                        <flux:icon name="apex-ui.mail" class="mr-1.5 h-5 w-5 shrink-0 text-gray-500" />
+                    <div class="flex items-center text-sm text-gray-600 dark:text-zinc-300">
+                        <flux:icon name="apex-ui.mail" class="mr-1.5 h-5 w-5 shrink-0 text-gray-500 dark:text-zinc-400" />
                         {{ $this->user->email }}
                     </div>
                 </div>
@@ -22,7 +22,7 @@
             <div class="flex items-center">
                 @can('view-member-balance', $this->community)
                     <div class="flex flex-col items-center justify-center mx-4 sm:ml-0">
-                        <div class="flex text-xs text-gray-400 whitespace-nowrap">Account Balance</div>
+                        <div class="flex text-xs text-gray-400 dark:text-zinc-500 whitespace-nowrap">Account Balance</div>
                         <livewire:community-manager.accounting.components.member-balance :user_id="$this->user->id" size="lg" :selectable="false" />
                     </div>
                 @endcan
@@ -56,7 +56,7 @@
             @forelse ($this->records as $transaction)
                 <x-apex::grid.item wire:key="transaction-{{ $transaction->id }}" wire:model="selected">
                     <x-apex::grid.item.column class="justify-start col-span-3">
-                        <div class="flex flex-col items-start justify-start w-full text-gray-500 lg:hidden">
+                        <div class="flex flex-col items-start justify-start w-full text-gray-500 dark:text-zinc-400 lg:hidden">
                             <p class="text-xs font-medium leading-5 whitespace-nowrap sm:text-sm sm:leading-6">
                                 @displayDate($transaction->transacted_at, 'M j')
                             </p>
@@ -64,7 +64,7 @@
                                 @displayDate($transaction->transacted_at, 'Y')
                             </p>
                         </div>
-                        <div class="hidden w-full text-sm text-gray-500 lg:block whitespace-nowrap">
+                        <div class="hidden w-full text-sm text-gray-500 dark:text-zinc-400 lg:block whitespace-nowrap">
                             @displayDate($transaction->transacted_at, 'M j, Y')
                         </div>
                     </x-apex::grid.item.column>
@@ -72,7 +72,7 @@
                         <div class="hidden lg:inline">
                             <x-community-manager::accounting.transactions.transaction-type-icon :type="$transaction->type->slug" />
                         </div>
-                        <x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" class="font-medium text-gray-900" />
+                        <x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" class="font-medium text-gray-900 dark:text-zinc-100" />
                     </x-apex::grid.item.column>
                     <div class="flex flex-col-reverse items-center justify-end w-full col-span-4 lg:grid lg:grid-cols-2 lg:gap-x-2">
                         <x-apex::grid.item.column class="flex justify-end text-sm lg:justify-start">

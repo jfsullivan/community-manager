@@ -36,7 +36,7 @@
             @forelse ($this->records as $transaction)
                 <x-apex::grid.item wire:key="transaction-{{ $transaction->id }}" wire:model="selected">
                     <x-apex::grid.item.column class="justify-start col-span-3">
-                        <div class="flex flex-col items-start justify-start w-full text-gray-500 lg:hidden">
+                        <div class="flex flex-col items-start justify-start w-full text-gray-500 dark:text-zinc-400 lg:hidden">
                             <p class="text-xs font-medium leading-5 whitespace-nowrap sm:text-sm sm:leading-6">
                                 @displayDate($transaction->transacted_at, 'M j')
                             </p>
@@ -44,18 +44,18 @@
                                 @displayDate($transaction->transacted_at, 'Y')
                             </p>
                         </div>
-                        <div class="hidden w-full text-sm text-gray-500 lg:block whitespace-nowrap">
+                        <div class="hidden w-full text-sm text-gray-500 dark:text-zinc-400 lg:block whitespace-nowrap">
                             @displayDate($transaction->transacted_at, 'M j, Y')
                         </div>
                     </x-apex::grid.item.column>
-                    <x-apex::grid.item.column class="justify-start col-span-3 font-medium text-gray-900">
+                    <x-apex::grid.item.column class="justify-start col-span-3 font-medium text-gray-900 dark:text-zinc-100">
                         {{ $transaction->user->name }}
                     </x-apex::grid.item.column>
                     <x-apex::grid.item.column class="justify-start col-span-6 lg:space-x-4">
                         <div class="hidden lg:inline">
                             <x-community-manager::accounting.transactions.transaction-type-icon :type="$transaction->type->slug" />
                         </div>
-                        <x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" class="text-gray-500" />
+                        <x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" class="text-gray-500 dark:text-zinc-400" />
                     </x-apex::grid.item.column>
                     <div class="flex flex-col-reverse items-center justify-end w-full col-span-4 lg:grid lg:grid-cols-2 lg:gap-x-2">
                         <x-apex::grid.item.column class="flex justify-end text-sm lg:justify-start">

@@ -15,7 +15,7 @@
             <div class="lg:col-span-2">
                 <x-apex::form action="save">
                     @error('form')
-                        <div class="pb-4 text-sm text-center text-red-500">{{ $message }}</div>
+                        <div class="pb-4 text-sm text-center text-red-500 dark:text-red-400">{{ $message }}</div>
                     @enderror
 
                     <div class="flex flex-col w-full space-y-5">
@@ -32,11 +32,11 @@
                         {{-- Premium capability --}}
                         <div class="p-4 border rounded-lg border-amber-200 bg-amber-50/60 dark:border-amber-500/40 dark:bg-amber-500/10">
                             <div class="flex items-center gap-2">
-                                <flux:icon name="apex-ui.wallet" class="w-4 h-4 shrink-0 text-amber-600 stroke-1.5" />
+                                <flux:icon name="apex-ui.wallet" class="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 stroke-1.5" />
                                 <span class="text-sm font-medium text-zinc-900 dark:text-zinc-100">Member balances &amp; accounting</span>
                                 <x-apex::badge size="sm" color="amber">Premium</x-apex::badge>
                             </div>
-                            <p class="mt-1 text-xs text-zinc-500">Track each member's balance, entry fees, and payouts with a full transaction history. You can turn this on now or later.</p>
+                            <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">Track each member's balance, entry fees, and payouts with a full transaction history. You can turn this on now or later.</p>
                             <div class="mt-3">
                                 <x-apex::input.checkbox wire:model="form.track_member_balances" label="Enable member balance tracking" />
                             </div>
@@ -70,13 +70,13 @@
                                 <flux:icon name="apex-ui.check-circle" class="mt-0.5 h-4 w-4 shrink-0 text-green-500 stroke-1.5" />
                                 <div>
                                     <div class="text-sm font-medium text-zinc-800 dark:text-zinc-200">{{ $benefit['title'] }}</div>
-                                    <div class="text-xs text-zinc-500">{{ $benefit['body'] }}</div>
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $benefit['body'] }}</div>
                                 </div>
                             </li>
                         @endforeach
                     </ul>
 
-                    <div class="p-3 mt-4 text-xs rounded-lg bg-zinc-50 text-zinc-500 dark:bg-zinc-900/50">
+                    <div class="p-3 mt-4 text-xs rounded-lg bg-zinc-50 text-zinc-500 dark:bg-zinc-900/50 dark:text-zinc-400">
                         You always have a private personal space for your own pools — a community is for sharing with others. Premium features such as member balances &amp; accounting are part of a paid plan.
                     </div>
                 </div>

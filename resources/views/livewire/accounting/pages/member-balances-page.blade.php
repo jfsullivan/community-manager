@@ -57,9 +57,9 @@
                             <x-profile-photo class="w-8 h-8 sm:h-10 sm:w-10" :url="$member->profile_photo_url" :name="$member->full_name" />
                             <div class="flex flex-col">
                                 <span>{{ $member->full_name }}</span>
-                                <span class="flex items-center text-xs font-normal text-gray-500">
+                                <span class="flex items-center text-xs font-normal text-gray-500 dark:text-zinc-400">
                                     <span class="hidden sm:inline">
-                                        <flux:icon name="apex-ui.mail" class="mr-1.5 h-4 w-4 text-gray-500 stroke-1.5" />
+                                        <flux:icon name="apex-ui.mail" class="mr-1.5 h-4 w-4 text-gray-500 dark:text-zinc-400 stroke-1.5" />
                                     </span>
                                     <a href="mailto:{{ $member->email }}" class="w-full truncate max-w-fit hover:underline">{{ $member->email }}</a>
                                 </span>
@@ -87,7 +87,7 @@
                     <x-slot:actions>
                         <div class="flex items-center justify-center w-10 sm:w-16">
                             <a href="{{ route('community.admin.accounting.member.transactions', [$member->id]) }}">
-                                <flux:icon name="apex-ui.chevron-right" class="w-5 h-5 text-gray-500 stroke-2" />
+                                <flux:icon name="apex-ui.chevron-right" class="w-5 h-5 text-gray-500 dark:text-zinc-400 stroke-2" />
                             </a>
                         </div>
                     </x-slot:actions>

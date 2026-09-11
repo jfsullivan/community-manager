@@ -1,7 +1,7 @@
 <div class="flex flex-col items-center w-full">
-    <div class="flex justify-center w-full bg-white shadow-sm">
+    <div class="flex justify-center w-full bg-white dark:bg-zinc-800 shadow-sm">
         <div class="w-full px-4 sm:px-6 max-w-7xl lg:mx-auto lg:px-8">
-            <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+            <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200 dark:lg:border-zinc-700">
                 <div class="flex-1 min-w-0">
                     <!-- Profile -->
                     <div class="flex items-center">
@@ -10,24 +10,24 @@
                             <div class="flex items-center">
                                 <x-profile-photo class="w-16 h-16 sm:hidden" :url="$community->owner->profile_photo_path ?? ''" :name="$community->name" />
                                 <div class="flex flex-col w-full">
-                                    <h1 class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
+                                    <h1 class="ml-3 text-2xl font-bold leading-7 text-gray-900 dark:text-zinc-100 sm:leading-9 sm:truncate">
                                         {{ $community->name }}
                                     </h1>
                                     <dl class="flex flex-col mb-4 ml-3 space-y-1 sm:ml-3 sm:mb-0 sm:mt-1 sm:flex-row sm:flex-wrap">
                                         <dt class="sr-only">Owner</dt>
-                                        <dd class="flex items-center text-sm font-medium text-gray-500 capitalize sm:mr-6">
-                                            <svg class="shrink-0 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 512 512" fill="currentColor">
+                                        <dd class="flex items-center text-sm font-medium text-gray-500 dark:text-zinc-400 capitalize sm:mr-6">
+                                            <svg class="shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-zinc-500" viewBox="0 0 512 512" fill="currentColor">
                                                 <path d="M496 448H16c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h480c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zm-304-64l-64-32 64-32 32-64 32 64 64 32-64 32-16 32h208l-86.41-201.63a63.955 63.955 0 0 1-1.89-45.45L416 0 228.42 107.19a127.989 127.989 0 0 0-53.46 59.15L64 416h144l-16-32zm64-224l16-32 16 32 32 16-32 16-16 32-16-32-32-16 32-16z"/>
                                             </svg>
                                             {{ $community->owner->name }}
                                         </dd>
                                         <dt class="sr-only">Email</dt>
-                                        <dd class="flex items-center text-sm font-medium text-gray-500 lowercase sm:mr-6">
-                                            <svg class="shrink-0 mr-1.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <dd class="flex items-center text-sm font-medium text-gray-500 dark:text-zinc-400 lowercase sm:mr-6">
+                                            <svg class="shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-zinc-500" viewBox="0 0 20 20" fill="currentColor">
                                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                                                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                                             </svg>
-                                            <a class="cursor-pointer hover:underline hover:text-gray-600" href="mailto:{{ $community->owner->email }}">
+                                            <a class="cursor-pointer hover:underline hover:text-gray-600 dark:hover:text-zinc-300" href="mailto:{{ $community->owner->email }}">
                                                 {{ $community->owner->email }}
                                             </a>
                                         </dd>
@@ -39,7 +39,7 @@
                 </div>
 
                 @can('view-member-balance', $community)
-                    <div class="flex text-sm text-gray-400">Account Balance</div>
+                    <div class="flex text-sm text-gray-400 dark:text-zinc-500">Account Balance</div>
                     {{-- @livewire('community-manager.accounting.components.member-balance', ['size' => 'lg']) --}}
                 @endcan
                 
@@ -60,7 +60,7 @@
 
     @if(auth()->user()->ownsCommunity($community))
         <div class="flex justify-end w-full max-w-4xl mt-4 space-x-3">
-            <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-xs hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button type="button" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-zinc-200 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-md shadow-xs hover:bg-gray-50 dark:hover:bg-zinc-700/50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     @if(empty($community->welcome_message))
                         Add Message
                     @else 
@@ -71,12 +71,12 @@
     @endif
 
     @if($community->message)
-        <div class="w-full max-w-4xl mt-6 bg-white shadow-sm sm:rounded-lg">
+        <div class="w-full max-w-4xl mt-6 bg-white dark:bg-zinc-800 shadow-sm sm:rounded-lg">
             <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium leading-6 text-gray-900">
+                <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-zinc-100">
                     Message from {{ $community->owner->name }}
                 </h3>
-                <div class="max-w-xl mt-2 text-sm text-gray-500">
+                <div class="max-w-xl mt-2 text-sm text-gray-500 dark:text-zinc-400">
                     <p>{!! $community->message !!}</p>
                 </div>
             </div>
