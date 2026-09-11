@@ -10,7 +10,7 @@ class CreateTransactionAction
 {
     public function execute(array $data): Transaction
     {
-        $transactionType = TransactionType::find($data['type_id']);
+        $transactionType = TransactionType::find((int) $data['type_id']);
 
         $transactionClass = app(config('community-manager.transaction_model'));
 

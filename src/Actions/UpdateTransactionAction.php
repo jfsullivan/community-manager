@@ -10,7 +10,7 @@ class UpdateTransactionAction
 {
     public function execute(Transaction $transaction, array $data): Transaction
     {
-        $transactionType = TransactionType::find($data['type_id']);
+        $transactionType = TransactionType::find((int) $data['type_id']);
 
         // Check if this was previously a transfer transaction
         $wasTransferTransaction = $this->isTransferTransaction($transaction->type);

@@ -16,7 +16,7 @@ class EnsureIsCommunityOwner
      */
     public function handle(Request $request, Closure $next)
     {
-        $community = Community::find(Auth::user()->currentCommunity->id);
+        $community = Community::find((int) Auth::user()->currentCommunity->id);
 
         if (Auth::user()->id != $community->user_id) {
             abort(403, 'Unauthorized action');
