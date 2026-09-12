@@ -2,6 +2,14 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.0 - Admin rename + lifecycle scoping - 2026-09-12
+
+### Admin rename + lifecycle scoping
+
+- `CommunityPolicy::renameCommunity` (owner or admin) + `Community::isCommunityAdmin()`; `UpdateCommunityName` action fixed and wired to it (host-app form wiring ships separately).
+- Member Balances: status filter (Current/Pending/Former/Banned), defaults to Current.
+- Transaction modal excludes former/banned members; roster shows Former/Banned badges.
+
 ## v3.4.0 - Admin rename ability, balances status filters, roster badges - 2026-09-12
 
 ### Added
