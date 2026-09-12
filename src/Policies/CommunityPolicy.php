@@ -43,6 +43,17 @@ class CommunityPolicy
         return $community->isOwner($user->id);
     }
 
+    /**
+     * Renaming the community is an administrative act, not an ownership one:
+     * the owner and any `admin`-role member may do it (matching who reaches the
+     * Community Admin area). Kept separate from `update` so ownership-only
+     * settings stay owner-only.
+     */
+    public function renameCommunity(Authenticatable $user, Community $community)
+    {
+        return $community->isCommunityAdmin($user->id);
+    }
+
     public function addCommunityMember(Authenticatable $user, Community $community)
     {
         return $community->isOwner($user->id);
