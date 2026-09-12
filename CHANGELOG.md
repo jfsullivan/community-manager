@@ -2,6 +2,20 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- **`Community::isCommunityAdmin($user_id)`** — owner OR a current `admin`-role member, mirroring the `community-admin` route middleware so in-component authorization agrees with route access.
+- **`CommunityPolicy::renameCommunity`** ability — authorizes the community owner and any `admin`-role member to rename the community (kept separate from owner-only `update`). The `UpdateCommunityName` action now authorizes via this ability. (Wiring a rename field into the host app's Community Settings page is an app-side follow-up.)
+- **Member-status filter on the Member Balances page** (`MemberStatusFilter` trait: Current / Pending / Former / Banned segments). Defaults to **Current**, so former and banned members no longer appear on the balances page unless an admin selects their segment.
+
+### Fixed
+
+- **The Add/Edit Transaction modal member select no longer offers former or banned members.** `HasTransactionForm::usersSearchQuery()` now excludes ended and banned memberships (current and still-pending members remain selectable); editing keeps a now-former bound user visible via `withSelectedUserOption()`.
+- **Community members roster shows a "Former" badge in the Role column** for ended memberships instead of the member's now-stale role (precedence Banned > Former > pending join-flow > live role).
+- Fixed the stale `UpdateCommunityName` action namespace (was `jfsullivan\BrainTools\Actions`, unautoloadable) to `jfsullivan\CommunityManager\Actions`.
+
 ## v3.3.2 - Allow article-manager v3 - 2026-09-07
 
 Widens the jfsullivan/article-manager constraint to ^2.0||^3.0 so consumers can upgrade to article-manager v3.0.0 (comment approval removed). No code changes; the package only consumes ArticlePolicy and the Livewire page base classes, all unchanged in v3. Package suite verified green against v3.0.0 (48 passed).

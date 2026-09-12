@@ -207,7 +207,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Modals\\CreateTransactionModal\:\:\$community\.$#'
 			identifier: property.notFound
-			count: 1
+			count: 2
 			path: src/Livewire/Accounting/Modals/CreateTransactionModal.php
 
 		-
@@ -225,7 +225,7 @@ parameters:
 		-
 			message: '#^Access to an undefined property jfsullivan\\CommunityManager\\Livewire\\Accounting\\Modals\\UpdateTransactionModal\:\:\$community\.$#'
 			identifier: property.notFound
-			count: 1
+			count: 2
 			path: src/Livewire/Accounting/Modals/UpdateTransactionModal.php
 
 		-
