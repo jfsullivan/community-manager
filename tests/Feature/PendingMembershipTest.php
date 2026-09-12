@@ -270,6 +270,31 @@ it('shows join status instead of a role for unconfirmed members', function () {
         ->assertSeeInOrder(['Ivy Iota', 'Invited', 'Penny Quill', 'Pending']);
 });
 
+it('shows a Former badge instead of a stale role for ended members', function () {
+    $userClass = config('community-manager.user_model');
+
+    $owner = $userClass::factory()->create();
+    $community = createCommunity($owner);
+    addCommunityMember($community, $owner);
+    $owner->update(['current_community_id' => $community->id]);
+
+    // A distinctive role so we can tell the stale role apart from the status.
+    $treasurer = Role::firstOrCreate(['slug' => 'treasurer'], ['name' => 'Treasurer', 'color' => 'purple']);
+
+    $former = $userClass::factory()->create(['first_name' => 'Fred', 'last_name' => 'Former', 'email' => 'fred@example.test']);
+    $community->members()->attach($former->id, [
+        'role_id' => $treasurer->id,
+        'type_id' => Type::where('slug', 'active')->value('id'),
+        'start_at' => now()->subYear(),
+        'end_at' => now()->subMonth(),
+    ]);
+
+    Livewire::actingAs($owner)
+        ->test(MemberManagementPage::class, ['community_id' => $community->id])
+        ->set('statusFilter', 'former')
+        ->assertSeeInOrder(['fred@example.test', 'Former']);
+});
+
 it('surfaces only pending rows under the pending filter', function () {
     $userClass = config('community-manager.user_model');
 

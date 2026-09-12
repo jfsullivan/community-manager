@@ -23,11 +23,13 @@
 
     @if ($this->showsColumn('role'))
         <x-apex::grid.item.column class="hidden md:flex md:col-span-2 justify-start">
-            {{-- An unconfirmed member's role isn't meaningful yet — show where
-                 they are in the join flow instead (mirrors member-manager's row).
-                 Banned takes precedence. --}}
+            {{-- A non-current member's role isn't meaningful — show their
+                 lifecycle status instead (mirrors member-manager's row).
+                 Banned > Former > pending join-flow > live role. --}}
             @if (($member->latest_status_name ?? null) === 'banned')
                 <x-apex::badge color="red" size="sm">Banned</x-apex::badge>
+            @elseif ($member->membership_status == 'former')
+                <x-apex::badge color="zinc" size="sm">Former</x-apex::badge>
             @elseif ($member->membership_status == 'pending')
                 @if (! is_null($member->invitation_id) && is_null($member->invitation_accepted_at))
                     <x-apex::badge color="amber" size="sm">Invited</x-apex::badge>

@@ -8,6 +8,7 @@ use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
 use jfsullivan\ApexUi\Livewire\Traits\WithSearchFilter;
 use jfsullivan\ApexUi\Livewire\Traits\WithSorting;
 use jfsullivan\CommunityManager\Livewire\Filters\BalanceFilter;
+use jfsullivan\CommunityManager\Livewire\Filters\MemberStatusFilter;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -15,6 +16,7 @@ use Livewire\Component;
 class MemberBalancesPage extends Component
 {
     use BalanceFilter;
+    use MemberStatusFilter;
     use WithFilters;
     use WithPerPagePagination;
     use WithSearchFilter;
@@ -33,6 +35,11 @@ class MemberBalancesPage extends Component
             'balance' => 'desc',
             'last_activity' => 'desc',
         ];
+    }
+
+    public function updatedMemberStatusFilter(): void
+    {
+        $this->resetPage();
     }
 
     #[Computed]
@@ -72,9 +79,7 @@ class MemberBalancesPage extends Component
             ->withFullName()
             ->withCommunityMembershipBalance($this->community)
             ->withCurrentMembership('community', $this->community->id)
-            ->whereHas('memberships', function ($query) {
-                $query->where('model_id', $this->community->id)->where('model_type', 'community');
-            })
+            ->tap(fn ($query) => $this->applyMemberStatusFilter($query, $this->community))
             ->when($this->balanceFilter == 'zero', fn ($query) => $query->where('balance', '=', 0))
             ->when($this->balanceFilter == 'positive', fn ($query) => $query->where('balance', '>', 0))
             ->when($this->balanceFilter == 'negative', fn ($query) => $query->where('balance', '<', 0))

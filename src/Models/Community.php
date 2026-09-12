@@ -131,6 +131,24 @@ class Community extends Model
         return $this->user_id == $user_id;
     }
 
+    /**
+     * Whether the user administers this community: the owner, or a current
+     * member holding the `admin` role. Mirrors the access rule enforced by the
+     * `community-admin` route middleware so in-component authorization (which
+     * middleware doesn't re-run on Livewire updates) can agree with it.
+     */
+    public function isCommunityAdmin($user_id): bool
+    {
+        if ($this->isOwner($user_id)) {
+            return true;
+        }
+
+        return $this->memberships()
+            ->where('memberships.user_id', $user_id)
+            ->whereRelation('role', 'slug', 'admin')
+            ->exists();
+    }
+
     // public function getInvitationModel()
     // {
     //     return CommunityInvitation::class;

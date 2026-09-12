@@ -53,8 +53,23 @@ trait HasTransactionForm
     {
         $userClass = config('community-manager.user_model');
 
-        return $userClass::whereHas('communities', function ($query) {
-            $query->where('communities.id', $this->community->id);
+        // Former (ended stint) and banned members must not surface as
+        // transaction subjects. Current and still-pending members remain
+        // selectable. (Editing keeps its bound user via withSelectedUserOption(),
+        // so an existing transaction against a now-former member still shows.)
+        return $userClass::whereHas('memberships', function ($query) {
+            $query->where('memberships.model_id', $this->community->id)
+                ->where('memberships.model_type', $this->community->getMorphClass())
+                // Not former: no end date, or the end date is still in the future.
+                ->where(function ($query) {
+                    $query->whereNull('memberships.end_at')
+                        ->orWhere('memberships.end_at', '>=', now());
+                })
+                // Not banned: the latest lifecycle status isn't `banned`.
+                ->whereDoesntHave('statuses', function ($statusQuery) {
+                    $statusQuery->where('name', 'banned')
+                        ->whereRaw('statuses.id = (select max(s2.id) from statuses s2 where s2.model_id = statuses.model_id and s2.model_type = statuses.model_type)');
+                });
         })
             ->select('id')
             ->withFullName()

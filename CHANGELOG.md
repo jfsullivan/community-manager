@@ -2,6 +2,20 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.0 - Admin rename ability, balances status filters, roster badges - 2026-09-12
+
+### Added
+
+- **`Community::isCommunityAdmin($user_id)`** — owner OR a current `admin`-role member, mirroring the `community-admin` route middleware so in-component authorization agrees with route access.
+- **`CommunityPolicy::renameCommunity`** ability — authorizes the community owner and any `admin`-role member to rename the community (kept separate from owner-only `update`). The `UpdateCommunityName` action now authorizes via this ability. (Wiring a rename field into the host app's Community Settings page is an app-side follow-up.)
+- **Member-status filter on the Member Balances page** (`MemberStatusFilter` trait: Current / Pending / Former / Banned segments). Defaults to **Current**, so former and banned members no longer appear on the balances page unless an admin selects their segment.
+
+### Fixed
+
+- **The Add/Edit Transaction modal member select no longer offers former or banned members.** `HasTransactionForm::usersSearchQuery()` now excludes ended and banned memberships (current and still-pending members remain selectable); editing keeps a now-former bound user visible via `withSelectedUserOption()`.
+- **Community members roster shows a "Former" badge in the Role column** for ended memberships instead of the member's now-stale role (precedence Banned > Former > pending join-flow > live role).
+- Fixed the stale `UpdateCommunityName` action namespace (was `jfsullivan\BrainTools\Actions`, unautoloadable) to `jfsullivan\CommunityManager\Actions`.
+
 ## v3.3.3 - Dark-mode variants across package views - 2026-09-11
 
 Additive Tailwind `dark:` variants on 25 views (accounting pages/modals, admin dashboard, dropdown/profile/community menus, member rows, create-community, responsive nav), matching the BracketBrain app's dark-mode conventions: zinc surfaces/borders/text, translucent semantic tints, solid brand elements untouched. No light-mode classes changed (verified additive-only). No API/behavior changes.
