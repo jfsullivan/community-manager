@@ -81,11 +81,11 @@ class Transaction extends Model
     public function scopeSearch($query, ?string $terms = null)
     {
         collect(explode(' ', $terms))->filter()->each(function ($term) use ($query) {
-            $term = '%'.$term.'%';
-            $query->where(function ($query) use ($term) {
-                $query->where('description', 'like', $term)
-                    ->orWhereRelation('user', 'name', 'like', $term)
-                    ->orWhereRelation('type', 'name', 'like', $term);
+            $like = '%'.$term.'%';
+            $query->where(function ($query) use ($term, $like) {
+                $query->where('transactions.description', 'like', $like)
+                    ->orWhereHas('user', fn ($query) => $query->searchByFullName($term))
+                    ->orWhereRelation('type', 'name', 'like', $like);
             });
         });
     }

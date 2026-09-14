@@ -248,6 +248,128 @@ class CommunityTransactionsPageTest extends TestCase
     }
 
     #[Test]
+    public function it_sorts_by_type_name()
+    {
+        $withdrawalType = TransactionType::find(1); // Withdrawal
+        $depositType = TransactionType::find(2); // Deposit
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $withdrawalType->id,
+        ]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $depositType->id,
+        ]);
+
+        $component = Livewire::test(CommunityTransactionsPage::class, [
+            'community_id' => $this->community->id,
+        ])
+            ->call('sortBy', 'type', 'asc');
+
+        $typeNames = collect($component->get('records')->items())->pluck('type.name')->all();
+        $this->assertEquals(['Deposit', 'Withdrawal'], $typeNames);
+    }
+
+    #[Test]
+    public function it_sorts_by_member_name()
+    {
+        $lastMember = User::factory()->create([
+            'first_name' => 'Zed',
+            'last_name' => 'Zimmer',
+            'current_community_id' => $this->community->id,
+        ]);
+
+        $firstMember = User::factory()->create([
+            'first_name' => 'Alice',
+            'last_name' => 'Adams',
+            'current_community_id' => $this->community->id,
+        ]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $lastMember->id,
+            'type_id' => $this->transactionType->id,
+        ]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $firstMember->id,
+            'type_id' => $this->transactionType->id,
+        ]);
+
+        $component = Livewire::test(CommunityTransactionsPage::class, [
+            'community_id' => $this->community->id,
+        ])
+            ->call('sortBy', 'member', 'asc');
+
+        $userIds = collect($component->get('records')->items())->pluck('user_id')->all();
+        $this->assertEquals([$firstMember->id, $lastMember->id], $userIds);
+    }
+
+    #[Test]
+    public function it_sorts_by_transaction_description()
+    {
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+            'description' => 'Zebra fund contribution',
+        ]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+            'description' => 'Alpha payment',
+        ]);
+
+        $component = Livewire::test(CommunityTransactionsPage::class, [
+            'community_id' => $this->community->id,
+        ])
+            ->call('sortBy', 'transaction', 'asc');
+
+        $descriptions = collect($component->get('records')->items())->pluck('description')->all();
+        $this->assertEquals(['Alpha payment', 'Zebra fund contribution'], $descriptions);
+    }
+
+    #[Test]
+    public function it_searches_by_member_name()
+    {
+        $member = User::factory()->create([
+            'first_name' => 'Zelda',
+            'last_name' => 'Fitzgerald',
+            'current_community_id' => $this->community->id,
+        ]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $member->id,
+            'type_id' => $this->transactionType->id,
+            'description' => 'Weekly dues',
+        ]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+            'description' => 'Unrelated deposit',
+        ]);
+
+        $component = Livewire::test(CommunityTransactionsPage::class, [
+            'community_id' => $this->community->id,
+        ])
+            ->set('searchFilter', 'Zelda');
+
+        $records = $component->get('records');
+        $this->assertCount(1, $records->items());
+        $this->assertEquals($member->id, $records->items()[0]->user_id);
+    }
+
+    #[Test]
     public function it_displays_community_balance()
     {
         // Create some transactions with different amounts

@@ -2,6 +2,16 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.1 - Transaction page sorting + search fixes - 2026-09-14
+
+### Fixed
+
+- **Community Transactions type sort no longer 500s** (BracketBrain #36): `CommunityTransactionsPage::transactionQuery()` was missing the `transaction_types` join that `setSort('type')` orders by (`Unknown column 'transaction_types.name'`). Both `transaction_types` and `users` are now joined.
+- **Transaction search no longer 500s** (BracketBrain #106): `Transaction::scopeSearch` searched the dropped `users.name` column via `orWhereRelation('user', 'name', …)`. It now uses `searchByFullName()` (name_type-aware: first/last/CONCAT), so searching by member name works.
+- **Member column now sorts** on the Community Transactions page: the blade's `sort-key="member"` had no `setSort()` case and silently fell through to the date sort. Sorts by member name (name_type-aware).
+- **Transaction column now sorts** on both the Community and Member Transactions pages: `sort-key="transaction"` now orders by description.
+- All sort/tiebreaker columns are table-qualified (`transactions.id` etc.) so the new joins can't make them ambiguous.
+
 ## v3.4.0 - Admin rename + lifecycle scoping - 2026-09-12
 
 ### Admin rename + lifecycle scoping

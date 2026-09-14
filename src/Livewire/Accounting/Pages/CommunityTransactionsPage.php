@@ -31,6 +31,8 @@ class CommunityTransactionsPage extends Component
 
         $this->defaultSortDir = [
             'date' => 'desc',
+            'member' => 'asc',
+            'transaction' => 'asc',
             'type' => 'asc',
             'amount' => 'asc',
         ];
@@ -38,29 +40,40 @@ class CommunityTransactionsPage extends Component
 
     public function setSort($query, $key = '', $dir = null)
     {
-        // match ($key) {
-        //     'date' => $query->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date']),
-        //     'amount' => $query->orderBy('amount', $dir ?? $this->defaultSortDir['amount']),
-        //     'type' => $query->orderBy('transaction_types.name', $dir ?? $this->defaultSortDir['type']),
-        //     default => $query->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date']),
-        // };
         switch ($key) {
             case 'date':
             default:
-                $query->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date'])
-                    ->orderBy('id', 'desc'); // Add unique column as tiebreaker
+                $query->orderBy('transactions.transacted_at', $dir ?? $this->defaultSortDir['date'])
+                    ->orderBy('transactions.id', 'desc'); // Add unique column as tiebreaker
+
+                break;
+            case 'member':
+                $query->when(config('member-manager.name_type') == 'single', function ($query) use ($dir) {
+                    $query->orderBy('users.name', $dir ?? $this->defaultSortDir['member']);
+                }, function ($query) use ($dir) {
+                    $query->orderBy('users.first_name', $dir ?? $this->defaultSortDir['member'])
+                        ->orderBy('users.last_name', $dir ?? $this->defaultSortDir['member']);
+                })
+                    ->orderBy('transactions.transacted_at', $this->defaultSortDir['date'])
+                    ->orderBy('transactions.id', 'desc'); // Add unique column as tiebreaker
+
+                break;
+            case 'transaction':
+                $query->orderBy('transactions.description', $dir ?? $this->defaultSortDir['transaction'])
+                    ->orderBy('transactions.transacted_at', $this->defaultSortDir['date'])
+                    ->orderBy('transactions.id', 'desc'); // Add unique column as tiebreaker
 
                 break;
             case 'amount':
-                $query->orderBy('amount', $dir ?? $this->defaultSortDir['amount'])
-                    ->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date'])
-                    ->orderBy('id', 'desc'); // Add unique column as tiebreaker
+                $query->orderBy('transactions.amount', $dir ?? $this->defaultSortDir['amount'])
+                    ->orderBy('transactions.transacted_at', $this->defaultSortDir['date'])
+                    ->orderBy('transactions.id', 'desc'); // Add unique column as tiebreaker
 
                 break;
             case 'type':
                 $query->orderBy('transaction_types.name', $dir ?? $this->defaultSortDir['type'])
-                    ->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date'])
-                    ->orderBy('id', 'desc'); // Add unique column as tiebreaker
+                    ->orderBy('transactions.transacted_at', $this->defaultSortDir['date'])
+                    ->orderBy('transactions.id', 'desc'); // Add unique column as tiebreaker
 
                 break;
         }
@@ -104,6 +117,8 @@ class CommunityTransactionsPage extends Component
             ->with(['transferPartner:id,first_name,last_name', 'type:id,name,slug', 'user:id,first_name,last_name'])
             ->select(['transactions.*'])
             ->withRelatedInfo()
+            ->leftJoin('transaction_types', 'transactions.type_id', '=', 'transaction_types.id')
+            ->leftJoin('users', 'transactions.user_id', '=', 'users.id')
             ->where('transactions.community_id', $this->community->id)
             ->when($this->transactionTypeFilter, fn ($query, $id) => $query->where('type_id', $id))
             ->when($this->searchFilter, fn ($query, $searchTerm) => $query->search($searchTerm));

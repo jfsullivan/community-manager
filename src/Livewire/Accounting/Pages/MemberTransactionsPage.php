@@ -33,6 +33,7 @@ class MemberTransactionsPage extends Component
 
         $this->defaultSortDir = [
             'date' => 'desc',
+            'transaction' => 'asc',
             'type' => 'asc',
             'amount' => 'asc',
         ];
@@ -43,11 +44,15 @@ class MemberTransactionsPage extends Component
         switch ($key) {
             case 'date':
             default:
-                $query->orderBy('transacted_at', $dir ?? $this->defaultSortDir['date']);
+                $query->orderBy('transactions.transacted_at', $dir ?? $this->defaultSortDir['date']);
+
+                break;
+            case 'transaction':
+                $query->orderBy('transactions.description', $dir ?? $this->defaultSortDir['transaction']);
 
                 break;
             case 'amount':
-                $query->orderBy('amount', $dir ?? $this->defaultSortDir['amount']);
+                $query->orderBy('transactions.amount', $dir ?? $this->defaultSortDir['amount']);
 
                 break;
             case 'type':
