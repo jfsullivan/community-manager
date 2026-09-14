@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.2 - Config-overridable member management page - 2026-09-14
+
+### Added
+
+- The community admin members route now resolves its page class from `config('community-manager.components.member_management_page')` (default unchanged: `CommunityMemberManagementPage`), mirroring the existing `member_details_page` override so host apps can subclass the roster page (e.g. BracketBrain adds per-member pool participation).
+
 ## v3.4.1 - Transaction page sorting + search fixes - 2026-09-14
 
 ### Fixed
