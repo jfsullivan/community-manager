@@ -3,6 +3,7 @@
 namespace jfsullivan\CommunityManager\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use jfsullivan\CommunityManager\Livewire\Accounting\Modals\DeleteTransactionModal;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\CommunityTransactionsPage;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\Transaction;
@@ -367,6 +368,80 @@ class CommunityTransactionsPageTest extends TestCase
         $records = $component->get('records');
         $this->assertCount(1, $records->items());
         $this->assertEquals($member->id, $records->items()[0]->user_id);
+    }
+
+    #[Test]
+    public function it_offers_row_and_bulk_delete_actions_to_the_community_owner()
+    {
+        $this->community->update(['user_id' => $this->user->id]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+        ]);
+
+        Livewire::test(CommunityTransactionsPage::class, [
+            'community_id' => $this->community->id,
+        ])
+            ->assertSee('Delete Transaction')
+            ->assertSee('Delete Selected Transactions');
+    }
+
+    #[Test]
+    public function it_hides_the_bulk_delete_action_from_non_owners()
+    {
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+        ]);
+
+        Livewire::test(CommunityTransactionsPage::class, [
+            'community_id' => $this->community->id,
+        ])
+            ->assertDontSee('Delete Selected Transactions');
+    }
+
+    #[Test]
+    public function it_deletes_a_single_transaction_through_the_modal()
+    {
+        $transaction = Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+        ]);
+
+        Livewire::test(DeleteTransactionModal::class)
+            ->dispatch('open-delete-transaction', id: $transaction->id)
+            ->call('save')
+            ->assertDispatched('transaction-deleted');
+
+        $this->assertDatabaseMissing('transactions', ['id' => $transaction->id]);
+    }
+
+    #[Test]
+    public function it_deletes_a_bulk_selection_of_transactions_through_the_modal()
+    {
+        $transactions = Transaction::factory()->count(3)->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+        ]);
+
+        $survivor = Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+        ]);
+
+        Livewire::test(DeleteTransactionModal::class)
+            ->dispatch('open-delete-transaction', records: $transactions->pluck('id')->all())
+            ->call('save')
+            ->assertDispatched('transaction-deleted');
+
+        $this->assertDatabaseCount('transactions', 1);
+        $this->assertDatabaseHas('transactions', ['id' => $survivor->id]);
     }
 
     #[Test]

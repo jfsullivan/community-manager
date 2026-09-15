@@ -23,6 +23,12 @@
             class="w-full grid-cols-16"
             wire:model="selected"
         >
+            @if (Gate::allows('delete-community-transaction', [$this->community]))
+                <x-slot:bulkActions>
+                    <x-apex::menu.item icon="apex-ui.trash" wire:click="$dispatch('open-delete-transaction', { records: $wire.selected })">Delete Selected Transactions</x-apex::menu.item>
+                </x-slot:bulkActions>
+            @endif
+
             <x-slot:header actions-variant="icon">
                 <x-apex::grid.header.column class="justify-start col-span-3" sortable sort-key="date" :sort-data="$sorts">Date</x-apex::grid.header.column>
                 <x-apex::grid.header.column class="justify-start col-span-3" sortable sort-key="member" :sort-data="$sorts">Member</x-apex::grid.header.column>
@@ -77,7 +83,7 @@
                             @endif
 
                             @if(Gate::allows('delete-community-transaction', [$this->community]))
-                                <x-apex::menu.item disabled icon="apex-ui.trash" wire:click="$dispatch('open-delete-transaction', { id: {{ $transaction->id }} })">Delete Transaction</x-apex::menu.item>
+                                <x-apex::menu.item icon="apex-ui.trash" wire:click="$dispatch('open-delete-transaction', { id: {{ $transaction->id }} })">Delete Transaction</x-apex::menu.item>
                             @endif
                         </x-apex::grid.item.column.actions.dropdown>
                     </x-slot:actions>

@@ -2,6 +2,13 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.3 - Community transaction delete actions - 2026-09-14
+
+### Fixed
+
+- **Delete Transaction is clickable again** on the Community Transactions page (BracketBrain #105): the menu item carried a stray hardcoded `disabled` attribute introduced during the apex-ui migration. The working per-member page item was never disabled; parity restored.
+- **Bulk "Delete Selected Transactions"** added to the Community Transactions page (BracketBrain #104): the grid was `selectable` but had no `bulkActions` slot, so selection did nothing. Mirrors the member-transactions page; gated on `delete-community-transaction` (community owner). Tests cover row + bulk delete through the modal and owner/non-owner visibility.
+
 ## v3.4.2 - Config-overridable member management page - 2026-09-14
 
 ### Added
