@@ -2,6 +2,22 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.4 - Pool-agnostic package defaults - 2026-09-18
+
+### Pool-agnostic package defaults
+
+community-manager manages communities for any consuming app, including ones with no pools domain. This release removes the remaining pool awareness from the package defaults:
+
+#### Changed
+
+- `community-menu` default view: dropped the hard-coded Pools link (`route('pools.index')` would error in apps without that route). Consuming apps add their domain links via a published override.
+- `header` default view: the community-context check now covers `community.*` routes only; apps whose domain pages also carry community context widen it via override.
+- Community layout: removed a commented-out pools toolbar remnant.
+- `create-community-page` default view: generalized the marketing copy (no pool-specific benefits).
+- Doc comments in `MemberManagementPage` and `Community` generalized ("app-driven" instead of "pool-derived").
+
+No PHP behavior changes. BracketBrain overrides all affected views, so its UI is unchanged.
+
 ## v3.4.3 - Community transaction delete actions - 2026-09-14
 
 ### Fixed
