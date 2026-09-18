@@ -2,6 +2,20 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.5 - Community toolbar icons - 2026-09-18
+
+### Community toolbar icons
+
+The community toolbar (`x-community-manager::navigation-menu`) now pairs each tab with an apex-ui icon, matching the app's pool dashboard toolbar (BracketBrain #91).
+
+#### Added
+
+- `navigation-menu.item` component: a toolbar tab that renders an apex-ui icon plus its label with selected/unselected styling, mirroring the pool toolbar item — the icon stacks above the label on mobile and sits beside it on `md+`.
+
+#### Changed
+
+- `navigation-menu` default view: rebuilt on the new `navigation-menu.item` component. Tabs (Dashboard, News, Members, Admin Tools) now show icons (`home`, `newspaper`, `users`, `settings`) and are driven by the `selected` prop with a route-based fallback. Stays pool-agnostic — only `community.*` routes appear; dead placeholder links (Documents/Calendar → `route('home')`) were dropped. Consuming apps add domain tabs (e.g. Pools) via a published override.
+
 ## v3.4.4 - Pool-agnostic package defaults - 2026-09-18
 
 ### Pool-agnostic package defaults

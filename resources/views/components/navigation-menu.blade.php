@@ -1,25 +1,47 @@
-<flux:navbar class="space-x-8" aria-label="Community">
-    <flux:navbar.item href="{{ route('community.dashboard') }}" :current="request()->routeIs('community.dashboard')">
-        {{ __('Dashboard') }}
-    </flux:navbar.item>
+@props([
+    'selected' => null,
+])
 
-    <flux:navbar.item href="{{ route('community.articles.index') }}" :current="request()->routeIs('community.articles.*')">
-        {{ __('News') }}
-    </flux:navbar.item>
+@php
+    // The consuming app passes an explicit `selected` key (e.g. "dashboard",
+    // "articles", "members", "admin"). Fall back to route detection so the
+    // toolbar still highlights correctly when a page omits the prop.
+    $selected ??= match (true) {
+        request()->routeIs('community.articles.*') => 'articles',
+        request()->routeIs('community.members.*') => 'members',
+        request()->routeIs('community.admin.*') => 'admin',
+        default => 'dashboard',
+    };
 
-    <flux:navbar.item href="{{ route('home') }}" :current="request()->routeIs('home')">
-        {{ __('Documents') }}
-    </flux:navbar.item>
+    $community = Auth::user()?->currentCommunity;
+@endphp
 
-    <flux:navbar.item href="{{ route('home') }}" :current="request()->routeIs('home')">
-        {{ __('Members') }}
-    </flux:navbar.item>
+{{-- Community toolbar. Each tab pairs an apex-ui icon with its label, mirroring
+     the app's pool dashboard toolbar (icon stacked above the label on mobile,
+     beside it on md+). Kept pool-agnostic: only community.* routes appear here.
+     Consuming apps add domain tabs (e.g. Pools) via a published override. --}}
+<div class="flex w-full">
+    <div class="flex items-end justify-start w-full space-x-8">
+        <x-community-manager::navigation-menu.item :selected="$selected == 'dashboard'"
+            active-icon="home" inactive-icon="home" url="{{ route('community.dashboard') }}">
+            {{ __('community-manager::labels.dashboard') }}
+        </x-community-manager::navigation-menu.item>
 
-    <flux:navbar.item href="{{ route('home') }}" :current="request()->routeIs('home')">
-        {{ __('Calendar') }}
-    </flux:navbar.item>
+        <x-community-manager::navigation-menu.item :selected="$selected == 'articles'"
+            active-icon="newspaper" inactive-icon="newspaper" url="{{ route('community.articles.index') }}">
+            {{ __('community-manager::labels.news') }}
+        </x-community-manager::navigation-menu.item>
 
-    <flux:navbar.item href="{{ route('community.admin.index') }}" :current="request()->routeIs('community.admin.index')">
-        {{ __('Admin Tools') }}
-    </flux:navbar.item>
-</flux:navbar>
+        <x-community-manager::navigation-menu.item :selected="$selected == 'members'"
+            active-icon="users" inactive-icon="users" url="{{ route('community.members.index') }}">
+            {{ __('community-manager::labels.members') }}
+        </x-community-manager::navigation-menu.item>
+
+        @if ($community && Auth::user()->can('manage', $community))
+            <x-community-manager::navigation-menu.item :selected="$selected == 'admin'"
+                active-icon="settings" inactive-icon="settings" url="{{ route('community.admin.index') }}">
+                {{ __('community-manager::labels.admin-tools') }}
+            </x-community-manager::navigation-menu.item>
+        @endif
+    </div>
+</div>
