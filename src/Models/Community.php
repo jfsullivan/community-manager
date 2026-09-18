@@ -86,9 +86,10 @@ class Community extends Model
      * Feature gating
      *
      * A personal community is the private, auto-provisioned default every user
-     * receives. It exists only to own that user's pools, so the shared-community
-     * management surfaces (members, invitations, transactions, articles) are not
-     * available on it — those belong to "real"/premium shared communities.
+     * receives. It exists only to own that user's own content, so the
+     * shared-community management surfaces (members, invitations, transactions,
+     * articles) are not available on it — those belong to "real"/premium shared
+     * communities.
     ***************************************************************************/
     public function isPersonal(): bool
     {

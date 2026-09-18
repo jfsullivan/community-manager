@@ -4,8 +4,6 @@
             <x-community-manager::page-header :community="$community" />
         </x-slot>
 
-        {{-- <x-pools.toolbar :selected="$selectedToolbarItem" :pool="$pool" /> --}}
-
             {{ $slot }}
 
     </div>

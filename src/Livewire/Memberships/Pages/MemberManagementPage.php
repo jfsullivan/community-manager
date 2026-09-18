@@ -17,7 +17,7 @@ class MemberManagementPage extends BaseMemberManagementPage
 
     /**
      * Communities surface a `pending` segment so admins can review and confirm
-     * self-join / pool-derived requests that are awaiting approval.
+     * self-join / app-driven membership requests that are awaiting approval.
      *
      * @return array<string, string>
      */
@@ -71,7 +71,8 @@ class MemberManagementPage extends BaseMemberManagementPage
     /**
      * Reject a pending membership by tombstoning it: record a `removed` status
      * and set end_at, WITHOUT deleting the row. Keeping the row makes a
-     * prior-removed member detectable so a later pool join stays pool-only.
+     * prior-removed member detectable so later app-driven joins don't silently
+     * re-grant community membership.
      */
     public function rejectMembership($user_id): void
     {

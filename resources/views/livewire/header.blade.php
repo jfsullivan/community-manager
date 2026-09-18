@@ -45,10 +45,11 @@
 
                 <!-- Community Dropdown -->
                 @php
-                    // The community switcher is only relevant inside a community context
-                    // (community or pool/entry pages). Hide it on the user home and other
-                    // non-community pages so it doesn't clutter them.
-                    $inCommunityContext = request()->routeIs('community.*', 'pools.*', 'entries.*');
+                    // The community switcher is only relevant inside a community context.
+                    // Hide it on the user home and other non-community pages so it
+                    // doesn't clutter them. Apps whose domain pages also carry community
+                    // context (e.g. pools/entries) widen this via a published override.
+                    $inCommunityContext = request()->routeIs('community.*');
                 @endphp
                 @if (Auth::user()->hasCommunities())
                     @if ($inCommunityContext)

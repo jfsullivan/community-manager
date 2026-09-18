@@ -1,7 +1,7 @@
 <div class="flex flex-col items-center w-full" x-data>
     <x-apex::section-header heading="Create a Community">
         <x-slot:subheading>
-            <x-apex::text>Communities let you share pools, standings, and news with friends, family, or your group.</x-apex::text>
+            <x-apex::text>Communities let you share news, activities, and membership with friends, family, or your group.</x-apex::text>
         </x-slot:subheading>
         <x-slot:actions>
             <x-apex::button size="sm" variant="ghost" icon="apex-ui.arrow-left" href="{{ route('home') }}" wire:navigate>Back to home</x-apex::button>
@@ -57,10 +57,9 @@
 
                     @php
                         $benefits = [
-                            ['title' => 'Share pools with your group', 'body' => 'Invite friends and family to join your pools with a simple code.'],
-                            ['title' => 'Combined standings', 'body' => "See everyone on one leaderboard across all of the community's pools."],
+                            ['title' => 'Share with your group', 'body' => 'Invite friends and family to join your community with a simple code.'],
                             ['title' => 'Community news', 'body' => 'Post announcements and updates your members see on the community home.'],
-                            ['title' => 'Members & admin tools', 'body' => 'Manage members, roles, and pool settings from one admin area.'],
+                            ['title' => 'Members & admin tools', 'body' => 'Manage members, roles, and settings from one admin area.'],
                         ];
                     @endphp
 
@@ -77,7 +76,7 @@
                     </ul>
 
                     <div class="p-3 mt-4 text-xs rounded-lg bg-zinc-50 text-zinc-500 dark:bg-zinc-900/50 dark:text-zinc-400">
-                        You always have a private personal space for your own pools — a community is for sharing with others. Premium features such as member balances &amp; accounting are part of a paid plan.
+                        You always have a private personal space of your own — a community is for sharing with others. Premium features such as member balances &amp; accounting are part of a paid plan.
                     </div>
                 </div>
             </aside>

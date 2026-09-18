@@ -53,11 +53,8 @@
                         </x-community-manager::dropdown-link>
                     @endif
 
-                    <!-- Community Pools -->
-                    <x-community-manager::dropdown-link url="{{ route('pools.index') }}" show-arrow>
-                        <x-slot name="icon"><flux:icon name="apex-ui.trophy" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
-                        {{ __('Pools') }}
-                    </x-community-manager::dropdown-link>
+                    {{-- Consuming apps add their domain links (e.g. pools) by
+                         publishing/overriding this view. --}}
 
                     <!-- Community Documents -->
                     {{-- <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
