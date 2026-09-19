@@ -2,6 +2,21 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.9 - From always stays on the app sending domain - 2026-09-18
+
+### Changed
+
+- `BaseMailable::envelope()` no longer uses the mail-template's `sender_email`
+  as the From address. From is always `config('mail.from.address')` — mail
+  providers (e.g. Resend) reject From addresses on domains the API key is not
+  verified for. The template's `sender_name` stays as the display name and the
+  template sender receives replies via Reply-To (omitted entirely when the
+  template has no `sender_email`). Suite 72 passing.
+
+Part of the BracketBrain Resend domain-authorization fix. Pairs with
+member-manager v0.9.39 (`SendsOnBehalfOfInviter`), which covers
+`CommunityInvitation`.
+
 ## v3.4.8 - Shorter Admin label on mobile - 2026-09-19
 
 ### v3.4.8 — Shorter Admin label on mobile
