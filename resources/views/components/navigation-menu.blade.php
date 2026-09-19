@@ -42,9 +42,11 @@
         </x-community-manager::navigation-menu.item>
 
         @if ($community && Auth::user()->can('manage', $community))
+            {{-- Mobile shows just "Admin"; the " Tools" suffix appears from sm up
+                 so the tab stays short on narrow screens. --}}
             <x-community-manager::navigation-menu.item :selected="$selected == 'admin'" class="flex-1 sm:flex-none"
                 active-icon="settings" inactive-icon="settings" url="{{ route('community.admin.index') }}">
-                {{ __('community-manager::labels.admin-tools') }}
+                {{ __('community-manager::labels.admin') }}<span class="hidden sm:inline">{{ __('community-manager::labels.admin-tools-suffix') }}</span>
             </x-community-manager::navigation-menu.item>
         @endif
     </div>

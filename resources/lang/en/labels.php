@@ -16,7 +16,9 @@ return [
     'members' => 'Members',
     'calendar' => 'Calendar',
     'leaderboard' => 'Leaderboard',
+    'admin' => 'Admin',
     'admin-tools' => 'Admin Tools',
+    'admin-tools-suffix' => ' Tools',
     'administration' => 'Administration',
     'community-administration' => 'Community Administration',
 ];
