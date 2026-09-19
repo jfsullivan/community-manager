@@ -19,9 +19,13 @@
 {{-- Community toolbar. Each tab pairs an apex-ui icon with its label, mirroring
      the app's pool dashboard toolbar (icon stacked above the label on mobile,
      beside it on md+). Kept pool-agnostic: only community.* routes appear here.
-     Consuming apps add domain tabs (e.g. Pools) via a published override. --}}
-<div class="flex w-full">
-    <div class="flex items-end justify-start w-full space-x-8">
+     Consuming apps add domain tabs (e.g. Pools) via a published override.
+
+     Mobile (< sm): the tabs spread evenly across the full row (justify-between)
+     so 3-5 items fill the width, matching the pool toolbar. From sm up they
+     collapse to inline left-aligned tabs with fixed spacing. --}}
+<div class="flex justify-center w-full sm:justify-start">
+    <div class="flex items-end justify-between w-full sm:w-auto sm:justify-start sm:space-x-8">
         <x-community-manager::navigation-menu.item :selected="$selected == 'dashboard'"
             active-icon="home" inactive-icon="home" url="{{ route('community.dashboard') }}">
             {{ __('community-manager::labels.dashboard') }}

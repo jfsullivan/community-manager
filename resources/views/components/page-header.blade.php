@@ -28,8 +28,11 @@
 	</div>
     @isset($navigationMenu)
         {{-- Full-width bottom border under the menubar (spans edge-to-edge because this
-             wrapper is w-full; the inner container just constrains the links). --}}
-        <div class="items-center justify-start hidden w-full bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700 sm:flex">
+             wrapper is w-full; the inner container just constrains the links).
+             Visible at all breakpoints so mobile users get the same toolbar — the
+             tabs stack icon-above-label on mobile (like the pool toolbar) and the
+             navigation-menu component spreads them across the row below sm. --}}
+        <div class="flex items-center justify-start w-full bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
             <div class="flex flex-col w-full px-2 mx-auto max-w-8xl xl:px-20">
                 {{ $navigationMenu }}
             </div>
