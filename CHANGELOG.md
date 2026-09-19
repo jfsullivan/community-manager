@@ -2,6 +2,19 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.7 - Uniform community toolbar across breakpoints - 2026-09-19
+
+### v3.4.7 — Uniform community toolbar across breakpoints
+
+The community toolbar now renders identically at every screen size — the desktop look everywhere.
+
+**Changed**
+
+- The toolbar item shows its icon inline beside the label with a single (desktop) text size at all breakpoints; the stacked-below-`sm` variant is gone.
+- On small screens the tabs are equal width (`flex-1`) and spread evenly across the full row; from `sm` up they collapse to inline, left-aligned tabs (`w-auto`) with fixed spacing. Only the row distribution changes by breakpoint, never the item's internal layout.
+
+Refs jfsullivan/BracketBrain#91
+
 ## v3.4.6 - Community toolbar visible on mobile - 2026-09-19
 
 ### v3.4.6 — Community toolbar visible on mobile
