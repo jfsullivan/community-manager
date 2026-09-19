@@ -2,6 +2,17 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.8 - Shorter Admin label on mobile - 2026-09-19
+
+### v3.4.8 — Shorter Admin label on mobile
+
+The community toolbar's admin tab now shows just **"Admin"** on narrow screens, expanding to the full **"Admin Tools"** from the `sm` breakpoint up, so the tab stays short on mobile.
+
+- Responsive span inside the tab label (`Admin<span class="hidden sm:inline"> Tools</span>`); the `" Tools"` suffix is hidden below `sm`.
+- Added `admin` and `admin-tools-suffix` keys to `resources/lang/en/labels.php` (existing `admin-tools` kept).
+
+Refs jfsullivan/BracketBrain#91
+
 ## v3.4.7 - Uniform community toolbar across breakpoints - 2026-09-19
 
 ### v3.4.7 — Uniform community toolbar across breakpoints
