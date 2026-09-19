@@ -2,6 +2,21 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.6 - Community toolbar visible on mobile - 2026-09-19
+
+### v3.4.6 — Community toolbar visible on mobile
+
+The community toolbar was hidden below the `sm` breakpoint, so mobile users saw no community tabs — only the hamburger drawer.
+
+**Fix**
+
+- The `page-header` navigation wrapper no longer applies `hidden ... sm:flex`; the toolbar now renders at every breakpoint.
+- On mobile the tabs spread evenly across the full row (`justify-between w-full`) and collapse to inline, left-aligned tabs with fixed spacing from `sm` up — mirroring the pool toolbar. Non-admins have 3 tabs, admins 4 (consuming apps that add a Pools tab get 5).
+
+The mobile drawer is unchanged and remains the only path to switch-community / balance / account actions.
+
+Refs jfsullivan/BracketBrain#91
+
 ## v3.4.5 - Community toolbar icons - 2026-09-18
 
 ### Community toolbar icons
