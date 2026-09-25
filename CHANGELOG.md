@@ -2,6 +2,11 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.12 - Card-style accounting grids and member account panel - 2026-09-25
+
+- Community transactions, member balances and member transaction grids use apex-ui grid card mode.
+- The member details Account panel is an `x-apex::card` with All Transactions in its header.
+
 ## v3.4.11 - Eight-digit Community IDs - 2026-09-25
 
 ### Eight-digit Community IDs
