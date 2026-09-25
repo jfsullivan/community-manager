@@ -2,6 +2,14 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.11 - Eight-digit Community IDs - 2026-09-25
+
+### Eight-digit Community IDs
+
+- `Community::newJoinId()` now draws an eight-digit ID (10000000–99999999, 90 million values), still re-drawing until unused.
+- Existing IDs are unchanged.
+- The factory matches.
+
 ## v3.4.10 - Unique six-digit Community IDs - 2026-09-25
 
 ### Unique six-digit Community IDs
