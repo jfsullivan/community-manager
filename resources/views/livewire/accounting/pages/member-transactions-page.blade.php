@@ -35,8 +35,8 @@
         </div>
     </div>
 
-    <div class="flex flex-col w-full">
-        <x-apex::grid flush selectable striped searchable
+    <div class="flex flex-col w-full py-4 sm:px-4">
+        <x-apex::grid card bleed selectable striped searchable
             class="w-full grid-cols-16"
             wire:model="selected"
         >

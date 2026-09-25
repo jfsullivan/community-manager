@@ -32,8 +32,8 @@
     </div>
 
     <x-app.card class="mt-0 lg:mt-8">
-        <div class="w-full flex flex-col">
-            <x-apex::grid striped searchable class="w-full grid-cols-16">
+        <div class="w-full flex flex-col py-4 sm:px-4">
+            <x-apex::grid card bleed striped searchable class="w-full grid-cols-16">
                 <x-slot name="heading">Transaction History</x-slot>
 
                 <x-slot:header actions-variant="icon">
