@@ -2,6 +2,15 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.10 - Unique six-digit Community IDs - 2026-09-25
+
+### Unique six-digit Community IDs
+
+- New `Community::newJoinId()` draws a random six-digit ID (100000–999999) and re-draws until no community uses it.
+- **Fix:** `CommunityForm`'s generator retried on a collision but returned the colliding ID anyway. It now uses `newJoinId()`.
+- `CreateCommunity` used an unchecked `mt_rand` up to eight digits. It now uses `newJoinId()`.
+- The factory draws unique six-digit IDs, so apps can put a unique index on `communities.join_id`.
+
 ## v3.4.9 - From always stays on the app sending domain - 2026-09-18
 
 ### Changed
