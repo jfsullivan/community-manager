@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.4.13 - Member account panel as a transactions grid - 2026-09-25
+
+- The member details Account card lists the ten most recent transactions as a date / transaction / amount grid that scrolls after about five rows.
+
 ## v3.4.12 - Card-style accounting grids and member account panel - 2026-09-25
 
 - Community transactions, member balances and member transaction grids use apex-ui grid card mode.
