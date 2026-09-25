@@ -26,7 +26,7 @@ class CreateCommunity
 
         $user->switchCommunity($community = $user->ownedCommunities()->create([
             'name' => $input['name'],
-            'join_id' => mt_rand(100000, 10000000),
+            'join_id' => $communityClass::newJoinId(),
             'password' => Str::random(mt_rand(6, 8)),
         ]));
 

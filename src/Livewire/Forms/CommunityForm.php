@@ -28,7 +28,7 @@ class CommunityForm extends Form
         $community = $communityModel::create([
             'name' => $this->name,
             'description' => $this->description,
-            'join_id' => $this->generateUniqueJoinId(),
+            'join_id' => $communityModel::newJoinId(),
             'password' => Str::random(8),
             'timezone' => $this->timezone,
             'track_member_balances' => $this->track_member_balances,
@@ -45,19 +45,5 @@ class CommunityForm extends Form
         ]);
 
         return $community;
-    }
-
-    public function generateUniqueJoinId()
-    {
-        $join_id = random_int(100000, 999999);
-
-        $communityModel = config('community-manager.community_model');
-
-        if ($communityModel::where('join_id', $join_id)->exists()) {
-            $this->generateUniqueJoinId();
-        }
-
-        return $join_id;
-
     }
 }

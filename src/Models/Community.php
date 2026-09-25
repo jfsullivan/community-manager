@@ -36,6 +36,19 @@ class Community extends Model
         ];
     }
 
+    /**
+     * A random six-digit Community ID no other community uses — what members
+     * type, with the password, to join.
+     */
+    public static function newJoinId(): int
+    {
+        do {
+            $joinId = random_int(100000, 999999);
+        } while (static::where('join_id', $joinId)->exists());
+
+        return $joinId;
+    }
+
     /**************************************************************************
      * Model Factory
     ***************************************************************************/
