@@ -57,7 +57,7 @@ class MemberDetailsPage extends BaseMemberDetailsPage
             ->where('user_id', $this->user_id)
             ->orderByDesc('transacted_at')
             ->orderByDesc('id')
-            ->limit(5)
+            ->limit(10)
             ->get();
     }
 }
