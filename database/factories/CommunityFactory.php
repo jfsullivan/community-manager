@@ -22,7 +22,7 @@ class CommunityFactory extends Factory
         return [
             'name' => $this->faker->company(),
             'user_id' => $userClass::factory(),
-            'join_id' => $this->faker->unique()->numberBetween(100000, 999999),
+            'join_id' => $this->faker->unique()->numberBetween(10000000, 99999999),
             'password' => bin2hex(random_bytes(6)),
             'timezone' => $this->faker->timezone(),
             'track_member_balances' => $this->faker->boolean(50),
