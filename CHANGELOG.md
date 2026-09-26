@@ -2,6 +2,22 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.0 - Transaction payment method - 2026-09-26
+
+### Added
+
+- `TransactionMethod` enum (Venmo, PayPal, Zelle, Cash, Check, Other), stored in a new nullable `transactions.method` column and cast on `Transaction`.
+- The transaction form shows a **Method** select for deposits and withdrawals. Other types always save `null`.
+- The community transactions grid has a **Method** column on large screens.
+
+### Upgrade
+
+Add the column in the host app:
+
+```php
+Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
+```
 ## v3.4.13 - Member account panel as a transactions grid - 2026-09-25
 
 - The member details Account card lists the ten most recent transactions as a date / transaction / amount grid that scrolls after about five rows.
