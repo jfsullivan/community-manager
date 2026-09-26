@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.1 - Load more instead of pagination links - 2026-09-26
+
+### Changed
+
+- Paginated grids load more records as you scroll (apex-ui `<x-apex::grid.load-more>`, with a **Load more** button fallback) instead of showing numbered pagination links. Requires `jfsullivan/apex-ui` `^1.27`.
+
 ## v3.5.0 - Transaction payment method - 2026-09-26
 
 ### Added
@@ -16,6 +22,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 ```
 ## v3.4.13 - Member account panel as a transactions grid - 2026-09-25
