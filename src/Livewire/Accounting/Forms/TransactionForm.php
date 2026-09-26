@@ -3,9 +3,12 @@
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Forms;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use jfsullivan\CommunityManager\Actions\CreateTransactionAction;
 use jfsullivan\CommunityManager\Actions\UpdateTransactionAction;
+use jfsullivan\CommunityManager\Enums\TransactionMethod;
 use jfsullivan\CommunityManager\Models\Transaction;
+use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\UserTimezone\Concerns\SplitsDateTimes;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -39,6 +42,28 @@ class TransactionForm extends Form
     #[Validate('required|numeric', onUpdate: false)]
     public $amount = null;
 
+    /** How the money moved (deposits and withdrawals only). */
+    public $method = null;
+
+    /** @return array<string, array<int, mixed>> */
+    protected function rules(): array
+    {
+        return [
+            'method' => ['nullable', Rule::enum(TransactionMethod::class)],
+        ];
+    }
+
+    /**
+     * The method to store: only deposits and withdrawals record one, so any
+     * other type saves null even if a method was picked before the type changed.
+     */
+    protected function methodForType(): ?string
+    {
+        $slug = TransactionType::find((int) $this->type_id)?->slug;
+
+        return in_array($slug, TransactionMethod::appliesToTypes(), true) && filled($this->method) ? $this->method : null;
+    }
+
     public function setTransaction(Transaction $transaction)
     {
         $this->transaction = $transaction;
@@ -51,6 +76,7 @@ class TransactionForm extends Form
         $this->transacted_date = $this->toUserDate($this->transaction->transacted_at);
         $this->transacted_time = $this->toUserTime($this->transaction->transacted_at);
         $this->description = $this->transaction->description;
+        $this->method = $this->transaction->method?->value;
 
         // str_replace($amount->getCurrency()->getSymbol(), '', $amount->formatTo('en_US'))
         $this->amount = $this->transaction->absoluteAmountValue;
@@ -69,6 +95,7 @@ class TransactionForm extends Form
             'transfer_user_id' => $this->transfer_user_id,
             'transacted_at' => $this->combinedAppDateTime($this->transacted_date, $this->transacted_time),
             'description' => $this->description,
+            'method' => $this->methodForType(),
             'amount' => $this->amount,
         ]);
     }
@@ -84,6 +111,7 @@ class TransactionForm extends Form
             'transfer_user_id' => $this->transfer_user_id,
             'transacted_at' => $this->combinedAppDateTime($this->transacted_date, $this->transacted_time),
             'description' => $this->description,
+            'method' => $this->methodForType(),
             'amount' => $this->amount,
         ]);
     }

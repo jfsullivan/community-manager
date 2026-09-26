@@ -30,9 +30,10 @@
             @endif
 
             <x-slot:header actions-variant="icon">
-                <x-apex::grid.header.column class="justify-start col-span-3" sortable sort-key="date" :sort-data="$sorts">Date</x-apex::grid.header.column>
+                <x-apex::grid.header.column class="justify-start col-span-3 lg:col-span-2" sortable sort-key="date" :sort-data="$sorts">Date</x-apex::grid.header.column>
                 <x-apex::grid.header.column class="justify-start col-span-3" sortable sort-key="member" :sort-data="$sorts">Member</x-apex::grid.header.column>
-                <x-apex::grid.header.column class="justify-start col-span-6 lg:pl-7" sortable sort-key="transaction" :sort-data="$sorts">Transaction</x-apex::grid.header.column>
+                <x-apex::grid.header.column class="justify-start col-span-6 lg:col-span-5 lg:pl-7" sortable sort-key="transaction" :sort-data="$sorts">Transaction</x-apex::grid.header.column>
+                <x-apex::grid.header.column class="justify-start hidden lg:flex lg:col-span-2">Method</x-apex::grid.header.column>
                 <div class="flex flex-col-reverse items-center justify-end w-full col-span-4 lg:grid lg:grid-cols-2 lg:gap-x-2">
                     <x-apex::grid.header.column class="justify-end hidden lg:flex lg:justify-start" sortable sort-key="type" :sort-data="$sorts">Type</x-apex::grid.header.column>
                     <x-apex::grid.header.column class="flex justify-end" sortable sort-key="amount" :sort-data="$sorts">Amount</x-apex::grid.header.column>
@@ -41,7 +42,7 @@
 
             @forelse ($this->records as $transaction)
                 <x-apex::grid.item wire:key="transaction-{{ $transaction->id }}" wire:model="selected">
-                    <x-apex::grid.item.column class="justify-start col-span-3">
+                    <x-apex::grid.item.column class="justify-start col-span-3 lg:col-span-2">
                         <div class="flex flex-col items-start justify-start w-full text-gray-500 dark:text-zinc-400 lg:hidden">
                             <p class="text-xs font-medium leading-5 whitespace-nowrap sm:text-sm sm:leading-6">
                                 @displayDate($transaction->transacted_at, 'M j')
@@ -57,11 +58,14 @@
                     <x-apex::grid.item.column class="justify-start col-span-3 font-medium text-gray-900 dark:text-zinc-100">
                         {{ $transaction->user->name }}
                     </x-apex::grid.item.column>
-                    <x-apex::grid.item.column class="justify-start col-span-6 lg:space-x-4">
+                    <x-apex::grid.item.column class="justify-start col-span-6 lg:col-span-5 lg:space-x-4">
                         <div class="hidden lg:inline">
                             <x-community-manager::accounting.transactions.transaction-type-icon :type="$transaction->type->slug" />
                         </div>
                         <x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" class="text-gray-500 dark:text-zinc-400" />
+                    </x-apex::grid.item.column>
+                    <x-apex::grid.item.column class="justify-start hidden text-sm text-gray-500 lg:flex lg:col-span-2 dark:text-zinc-400">
+                        {{ $transaction->method?->label() ?? '' }}
                     </x-apex::grid.item.column>
                     <div class="flex flex-col-reverse items-center justify-end w-full col-span-4 lg:grid lg:grid-cols-2 lg:gap-x-2">
                         <x-apex::grid.item.column class="flex justify-end text-sm lg:justify-start">

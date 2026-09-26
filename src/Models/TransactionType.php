@@ -8,6 +8,9 @@ use jfsullivan\CommunityManager\Database\Factories\TransactionTypeFactory;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+/**
+ * @property string $slug
+ */
 class TransactionType extends Model
 {
     use HasFactory;

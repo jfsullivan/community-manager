@@ -5,6 +5,7 @@ namespace jfsullivan\CommunityManager\Tests\Feature;
 use Brick\Money\Money;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use jfsullivan\CommunityManager\Enums\TransactionMethod;
 use jfsullivan\CommunityManager\Livewire\Accounting\Modals\CreateTransactionModal;
 use jfsullivan\CommunityManager\Livewire\Accounting\Modals\UpdateTransactionModal;
 use jfsullivan\CommunityManager\Models\Community;
@@ -92,6 +93,58 @@ class TransactionFormsTest extends TestCase
             'description' => 'Test withdrawal',
             'amount' => Money::of('100.00', 'USD')->multipliedBy(-1)->getMinorAmount()->toInt(),
         ]);
+    }
+
+    #[Test]
+    public function a_deposit_records_how_the_money_moved()
+    {
+        Livewire::test(CreateTransactionModal::class, ['user_id' => $this->user->id])
+            ->set([
+                'form.type_id' => 2, // Deposit
+                'form.user_id' => $this->user->id,
+                'form.amount' => '25.00',
+                'form.method' => 'venmo',
+                'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            ])
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $transaction = Transaction::where('user_id', $this->user->id)->where('type_id', 2)->firstOrFail();
+
+        $this->assertSame(TransactionMethod::Venmo, $transaction->method);
+    }
+
+    #[Test]
+    public function a_transfer_never_stores_a_method()
+    {
+        Livewire::test(CreateTransactionModal::class, ['user_id' => $this->user->id])
+            ->set([
+                'form.type_id' => 5, // Transfer Out
+                'form.user_id' => $this->user->id,
+                'form.transfer_user_id' => $this->transferUser->id,
+                'form.amount' => '10.00',
+                'form.method' => 'cash',
+                'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            ])
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $this->assertNull(Transaction::where('user_id', $this->user->id)->where('type_id', 5)->firstOrFail()->method);
+    }
+
+    #[Test]
+    public function an_unknown_method_is_rejected()
+    {
+        Livewire::test(CreateTransactionModal::class, ['user_id' => $this->user->id])
+            ->set([
+                'form.type_id' => 2,
+                'form.user_id' => $this->user->id,
+                'form.amount' => '25.00',
+                'form.method' => 'bitcoin',
+                'form.transacted_date' => Carbon::now()->format('Y-m-d'),
+            ])
+            ->call('save')
+            ->assertHasErrors('form.method');
     }
 
     #[Test]

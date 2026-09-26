@@ -17,6 +17,11 @@
                 }
 
                 return transaction.slug == 'transfer-in' || transaction.slug == 'transfer-out';
+            },
+            recordsMethod() {
+                transaction = this.transactionTypes.find(type => type.value == $wire.form.type_id);
+
+                return !! transaction && @js(\jfsullivan\CommunityManager\Enums\TransactionMethod::appliesToTypes()).includes(transaction.slug);
             }
         }"
     >
@@ -37,6 +42,15 @@
         <div x-show="isTranferTransaction" class="flex w-full col-span-6">
             <x-apex::input.select label="Transfer" placeholder="Select User" wire:model="form.transfer_user_id" searchable wire:search="transferUserSearchTerm" required class="w-full">
                 @foreach ($this->transferUserOptions as $option)
+                    <x-apex::input.select.option :value="$option['value']">{{ $option['label'] }}</x-apex::input.select.option>
+                @endforeach
+            </x-apex::input.select>
+        </div>
+
+        {{-- Deposits and withdrawals record how the money moved. --}}
+        <div x-show="recordsMethod" x-cloak class="flex w-full col-span-6">
+            <x-apex::input.select label="Method" placeholder="Select Method" wire:model="form.method" class="w-full">
+                @foreach (\jfsullivan\CommunityManager\Enums\TransactionMethod::options() as $option)
                     <x-apex::input.select.option :value="$option['value']">{{ $option['label'] }}</x-apex::input.select.option>
                 @endforeach
             </x-apex::input.select>

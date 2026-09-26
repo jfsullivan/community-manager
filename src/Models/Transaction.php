@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use jfsullivan\CommunityManager\Database\Factories\TransactionFactory;
+use jfsullivan\CommunityManager\Enums\TransactionMethod;
 
+/**
+ * @property TransactionMethod|null $method
+ */
 class Transaction extends Model
 {
     use HasFactory;
@@ -29,11 +33,13 @@ class Transaction extends Model
         'model_id',
         'amount',
         'description',
+        'method',
         'created_by',
     ];
 
     protected $casts = [
         'transacted_at' => 'date:m/d/Y',
+        'method' => TransactionMethod::class,
     ];
 
     // protected $appends = ['absolute_amount'];
