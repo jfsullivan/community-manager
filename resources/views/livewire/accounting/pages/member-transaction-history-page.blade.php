@@ -104,9 +104,7 @@
                 @endforelse
 
                 <x-slot name="footer">
-                    <div class="w-full flex flex-1 justify-between">
-                        {{ $this->records->links() }}
-                    </div>
+                    <x-apex::grid.load-more :records="$this->records" class="mt-2" />
                 </x-slot>
             </x-apex::grid>
         </div>

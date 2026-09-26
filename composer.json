@@ -50,6 +50,7 @@
         "brick/money": "^0.8.1||^0.14",
         "illuminate/contracts": "^11.0||^12.0||^13.0",
         "jackiedo/timezonelist": "^5.1",
+        "jfsullivan/apex-ui": "^1.27",
         "jfsullivan/article-manager": "^2.0||^3.0",
         "jfsullivan/common-helpers": "^1.0",
         "jfsullivan/member-manager": "^0.9.22",
