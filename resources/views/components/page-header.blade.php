@@ -23,6 +23,14 @@
                         </div>
 					</div>
 				</div>
+
+                {{-- Optional page actions (e.g. a member "Invite friends"
+                     button), right of the name; below it on phones. --}}
+                @isset($actions)
+                    <div class="flex items-center gap-2">
+                        {{ $actions }}
+                    </div>
+                @endisset
 			</div>
 		</div>
 	</div>
