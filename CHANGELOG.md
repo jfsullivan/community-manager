@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.2 - Page header actions slot - 2026-09-27
+
+### Added
+
+- `<x-community-manager::page-header>` accepts an optional `actions` slot, rendered to the right of the community name (below it on phones), for page-level actions such as a member **Invite friends** button.
+
 ## v3.5.1 - Load more instead of pagination links - 2026-09-26
 
 ### Changed
@@ -22,6 +28,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 ```
