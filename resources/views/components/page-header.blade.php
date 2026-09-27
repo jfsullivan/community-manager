@@ -4,7 +4,7 @@
 	<div class="flex justify-center w-full py-4 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700 sm:py-6">
 		<div class="flex flex-col w-full px-2 mx-auto max-w-8xl md:px-4">
             
-			<div class="flex flex-col items-center space-y-6 sm:flex-row sm:justify-between">
+			<div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
 				<div class="flex items-center space-x-5">
 					<div class="shrink-0">
                         @if($community->hasMedia('logo'))
