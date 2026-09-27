@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.3 - Page header spacing - 2026-09-27
+
+### Fixed
+
+- The community page header uses a flex gap instead of `space-y-6`, so filling the `actions` slot no longer makes the header taller on larger screens.
+
 ## v3.5.2 - Page header actions slot - 2026-09-27
 
 ### Added
@@ -28,6 +34,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
