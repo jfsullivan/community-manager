@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.6 - Membership end is exclusive - 2026-09-28
+
+### Fixed
+
+- Current community members, the member status filter and the transaction form's member list treat a membership ending **now** as ended (`end_at > now()`), matching member-manager v0.9.54. A just-removed member no longer lingers as current for the rest of that second.
+
 ## v3.5.5 - Search by payment method - 2026-09-28
 
 ### Changed
@@ -50,6 +56,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
