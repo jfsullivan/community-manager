@@ -27,6 +27,12 @@ enum TransactionMethod: string
         };
     }
 
+    /** "Via Venmo" line for the transaction column; null for Other (nothing to call out). */
+    public function viaLabel(): ?string
+    {
+        return $this === self::Other ? null : 'Via '.$this->label();
+    }
+
     /**
      * Transaction type slugs that record a method: money actually changing
      * hands with the community.

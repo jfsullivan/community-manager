@@ -115,6 +115,25 @@ class TransactionFormsTest extends TestCase
     }
 
     #[Test]
+    public function a_deposit_leads_with_its_method_and_keeps_the_description_as_a_subline()
+    {
+        $render = function (?string $method, ?string $description): string {
+            $transaction = new Transaction(['method' => $method, 'description' => $description]);
+            $transaction->setRelation('type', TransactionType::find(2)); // Deposit
+
+            return $this->blade('<x-community-manager::accounting.transactions.transaction-detail :transaction="$transaction" />', ['transaction' => $transaction])->__toString();
+        };
+
+        $withBoth = $render('venmo', 'Jon Braun');
+        $this->assertStringContainsString('Via Venmo', $withBoth);
+        $this->assertMatchesRegularExpression('/Via Venmo\s*<p[^>]*>Jon Braun<\/p>/', $withBoth);
+
+        $this->assertStringNotContainsString('<p', $render('paypal', null));
+        $this->assertStringNotContainsString('Via', $render(null, 'for tickets'));
+        $this->assertStringNotContainsString('Via', $render('other', 'Gift card'));
+    }
+
+    #[Test]
     public function a_transfer_never_stores_a_method()
     {
         Livewire::test(CreateTransactionModal::class, ['user_id' => $this->user->id])
