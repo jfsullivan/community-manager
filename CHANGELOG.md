@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.5 - Search by payment method - 2026-09-28
+
+### Changed
+
+- Transaction search also matches the payment method: a term found in a method label ("venmo", "pay" for PayPal) finds those deposits and withdrawals.
+
 ## v3.5.4 - Via method in the transaction column - 2026-09-28
 
 ### Changed
@@ -44,6 +50,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
