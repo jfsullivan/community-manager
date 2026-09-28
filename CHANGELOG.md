@@ -2,6 +2,16 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.4 - Via method in the transaction column - 2026-09-28
+
+### Changed
+
+- Community transactions grid: the **Method** column is gone. Deposits and withdrawals with a method now lead the Transaction column with **Via Venmo** (etc.), and the description, if any, shows as a subline.
+
+### Added
+
+- `TransactionMethod::viaLabel()` — "Via Venmo"; `null` for Other.
+
 ## v3.5.3 - Page header spacing - 2026-09-27
 
 ### Fixed
@@ -34,6 +44,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
