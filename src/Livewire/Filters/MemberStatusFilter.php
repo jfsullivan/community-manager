@@ -63,7 +63,7 @@ trait MemberStatusFilter
                     ->where('memberships.start_at', '<=', $now)
                     ->where(function ($query) use ($now) {
                         $query->whereNull('memberships.end_at')
-                            ->orWhere('memberships.end_at', '>=', $now);
+                            ->orWhere('memberships.end_at', '>', $now);
                     }),
             };
         });

@@ -37,7 +37,7 @@ trait HasCommunityMemberships
             ->wherePivotNotNull('start_at')
             ->wherePivot('start_at', '<=', now())
             ->where(function ($query) {
-                $query->whereNull('memberships.end_at')->orWhere('memberships.end_at', '>=', now());
+                $query->whereNull('memberships.end_at')->orWhere('memberships.end_at', '>', now());
             });
     }
 

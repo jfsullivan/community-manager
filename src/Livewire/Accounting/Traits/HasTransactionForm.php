@@ -63,7 +63,7 @@ trait HasTransactionForm
                 // Not former: no end date, or the end date is still in the future.
                 ->where(function ($query) {
                     $query->whereNull('memberships.end_at')
-                        ->orWhere('memberships.end_at', '>=', now());
+                        ->orWhere('memberships.end_at', '>', now());
                 })
                 // Not banned: the latest lifecycle status isn't `banned`.
                 ->whereDoesntHave('statuses', function ($statusQuery) {
