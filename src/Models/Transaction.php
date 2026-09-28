@@ -88,8 +88,17 @@ class Transaction extends Model
     {
         collect(explode(' ', $terms))->filter()->each(function ($term) use ($query) {
             $like = '%'.$term.'%';
-            $query->where(function ($query) use ($term, $like) {
+
+            // Methods whose label contains the term ("venmo", "pay" → PayPal).
+            $methods = collect(TransactionMethod::cases())
+                ->filter(fn (TransactionMethod $method) => str_contains(mb_strtolower($method->label()), mb_strtolower($term)))
+                ->map->value
+                ->values()
+                ->all();
+
+            $query->where(function ($query) use ($term, $like, $methods) {
                 $query->where('transactions.description', 'like', $like)
+                    ->when($methods, fn ($query) => $query->orWhereIn('transactions.method', $methods))
                     ->orWhereHas('user', fn ($query) => $query->searchByFullName($term))
                     ->orWhereRelation('type', 'name', 'like', $like);
             });

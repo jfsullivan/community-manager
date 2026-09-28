@@ -371,6 +371,32 @@ class CommunityTransactionsPageTest extends TestCase
     }
 
     #[Test]
+    public function it_searches_by_method()
+    {
+        $venmo = Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+            'description' => null,
+            'method' => 'venmo',
+        ]);
+
+        Transaction::factory()->create([
+            'community_id' => $this->community->id,
+            'user_id' => $this->user->id,
+            'type_id' => $this->transactionType->id,
+            'description' => null,
+            'method' => 'paypal',
+        ]);
+
+        $records = Livewire::test(CommunityTransactionsPage::class, ['community_id' => $this->community->id])
+            ->set('searchFilter', 'venmo')
+            ->get('records');
+
+        $this->assertSame([$venmo->id], collect($records->items())->pluck('id')->all());
+    }
+
+    #[Test]
     public function it_offers_row_and_bulk_delete_actions_to_the_community_owner()
     {
         $this->community->update(['user_id' => $this->user->id]);
