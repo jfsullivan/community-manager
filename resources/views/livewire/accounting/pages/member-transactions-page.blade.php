@@ -102,11 +102,17 @@
             @empty
                 <x-apex::grid.item :selectable="false">
                     <x-apex::grid.item.column class="col-span-full justify-center">
-                        <x-apex::empty-state icon="apex-ui.coins-swap" heading="No transactions yet">
-                            <x-slot:subheading>
-                                {{ $this->user->full_name }} doesn't have any transactions that meet that criteria.
-                            </x-slot:subheading>
-                        </x-apex::empty-state>
+                        @if (filled($this->searchFilter))
+                            <x-apex::empty-state icon="apex-ui.search" heading="No transactions found" subheading="We couldn't find any transactions that meet that criteria.">
+                                <x-slot:actions>
+                                    <x-apex::button variant="outline" wire:click="clearSearch">Clear search</x-apex::button>
+                                </x-slot:actions>
+                            </x-apex::empty-state>
+                        @else
+                            <x-apex::empty-state icon="apex-ui.coins-swap" heading="No transactions yet">
+                                <x-slot:subheading>{{ $this->user->full_name }} doesn't have any transactions yet.</x-slot:subheading>
+                            </x-apex::empty-state>
+                        @endif
                     </x-apex::grid.item.column>
                 </x-apex::grid.item>
             @endforelse

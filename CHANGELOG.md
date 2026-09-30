@@ -2,6 +2,17 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.8 - Empty states: nothing yet vs no results - 2026-09-30
+
+### Empty states: "nothing yet" vs "no results"
+
+List pages now tell the two apart:
+
+- **Search or filters matched nothing:** "No {things} found. We couldn't find any {things} that meet that criteria." with a **Clear search** (or **Clear search and filters**) button.
+- **Nothing here yet:** "No {things} yet" with a line saying there aren't any yet.
+
+The member-balances list always reads as a search/filter miss (a pool or community always has members), with **Clear search and filters** resetting everything.
+
 ## v3.5.7 - Consistent empty states - 2026-09-30
 
 ### Empty states

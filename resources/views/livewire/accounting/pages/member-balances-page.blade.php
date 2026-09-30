@@ -107,10 +107,12 @@
             @empty
                 <x-apex::grid.item :selectable="false">
                     <x-apex::grid.item.column class="col-span-full justify-center">
-                        <x-apex::empty-state icon="apex-ui.users" heading="No members found">
-                            <x-slot:subheading>
-                                There aren't any members that meet that criteria.
-                            </x-slot:subheading>
+                        {{-- A community or pool always has members (its owner), so an empty list is
+                             a search/filter miss: clearFilters() resets the search and every filter. --}}
+                        <x-apex::empty-state icon="apex-ui.search" heading="No members found" subheading="We couldn't find any members that meet that criteria.">
+                            <x-slot:actions>
+                                <x-apex::button variant="outline" wire:click="clearFilters">Clear search and filters</x-apex::button>
+                            </x-slot:actions>
                         </x-apex::empty-state>
                     </x-apex::grid.item.column>
                 </x-apex::grid.item>
