@@ -2,6 +2,14 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.9 - Transaction history without a nested card - 2026-09-30
+
+### Member transaction history: no card inside a card
+
+The member transaction history page wrapped its transactions grid (already an apex card) in the app's `x-app.card`, which drew a second frame around it. It also meant the package depended on a component that only exists in the host app.
+
+The grid now sits in the same padded container as the other transaction pages, so the page no longer needs `x-app.card`.
+
 ## v3.5.8 - Empty states: nothing yet vs no results - 2026-09-30
 
 ### Empty states: "nothing yet" vs "no results"
