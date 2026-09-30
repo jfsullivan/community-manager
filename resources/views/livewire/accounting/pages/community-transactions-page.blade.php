@@ -91,7 +91,7 @@
             @empty
                 <x-apex::grid.item :selectable="false">
                     <x-apex::grid.item.column class="col-span-full justify-center">
-                        <x-apex::empty-state icon="apex-ui.coins-swap" heading="No transactions yet" class="mt-6 mb-6">
+                        <x-apex::empty-state icon="apex-ui.coins-swap" heading="No transactions yet">
                             <x-slot:subheading>
                                 There aren't any transactions that meet that criteria.
                             </x-slot:subheading>

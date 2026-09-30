@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.7 - Consistent empty states - 2026-09-30
+
+### Empty states
+
+Empty states no longer add their own `mt-6 mb-6` spacing; apex-ui v1.32 builds in standard spacing, so they match the rest of the app.
+
 ## v3.5.6 - Membership end is exclusive - 2026-09-28
 
 ### Fixed

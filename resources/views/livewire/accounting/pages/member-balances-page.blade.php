@@ -107,7 +107,7 @@
             @empty
                 <x-apex::grid.item :selectable="false">
                     <x-apex::grid.item.column class="col-span-full justify-center">
-                        <x-apex::empty-state icon="apex-ui.users" heading="No members found" class="mt-6 mb-6">
+                        <x-apex::empty-state icon="apex-ui.users" heading="No members found">
                             <x-slot:subheading>
                                 There aren't any members that meet that criteria.
                             </x-slot:subheading>
