@@ -41,6 +41,9 @@ class CommunityTransactionsPageTest extends TestCase
 
         $this->transactionType = TransactionType::find(1); // Withdrawal
 
+        // The acting user owns the community, so the transaction gates allow them.
+        $this->community->forceFill(['user_id' => $this->user->id])->save();
+
         $this->actingAs($this->user);
     }
 
@@ -417,6 +420,8 @@ class CommunityTransactionsPageTest extends TestCase
     #[Test]
     public function it_hides_the_bulk_delete_action_from_non_owners()
     {
+        $this->community->forceFill(['user_id' => User::factory()->create()->id])->save();
+
         Transaction::factory()->create([
             'community_id' => $this->community->id,
             'user_id' => $this->user->id,

@@ -55,6 +55,9 @@ class TransactionFormsTest extends TestCase
 
         $this->setupTransactionTypes();
 
+        // The acting user owns the community, so the transaction gates allow them.
+        $this->community->forceFill(['user_id' => $this->user->id])->save();
+
         $this->actingAs($this->user);
     }
 

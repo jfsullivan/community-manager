@@ -27,6 +27,15 @@ class MemberTransactionHistoryPage extends Component
 
     public function mount()
     {
+        // A member's ledger is private: only the member themself or the
+        // community's owner may see it (TransactionPolicy::viewAny). Admins use
+        // the admin accounting pages instead.
+        abort_unless(
+            $this->user && $this->community
+                && app(config('community-manager.transaction_policy'))->viewAny(Auth::user(), $this->user, $this->community),
+            403
+        );
+
         $this->perPage = 100;
 
         $this->defaultSortDir = [

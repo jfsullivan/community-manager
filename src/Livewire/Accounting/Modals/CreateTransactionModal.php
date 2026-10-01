@@ -3,6 +3,8 @@
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use jfsullivan\ApexUi\Modal\FormModalComponent;
 use jfsullivan\CommunityManager\Livewire\Accounting\Traits\HasTransactionForm;
 use Livewire\Attributes\On;
@@ -44,6 +46,15 @@ class CreateTransactionModal extends FormModalComponent
 
     public function save(): void
     {
+        $community = Auth::user()?->currentCommunity;
+
+        if ($community === null || Gate::denies('create-community-transaction', [$community])) {
+            $this->dispatch('notify', type: 'error', title: 'Not allowed', message: 'You can’t add transactions in this community.');
+            $this->closeModal();
+
+            return;
+        }
+
         $this->validate();
 
         $transaction = $this->form->store();

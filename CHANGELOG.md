@@ -2,6 +2,15 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.11 - Authorize transaction history and transaction modals - 2026-10-01
+
+### Security: transaction history and transaction modals are authorized
+
+- **Member transaction history** (`community.members.transactions`): only the member themself or the community's owner can view a member's history. Any other community member gets a 403. Before this, any member could open any other member's ledger by changing the user id in the URL. Admins use the admin accounting pages.
+- **Delete transaction modal:** checks `delete-community-transaction` for the current community and only deletes transactions in that community. It's mounted on member-facing pages, and before this it would delete any transaction id it was opened with.
+- **Edit transaction modal:** only loads and saves a transaction in the current community for someone with `edit-community-transaction`. A transaction can no longer be moved to another community through the form.
+- **Create transaction modal:** checks `create-community-transaction` before saving.
+
 ## v3.5.10 - Buttons use x-apex::button - 2026-10-01
 
 ### Buttons use x-apex::button
