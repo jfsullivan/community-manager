@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.14 - Community news in cards - 2026-10-01
+
+### Community news in cards
+
+The community news page now shows article-manager's shared card-style news list (Latest news / Older news) below the community navigation, instead of its own older copy of the list. Requires article-manager v3.11.3 for the card style.
+
 ## v3.5.13 - Balance card actions slot - 2026-10-01
 
 ### Balance card actions slot
