@@ -62,7 +62,7 @@
     </div>
 
     <x-slot name="actions">
-        <flux:button wire:click="closeModal" class="max-sm:hidden">Cancel</flux:button>
-        <flux:button variant="primary" type="submit">Save</flux:button>
+        <x-apex::button wire:click="closeModal" class="max-sm:hidden">Cancel</x-apex::button>
+        <x-apex::button variant="primary" type="submit">Save</x-apex::button>
     </x-slot>
 </x-apex::drawer.form>

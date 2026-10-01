@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.10 - Buttons use x-apex::button - 2026-10-01
+
+### Buttons use x-apex::button
+
+The package's views use `x-apex::button` everywhere instead of `<flux:button>` directly, so buttons match the rest of the app: the same small size and outline icons. Behavior (variants, loading spinner, links) is unchanged.
+
 ## v3.5.9 - Transaction history without a nested card - 2026-09-30
 
 ### Member transaction history: no card inside a card

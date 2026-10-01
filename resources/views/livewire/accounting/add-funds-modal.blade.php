@@ -32,6 +32,6 @@
     @endif
 
     <x-slot name="actions">
-        <flux:button variant="primary" wire:click="closeModal">{{ __('Close') }}</flux:button>
+        <x-apex::button variant="primary" wire:click="closeModal">{{ __('Close') }}</x-apex::button>
     </x-slot>
 </x-apex::modal.form>

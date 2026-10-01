@@ -24,7 +24,7 @@
     </div>
 
     <x-slot name="actions">
-        <flux:button wire:click="closeModal" class="max-sm:hidden">{{ __('Cancel') }}</flux:button>
-        <flux:button variant="primary" type="submit">{{ __('Join') }}</flux:button>
+        <x-apex::button wire:click="closeModal" class="max-sm:hidden">{{ __('Cancel') }}</x-apex::button>
+        <x-apex::button variant="primary" type="submit">{{ __('Join') }}</x-apex::button>
     </x-slot>
 </x-apex::modal.form>
