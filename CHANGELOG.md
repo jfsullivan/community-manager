@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.13 - Balance card actions slot - 2026-10-01
+
+### Balance card actions slot
+
+`<x-community-manager::balance-card>` takes an optional `actions` slot. Its content renders beside **Add Funds**, so an app can add its own buttons, such as a member's **Request payout**. The action row also shows when the viewer can't add funds but the slot is filled.
+
 ## v3.5.12 - Balance card links to your transactions - 2026-10-01
 
 ### Balance card links to your transactions

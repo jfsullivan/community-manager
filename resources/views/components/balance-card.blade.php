@@ -1,9 +1,11 @@
-@props(['community'])
+@props(['community', 'actions' => null])
 
 {{--
     The member's balance in a community, shown as a card. Rendered below the menubar
     by the page-header so it's visible on every community page (not just the home),
     and self-guards on track_member_balances so it never shows for personal communities.
+
+    actions: optional extra buttons beside Add Funds (e.g. an app's Request payout).
 --}}
 @if ($community->track_member_balances)
     @php $memberBalanceCents = (int) $community->memberBalance(auth()->user()); @endphp
@@ -31,10 +33,13 @@
             </div>
         </div>
 
-        @can('add-funds', $community)
+        @if (isset($actions) || Gate::allows('add-funds', $community))
             <div class="flex items-center gap-2 shrink-0">
-                <x-community-manager::accounting.add-funds-button size="sm" />
+                {{ $actions }}
+                @can('add-funds', $community)
+                    <x-community-manager::accounting.add-funds-button size="sm" />
+                @endcan
             </div>
-        @endcan
+        @endif
     </div>
 @endif
