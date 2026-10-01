@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.12 - Balance card links to your transactions - 2026-10-01
+
+### Balance card links to your transactions
+
+The community balance card now has a **View transactions** link under the balance. It opens the member's own transaction history.
+
 ## v3.5.11 - Authorize transaction history and transaction modals - 2026-10-01
 
 ### Security: transaction history and transaction modals are authorized

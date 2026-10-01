@@ -23,6 +23,11 @@
                 ])>
                     {{ $memberBalanceCents < 0 ? '-' : '' }}${{ number_format(abs($memberBalanceCents) / 100, 2) }}
                 </div>
+                <a href="{{ route('community.members.transactions', ['user_id' => auth()->id()]) }}" wire:navigate
+                    class="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:text-primary-700 hover:underline dark:text-primary-400 dark:hover:text-primary-300">
+                    View transactions
+                    <flux:icon name="apex-ui.arrow-right" class="size-3 stroke-2" />
+                </a>
             </div>
         </div>
 
