@@ -107,7 +107,7 @@ class CommunityTransactionsPage extends Component
     #[Computed]
     public function transactionTypes()
     {
-        return TransactionType::select(['id', 'name'])->get();
+        return TransactionType::select(['id', 'slug', 'name'])->get();
     }
 
     #[Url]
@@ -174,7 +174,7 @@ class CommunityTransactionsPage extends Component
             ->leftJoin('transaction_types', 'transactions.type_id', '=', 'transaction_types.id')
             ->leftJoin('users', 'transactions.user_id', '=', 'users.id')
             ->where('transactions.community_id', $this->community->id)
-            ->when($this->transactionTypeFilter, fn ($query, $id) => $query->where('type_id', $id))
+            ->when($this->transactionTypeFilter, fn ($query, $slug) => $query->whereRelation('type', 'slug', $slug))
             ->when($this->methodFilter, fn ($query, $method) => $query->where('transactions.method', $method))
             ->when($this->periodRange(), fn ($query, $range) => $query->whereBetween('transactions.transacted_at', $range))
             ->when($this->searchFilter, fn ($query, $searchTerm) => $query->search($searchTerm));

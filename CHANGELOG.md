@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.20 - Slug-based transaction type filter - 2026-10-02
+
+The Transaction Type filter uses slugs in the URL (`?transactionTypeFilter=deposit`) instead of ids. Old links with ids still work: they are converted to the slug on load.
+
 ## v3.5.19 - Clearable filter dropdowns - 2026-10-02
 
 Filter dropdowns can be cleared: each now starts with an "Any …" option (apex-ui v1.40 `nullable` select). Requires apex-ui ^1.40.

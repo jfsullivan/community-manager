@@ -31,7 +31,7 @@
                     <x-slot:primary>
                         <x-apex::input.select nullable label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
                             @foreach ($this->transactionTypes as $type)
-                                <x-apex::input.select.option value="{{ $type->id }}">{{ $type->name }}</x-apex::input.select.option>
+                                <x-apex::input.select.option value="{{ $type->slug }}">{{ $type->name }}</x-apex::input.select.option>
                             @endforeach
                         </x-apex::input.select>
                     </x-slot:primary>

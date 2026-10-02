@@ -108,7 +108,7 @@ class MemberTransactionHistoryPage extends Component
     #[Computed]
     public function transactionTypes()
     {
-        return TransactionType::select(['id', 'name'])->get();
+        return TransactionType::select(['id', 'slug', 'name'])->get();
     }
 
     #[Computed]
@@ -123,7 +123,7 @@ class MemberTransactionHistoryPage extends Component
             ->leftJoin('transaction_types', 'transactions.type_id', '=', 'transaction_types.id')
             ->where('transactions.community_id', $this->community->id)
             ->where('transactions.user_id', $this->user->id)
-            ->when($this->transactionTypeFilter, fn ($query, $id) => $query->where('type_id', $id))
+            ->when($this->transactionTypeFilter, fn ($query, $slug) => $query->whereRelation('type', 'slug', $slug))
             ->when($this->searchFilter, fn ($query, $searchTerm) => $query->where('users.name', 'LIKE', '%'.$searchTerm.'%'));
 
         return $this->applySorting($query);

@@ -169,7 +169,7 @@ class CommunityTransactionsPageTest extends TestCase
             'community_id' => $this->community->id,
         ])
             ->set('perPage', 10)
-            ->set('transactionTypeFilter', $withdrawalType->id);
+            ->set('transactionTypeFilter', $withdrawalType->slug);
 
         $filteredRecords = $component->get('records');
 
@@ -183,6 +183,12 @@ class CommunityTransactionsPageTest extends TestCase
 
         // Should still have pagination since we have 30 withdrawals but only showing 10
         $this->assertTrue($filteredRecords->hasPages());
+
+        // Links from before the filter used slugs carry the type's id.
+        Livewire::withQueryParams(['transactionTypeFilter' => (string) $withdrawalType->id])
+            ->test(CommunityTransactionsPage::class, ['community_id' => $this->community->id])
+            ->assertSet('transactionTypeFilter', $withdrawalType->slug)
+            ->assertSeeHtml('value="'.$depositType->slug.'"');
     }
 
     #[Test]
