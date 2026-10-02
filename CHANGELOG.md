@@ -2,6 +2,15 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.21 - Accounting pages on phones - 2026-10-02
+
+**Transactions and Member Balances on phones:**
+- The title shows a count.
+- Add Transaction folds into a ⋮ menu.
+- The list sits flush under the header with the grid's search and filter bar.
+
+Requires apex-ui ^1.43.
+
 ## v3.5.20 - Slug-based transaction type filter - 2026-10-02
 
 The Transaction Type filter uses slugs in the URL (`?transactionTypeFilter=deposit`) instead of ids. Old links with ids still work: they are converted to the slug on load.

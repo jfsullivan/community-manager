@@ -8,18 +8,24 @@
     <x-apex::section-header
         heading="Member Balances"
         subheading="Current account balance for each member of this community."
+        :count="$this->records->total()"
+        count-label="member"
     >
-        <x-slot:actions>
-            @if(Gate::allows('create-community-transaction', $this->community))
+        @if(Gate::allows('create-community-transaction', $this->community))
+            <x-slot:actions>
                 <x-apex::button size="sm" variant="primary" icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction')">
                     Add Transaction
                 </x-apex::button>
-            @endif
-        </x-slot:actions>
+            </x-slot:actions>
+
+            <x-slot:menu>
+                <x-apex::menu.item icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction')">Add Transaction</x-apex::menu.item>
+            </x-slot:menu>
+        @endif
     </x-apex::section-header>
 
-    <div class="flex flex-col w-full py-4 sm:px-4">
-        <x-apex::grid card bleed selectable striped searchable
+    <div class="flex flex-col w-full pb-4 sm:px-4 sm:pt-4">
+        <x-apex::grid card bleed selectable striped searchable mobile-toolbar
             class="w-full grid-cols-16"
             wire:model="selected"
         >
