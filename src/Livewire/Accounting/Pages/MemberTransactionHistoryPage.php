@@ -8,11 +8,17 @@ use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
 use jfsullivan\ApexUi\Livewire\Traits\WithSearchFilter;
 use jfsullivan\ApexUi\Livewire\Traits\WithSorting;
 use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
+use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\TransactionType;
+use jfsullivan\CommunityManager\Models\User;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
+/**
+ * @property-read Community|null $community the configured community model (a subclass of this)
+ * @property-read User|null $user the configured user model (a subclass of this)
+ */
 class MemberTransactionHistoryPage extends Component
 {
     use TransactionTypeFilter;

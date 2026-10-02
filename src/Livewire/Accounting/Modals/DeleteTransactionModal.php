@@ -2,12 +2,14 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use jfsullivan\ApexUi\Modal\DeleteConfirmationModal;
+use jfsullivan\CommunityManager\Livewire\Concerns\ResolvesCurrentCommunity;
 
 class DeleteTransactionModal extends DeleteConfirmationModal
 {
+    use ResolvesCurrentCommunity;
+
     public string $modalName = 'delete-transaction';
 
     public $modelType = 'transaction';
@@ -19,7 +21,7 @@ class DeleteTransactionModal extends DeleteConfirmationModal
      */
     public function checkAuthorization(): bool
     {
-        $community = Auth::user()?->currentCommunity;
+        $community = $this->currentCommunity();
         $transactionClass = app(config('community-manager.transaction_model'));
 
         $allowed = $community !== null
@@ -39,7 +41,7 @@ class DeleteTransactionModal extends DeleteConfirmationModal
         $transactionClass = app(config('community-manager.transaction_model'));
 
         return (bool) $transactionClass::whereIn('id', $this->records)
-            ->where('community_id', Auth::user()->currentCommunity->id)
+            ->where('community_id', $this->currentCommunity()?->id)
             ->delete();
     }
 }

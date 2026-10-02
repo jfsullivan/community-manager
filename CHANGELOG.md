@@ -2,6 +2,15 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.16 - PHPStan - 2026-10-01
+
+### PHPStan
+
+PHPStan passes again:
+- The transaction modals load the current community by `current_community_id` (new `ResolvesCurrentCommunity` concern) instead of the host app's `currentCommunity` relation, which the package can't see.
+- The computed `community`, `user` and `transaction` properties are declared, and `Transaction` declares `community_id`.
+- The member-status filter calls its `updatedMemberStatusFilter()` hook directly; the trait now provides a no-op default that pages override.
+
 ## v3.5.15 - Member Balances: one filter pattern - 2026-10-01
 
 ### Member Balances: one filter pattern

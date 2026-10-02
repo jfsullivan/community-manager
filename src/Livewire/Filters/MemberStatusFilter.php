@@ -48,10 +48,11 @@ trait MemberStatusFilter
     {
         $this->memberStatusFilter = 'current';
 
-        if (method_exists($this, 'updatedMemberStatusFilter')) {
-            $this->updatedMemberStatusFilter();
-        }
+        $this->updatedMemberStatusFilter();
     }
+
+    /** Runs when the member status changes; pages override it (e.g. to reset paging). */
+    public function updatedMemberStatusFilter(): void {}
 
     /**
      * Constrain a users query to memberships of the given community that match

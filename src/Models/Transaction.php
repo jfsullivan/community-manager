@@ -12,6 +12,7 @@ use jfsullivan\CommunityManager\Database\Factories\TransactionFactory;
 use jfsullivan\CommunityManager\Enums\TransactionMethod;
 
 /**
+ * @property int $community_id
  * @property TransactionMethod|null $method
  */
 class Transaction extends Model

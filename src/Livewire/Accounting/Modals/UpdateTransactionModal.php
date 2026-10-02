@@ -2,15 +2,20 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Modals;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use jfsullivan\ApexUi\Modal\FormModalComponent;
 use jfsullivan\CommunityManager\Livewire\Accounting\Traits\HasTransactionForm;
+use jfsullivan\CommunityManager\Livewire\Concerns\ResolvesCurrentCommunity;
+use jfsullivan\CommunityManager\Models\Transaction;
 use Livewire\Attributes\Computed;
 
+/**
+ * @property-read Transaction|null $transaction the configured transaction model (a subclass of this)
+ */
 class UpdateTransactionModal extends FormModalComponent
 {
     use HasTransactionForm;
+    use ResolvesCurrentCommunity;
 
     public string $modalName = 'update-transaction';
 
@@ -49,7 +54,7 @@ class UpdateTransactionModal extends FormModalComponent
         // Only a transaction in the current community, for someone allowed to
         // edit it there: the modal is mounted on member-facing pages, so the id
         // it's opened with can't be trusted.
-        $community = Auth::user()?->currentCommunity;
+        $community = $this->currentCommunity();
 
         if ($community === null || Gate::denies('edit-community-transaction', [$community])) {
             return null;
