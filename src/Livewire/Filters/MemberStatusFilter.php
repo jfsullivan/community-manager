@@ -33,6 +33,27 @@ trait MemberStatusFilter
     }
 
     /**
+     * The member-status filter as a chip label when it's narrowed away from
+     * the default (Current), else null.
+     */
+    public function memberStatusFilterChip(): ?string
+    {
+        return $this->memberStatusFilter === 'current'
+            ? null
+            : 'Members: '.($this->memberStatusFilterOptions()[$this->memberStatusFilter] ?? $this->memberStatusFilter);
+    }
+
+    /** Back to the default (Current) — the Filters menu's "Clear filters". */
+    public function clearMemberStatusFilter(): void
+    {
+        $this->memberStatusFilter = 'current';
+
+        if (method_exists($this, 'updatedMemberStatusFilter')) {
+            $this->updatedMemberStatusFilter();
+        }
+    }
+
+    /**
      * Constrain a users query to memberships of the given community that match
      * the selected lifecycle status. The users query must already join/scope
      * to the community's memberships (see MemberBalancesPage).

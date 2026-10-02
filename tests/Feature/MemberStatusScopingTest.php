@@ -95,6 +95,25 @@ class MemberStatusScopingTest extends TestCase
         $this->assertSame('current', $withFilter->memberStatusFilter);
     }
 
+    #[Test]
+    public function the_member_status_shows_as_a_chip_only_when_narrowed_away_from_current()
+    {
+        $filter = new class
+        {
+            use MemberStatusFilter;
+        };
+
+        $this->assertNull($filter->memberStatusFilterChip());
+
+        $filter->memberStatusFilter = 'former';
+        $this->assertSame('Members: Former', $filter->memberStatusFilterChip());
+
+        // The Filters menu's "Clear filters" (and the chip) go back to Current.
+        $filter->clearMemberStatusFilter();
+        $this->assertSame('current', $filter->memberStatusFilter);
+        $this->assertNull($filter->memberStatusFilterChip());
+    }
+
     /**
      * Runs the MemberStatusFilter query scope in isolation (no balance CTE) and
      * returns the matching users, so we can assert each status segment without

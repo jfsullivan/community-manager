@@ -27,34 +27,31 @@
                 <x-apex::menu.item icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction', { records: $wire.selected })">Add Bulk Transaction</x-apex::menu.item>
             </x-slot:bulkActions>
 
-            <x-slot name="filterButtons">
-                <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-                    {{-- Member status: defaults to Current so former/banned members
-                         stay hidden until an admin deliberately switches. --}}
-                    <x-apex::button-group wire:model.live="memberStatusFilter">
+            {{-- The shared list filter: balance is this page's segments; member
+                 status (Current by default, so former and banned members stay
+                 hidden until asked for) lives in the Filters menu, with a chip
+                 when it's narrowed to something else. --}}
+            <x-slot:filters>
+                <x-apex::filter-bar
+                    segments="balanceFilter"
+                    segments-label="Balance"
+                    :segment-options="$this->balanceFilterOptions()"
+                    :active="$this->memberStatusFilterChip() ? 1 : 0"
+                    clear-action="clearMemberStatusFilter"
+                >
+                    <x-apex::input.select label="Members" wire:model.live="memberStatusFilter" class="w-full">
                         @foreach ($this->memberStatusFilterOptions() as $value => $label)
-                            <x-apex::button-group.button name="{{ $value }}">
-                                <span class="py-px">{{ $label }}</span>
-                            </x-apex::button-group.button>
+                            <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
                         @endforeach
-                    </x-apex::button-group>
+                    </x-apex::input.select>
+                </x-apex::filter-bar>
+            </x-slot:filters>
 
-                    <x-apex::button-group wire:model.live="balanceFilter" class="grid grid-cols-4">
-                        <x-apex::button-group.button name="all">
-                            <span class="py-px">View All</span>
-                        </x-apex::button-group.button>
-                        <x-apex::button-group.button name="positive">
-                            <span class="py-px">Positive</span>
-                        </x-apex::button-group.button>
-                        <x-apex::button-group.button name="negative">
-                            <span class="py-px">Negative</span>
-                        </x-apex::button-group.button>
-                        <x-apex::button-group.button name="zero">
-                            <span class="py-px">No Balance</span>
-                        </x-apex::button-group.button>
-                    </x-apex::button-group>
-                </div>
-            </x-slot>
+            <x-slot:activeFilters>
+                @if ($chip = $this->memberStatusFilterChip())
+                    <x-apex::filter-chip wire:click="clearMemberStatusFilter">{{ $chip }}</x-apex::filter-chip>
+                @endif
+            </x-slot:activeFilters>
 
             <x-slot:header actions-variant="icon">
                 <x-apex::grid.header.column class="justify-start col-span-11 md:col-span-9" sortable sort-key="name" :sort-data="$sorts">Name</x-apex::grid.header.column>

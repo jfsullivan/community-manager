@@ -2,6 +2,18 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.15 - Member Balances: one filter pattern - 2026-10-01
+
+### Member Balances: one filter pattern
+
+Member Balances uses apex-ui's shared `x-apex::filter-bar`:
+- **Segments:** the balance (All / Positive / Negative / No balance).
+- **Filters menu:** member status, still Current by default. When it's set to anything else, it shows as a removable "Members: Former" chip.
+
+New `balanceFilterOptions()`, `memberStatusFilterChip()` and `clearMemberStatusFilter()` support this.
+
+Requires apex-ui ^1.37.1.
+
 ## v3.5.14 - Community news in cards - 2026-10-01
 
 ### Community news in cards
