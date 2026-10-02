@@ -30,10 +30,17 @@ jobs:
           php-version: '8.4'
           coverage: none
 
+      # Repos without the private-packages secret fall back to the workflow's own token.
       - name: Authenticate private Composer repositories
+        env:
+          PACKAGES_TOKEN: ${{ secrets.PRIVATE_PACKAGES_TOKEN || github.token }}
+          FLUX_USERNAME: ${{ secrets.FLUX_USERNAME }}
+          FLUX_LICENSE_KEY: ${{ secrets.FLUX_LICENSE_KEY }}
         run: |
-          composer config github-oauth.github.com "${{ secrets.PRIVATE_PACKAGES_TOKEN }}"
-          composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
+          composer config github-oauth.github.com "$PACKAGES_TOKEN"
+          if [ -n "$FLUX_USERNAME" ]; then
+            composer config http-basic.composer.fluxui.dev "$FLUX_USERNAME" "$FLUX_LICENSE_KEY"
+          fi
 
       # Private packages resolve over git ("no-api" in composer.json), and the cache
       # keeps those clones between runs, so CI doesn't burn the token's API quota.
