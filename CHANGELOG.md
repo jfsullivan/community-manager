@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.19 - Clearable filter dropdowns - 2026-10-02
+
+Filter dropdowns can be cleared: each now starts with an "Any …" option (apex-ui v1.40 `nullable` select). Requires apex-ui ^1.40.
+
 ## v3.5.18 - Accounting filters - one primary plus a Filters dropdown - 2026-10-01
 
 Transactions and Member Balances filters follow the apex-ui v1.39 pattern: one primary dropdown in the header (**Type** / **Balance**), and the rest under the **Filters** dropdown with a count and "Clear all". Requires apex-ui ^1.39.

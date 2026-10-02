@@ -29,20 +29,20 @@
             <x-slot:filterRow>
                 <x-apex::filter-row :active="count(array_filter([$methodFilter, $periodFilter]))" :primary-active="filled($transactionTypeFilter)" clear-action="clearAllFilters">
                     <x-slot:primary>
-                        <x-apex::input.select label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
+                        <x-apex::input.select nullable label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
                             @foreach ($this->transactionTypes as $type)
                                 <x-apex::input.select.option value="{{ $type->id }}">{{ $type->name }}</x-apex::input.select.option>
                             @endforeach
                         </x-apex::input.select>
                     </x-slot:primary>
 
-                    <x-apex::input.select label="Method" wire:model.live="methodFilter" placeholder="Any method">
+                    <x-apex::input.select nullable label="Method" wire:model.live="methodFilter" placeholder="Any method">
                         @foreach (\jfsullivan\CommunityManager\Enums\TransactionMethod::options() as $option)
                             <x-apex::input.select.option value="{{ $option['value'] }}">{{ $option['label'] }}</x-apex::input.select.option>
                         @endforeach
                     </x-apex::input.select>
 
-                    <x-apex::input.select label="When" wire:model.live="periodFilter" placeholder="Any time">
+                    <x-apex::input.select nullable label="When" wire:model.live="periodFilter" placeholder="Any time">
                         @foreach ($this->periodOptions() as $value => $label)
                             <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
                         @endforeach
