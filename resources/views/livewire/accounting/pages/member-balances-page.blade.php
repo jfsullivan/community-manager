@@ -30,15 +30,14 @@
             {{-- The shared filter row: Balance and Members (Current by default, so
                  former and banned members stay hidden until asked for). --}}
             <x-slot:filterRow>
-                <x-apex::filter-row
-                    :active="($balanceFilter !== 'all' ? 1 : 0) + ($this->memberStatusFilterChip() ? 1 : 0)"
-                    clear-action="clearBalanceFilters"
-                >
-                    <x-apex::input.select label="Balance" wire:model.live="balanceFilter">
-                        @foreach ($this->balanceFilterOptions() as $value => $label)
-                            <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
-                        @endforeach
-                    </x-apex::input.select>
+                <x-apex::filter-row :active="$this->memberStatusFilterChip() ? 1 : 0" :primary-active="$balanceFilter !== 'all'" clear-action="clearBalanceFilters">
+                    <x-slot:primary>
+                        <x-apex::input.select label="Balance" wire:model.live="balanceFilter">
+                            @foreach ($this->balanceFilterOptions() as $value => $label)
+                                <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
+                            @endforeach
+                        </x-apex::input.select>
+                    </x-slot:primary>
 
                     <x-apex::input.select label="Members" wire:model.live="memberStatusFilter">
                         @foreach ($this->memberStatusFilterOptions() as $value => $label)
