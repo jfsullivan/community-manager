@@ -2,8 +2,13 @@ name: Fix PHP code style issues
 
 on:
   push:
+    branches: [main]
     paths:
       - '**.php'
+
+concurrency:
+  group: fix-php-code-style-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   php-code-styling:

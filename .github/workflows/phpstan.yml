@@ -1,11 +1,21 @@
 name: PHPStan
 
+# Runs on main and PRs only: a release tag points at a commit main already checked.
 on:
   push:
+    branches: [main]
     paths:
       - '**.php'
+      - 'composer.json'
       - 'phpstan.neon.dist'
       - 'phpstan-baseline.neon'
+      - '.github/workflows/phpstan.yml'
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: phpstan-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   phpstan:
@@ -24,6 +34,19 @@ jobs:
         run: |
           composer config github-oauth.github.com "${{ secrets.PRIVATE_PACKAGES_TOKEN }}"
           composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
+
+      # Private packages resolve over git ("no-api" in composer.json), and the cache
+      # keeps those clones between runs, so CI doesn't burn the token's API quota.
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.json') }}
+          restore-keys: composer-${{ runner.os }}-
 
       - name: Install composer dependencies
         run: composer update --prefer-dist --no-interaction

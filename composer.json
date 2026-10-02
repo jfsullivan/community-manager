@@ -22,27 +22,33 @@
         },
         "apex-ui": {
             "type": "vcs",
-            "url": "https://github.com/jfsullivan/apex-ui"
+            "url": "https://github.com/jfsullivan/apex-ui",
+            "no-api": true
         },
         "article-manager": {
             "type": "vcs",
-            "url": "https://github.com/jfsullivan/article-manager"
+            "url": "https://github.com/jfsullivan/article-manager",
+            "no-api": true
         },
         "common-helpers": {
             "type": "vcs",
-            "url": "https://github.com/jfsullivan/common-helpers"
+            "url": "https://github.com/jfsullivan/common-helpers",
+            "no-api": true
         },
         "member-manager": {
             "type": "vcs",
-            "url": "https://github.com/jfsullivan/member-manager"
+            "url": "https://github.com/jfsullivan/member-manager",
+            "no-api": true
         },
         "notifications": {
             "type": "vcs",
-            "url": "https://github.com/jfsullivan/notifications"
+            "url": "https://github.com/jfsullivan/notifications",
+            "no-api": true
         },
         "user-timezone": {
             "type": "vcs",
-            "url": "https://github.com/jfsullivan/user-timezone"
+            "url": "https://github.com/jfsullivan/user-timezone",
+            "no-api": true
         }
     },
     "require": {
