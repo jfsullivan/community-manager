@@ -37,6 +37,13 @@ class MemberBalancesPage extends Component
         ];
     }
 
+    /** "Clear all": every balance, current members only. */
+    public function clearBalanceFilters(): void
+    {
+        $this->balanceFilter = 'all';
+        $this->clearMemberStatusFilter();
+    }
+
     public function updatedMemberStatusFilter(): void
     {
         $this->resetPage();

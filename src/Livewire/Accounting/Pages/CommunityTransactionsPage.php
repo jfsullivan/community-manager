@@ -2,6 +2,7 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Pages;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\ApexUi\Livewire\Traits\WithFilters;
 use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
@@ -11,6 +12,7 @@ use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class CommunityTransactionsPage extends Component
@@ -108,6 +110,58 @@ class CommunityTransactionsPage extends Component
         return TransactionType::select(['id', 'name'])->get();
     }
 
+    #[Url]
+    public ?string $methodFilter = null;
+
+    /** 7d | 30d | 90d | this_year | last_year */
+    #[Url]
+    public ?string $periodFilter = null;
+
+    /** @return array<string, string> value => label */
+    public function periodOptions(): array
+    {
+        return [
+            '7d' => 'Last 7 days',
+            '30d' => 'Last 30 days',
+            '90d' => 'Last 90 days',
+            'this_year' => 'This year',
+            'last_year' => 'Last year',
+        ];
+    }
+
+    public function activeFilterCount(): int
+    {
+        return count(array_filter([$this->transactionTypeFilter, $this->methodFilter, $this->periodFilter]));
+    }
+
+    public function clearAllFilters(): void
+    {
+        $this->reset('transactionTypeFilter', 'methodFilter', 'periodFilter');
+        $this->resetLoadMore();
+    }
+
+    public function updated(string $property): void
+    {
+        if (in_array($property, ['transactionTypeFilter', 'methodFilter', 'periodFilter'], true)) {
+            $this->resetLoadMore();
+        }
+    }
+
+    /** @return array{0: Carbon, 1: Carbon}|null */
+    private function periodRange(): ?array
+    {
+        $now = now();
+
+        return match ($this->periodFilter) {
+            '7d' => [$now->copy()->subDays(7), $now],
+            '30d' => [$now->copy()->subDays(30), $now],
+            '90d' => [$now->copy()->subDays(90), $now],
+            'this_year' => [$now->copy()->startOfYear(), $now],
+            'last_year' => [$now->copy()->subYear()->startOfYear(), $now->copy()->subYear()->endOfYear()],
+            default => null,
+        };
+    }
+
     #[Computed]
     public function transactionQuery()
     {
@@ -121,6 +175,8 @@ class CommunityTransactionsPage extends Component
             ->leftJoin('users', 'transactions.user_id', '=', 'users.id')
             ->where('transactions.community_id', $this->community->id)
             ->when($this->transactionTypeFilter, fn ($query, $id) => $query->where('type_id', $id))
+            ->when($this->methodFilter, fn ($query, $method) => $query->where('transactions.method', $method))
+            ->when($this->periodRange(), fn ($query, $range) => $query->whereBetween('transactions.transacted_at', $range))
             ->when($this->searchFilter, fn ($query, $searchTerm) => $query->search($searchTerm));
 
         return $this->applySorting($query);

@@ -27,31 +27,26 @@
                 <x-apex::menu.item icon="apex-ui.plus" wire:click="$dispatch('open-create-transaction', { records: $wire.selected })">Add Bulk Transaction</x-apex::menu.item>
             </x-slot:bulkActions>
 
-            {{-- The shared list filter: balance is this page's segments; member
-                 status (Current by default, so former and banned members stay
-                 hidden until asked for) lives in the Filters menu, with a chip
-                 when it's narrowed to something else. --}}
-            <x-slot:filters>
-                <x-apex::filter-bar
-                    segments="balanceFilter"
-                    segments-label="Balance"
-                    :segment-options="$this->balanceFilterOptions()"
-                    :active="$this->memberStatusFilterChip() ? 1 : 0"
-                    clear-action="clearMemberStatusFilter"
+            {{-- The shared filter row: Balance and Members (Current by default, so
+                 former and banned members stay hidden until asked for). --}}
+            <x-slot:filterRow>
+                <x-apex::filter-row
+                    :active="($balanceFilter !== 'all' ? 1 : 0) + ($this->memberStatusFilterChip() ? 1 : 0)"
+                    clear-action="clearBalanceFilters"
                 >
-                    <x-apex::input.select label="Members" wire:model.live="memberStatusFilter" class="w-full">
+                    <x-apex::input.select label="Balance" wire:model.live="balanceFilter">
+                        @foreach ($this->balanceFilterOptions() as $value => $label)
+                            <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
+                        @endforeach
+                    </x-apex::input.select>
+
+                    <x-apex::input.select label="Members" wire:model.live="memberStatusFilter">
                         @foreach ($this->memberStatusFilterOptions() as $value => $label)
                             <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
                         @endforeach
                     </x-apex::input.select>
-                </x-apex::filter-bar>
-            </x-slot:filters>
-
-            <x-slot:activeFilters>
-                @if ($chip = $this->memberStatusFilterChip())
-                    <x-apex::filter-chip wire:click="clearMemberStatusFilter">{{ $chip }}</x-apex::filter-chip>
-                @endif
-            </x-slot:activeFilters>
+                </x-apex::filter-row>
+            </x-slot:filterRow>
 
             <x-slot:header actions-variant="icon">
                 <x-apex::grid.header.column class="justify-start col-span-11 md:col-span-9" sortable sort-key="name" :sort-data="$sorts">Name</x-apex::grid.header.column>

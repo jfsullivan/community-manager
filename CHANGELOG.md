@@ -2,6 +2,15 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.5.17 - Transactions and Member Balances filter row - 2026-10-01
+
+### Transactions and Member Balances: filter row
+
+- **Transactions:** a filter row with Type, Method and When (Last 7, 30 or 90 days, This year, Last year), plus Clear all and an "All transactions" heading.
+- **Member Balances:** Balance and Members dropdowns, plus Clear all (new `clearBalanceFilters()`).
+
+Requires apex-ui ^1.38.
+
 ## v3.5.16 - PHPStan - 2026-10-01
 
 ### PHPStan

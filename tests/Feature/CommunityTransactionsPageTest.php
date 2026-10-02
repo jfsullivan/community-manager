@@ -536,4 +536,31 @@ class CommunityTransactionsPageTest extends TestCase
             $this->assertEquals($this->community->id, $transaction->community_id);
         }
     }
+
+    #[Test]
+    public function it_filters_by_method_and_period_and_clears_them_together()
+    {
+        $venmo = Transaction::factory()->create([
+            'community_id' => $this->community->id, 'user_id' => $this->user->id, 'type_id' => $this->transactionType->id,
+            'method' => 'venmo', 'transacted_at' => now()->subDays(3),
+        ]);
+        $oldCash = Transaction::factory()->create([
+            'community_id' => $this->community->id, 'user_id' => $this->user->id, 'type_id' => $this->transactionType->id,
+            'method' => 'cash', 'transacted_at' => now()->subYears(2),
+        ]);
+
+        $page = Livewire::test(CommunityTransactionsPage::class, ['community_id' => $this->community->id]);
+        $ids = fn () => collect($page->get('records')->items())->pluck('id')->all();
+
+        $page->set('methodFilter', 'venmo');
+        $this->assertSame([$venmo->id], $ids());
+
+        $page->set('methodFilter', null)->set('periodFilter', '30d');
+        $this->assertSame([$venmo->id], $ids());
+        $this->assertSame(1, $page->instance()->activeFilterCount());
+
+        $page->call('clearAllFilters');
+        $this->assertEqualsCanonicalizing([$venmo->id, $oldCash->id], $ids());
+        $this->assertSame(0, $page->instance()->activeFilterCount());
+    }
 }

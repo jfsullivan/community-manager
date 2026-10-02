@@ -23,6 +23,31 @@
             class="w-full grid-cols-16"
             wire:model="selected"
         >
+            <x-slot:heading>All transactions</x-slot:heading>
+            <x-slot:subheading>Every deposit, withdrawal, fee and payout in the community.</x-slot:subheading>
+
+            <x-slot:filterRow>
+                <x-apex::filter-row :active="$this->activeFilterCount()" clear-action="clearAllFilters">
+                    <x-apex::input.select label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
+                        @foreach ($this->transactionTypes as $type)
+                            <x-apex::input.select.option value="{{ $type->id }}">{{ $type->name }}</x-apex::input.select.option>
+                        @endforeach
+                    </x-apex::input.select>
+
+                    <x-apex::input.select label="Method" wire:model.live="methodFilter" placeholder="Any method">
+                        @foreach (\jfsullivan\CommunityManager\Enums\TransactionMethod::options() as $option)
+                            <x-apex::input.select.option value="{{ $option['value'] }}">{{ $option['label'] }}</x-apex::input.select.option>
+                        @endforeach
+                    </x-apex::input.select>
+
+                    <x-apex::input.select label="When" wire:model.live="periodFilter" placeholder="Any time">
+                        @foreach ($this->periodOptions() as $value => $label)
+                            <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
+                        @endforeach
+                    </x-apex::input.select>
+                </x-apex::filter-row>
+            </x-slot:filterRow>
+
             @if (Gate::allows('delete-community-transaction', [$this->community]))
                 <x-slot:bulkActions>
                     <x-apex::menu.item icon="apex-ui.trash" wire:click="$dispatch('open-delete-transaction', { records: $wire.selected })">Delete Selected Transactions</x-apex::menu.item>
