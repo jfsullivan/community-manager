@@ -24,13 +24,8 @@ class EnsureIsCommunityAdmin
             abort(403, 'Current community not found');
         }
 
-        // Allow access if user is the community owner
-        if ($request->user()->id == $currentCommunity->user_id) {
-            return $next($request);
-        }
-
-        // Allow access if user is an admin member
-        if ($currentCommunity->memberships()->whereRelation('role', 'slug', 'admin')->where('user_id', $request->user()->id)->exists()) {
+        // The owner, or a current (not pending, former or banned) admin member.
+        if ($currentCommunity->isCommunityAdmin($request->user()->id)) {
             return $next($request);
         }
 

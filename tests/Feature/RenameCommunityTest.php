@@ -6,24 +6,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 use jfsullivan\CommunityManager\Actions\UpdateCommunityName;
-use jfsullivan\MemberManager\Models\Role;
-use jfsullivan\MemberManager\Models\Type;
-
-function addCommunityAdmin($community, $user)
-{
-    $adminRole = Role::firstOrCreate(['slug' => 'admin'], ['name' => 'Admin', 'color' => 'purple']);
-
-    $community->members()->attach($user->id, [
-        'role_id' => $adminRole->id,
-        'type_id' => Type::where('slug', 'active')->first()->id,
-        'start_at' => now(),
-    ]);
-
-    $user->current_community_id = $community->id;
-    $user->save();
-
-    return $community;
-}
 
 it('lets the owner rename the community', function () {
     $userClass = config('community-manager.user_model');

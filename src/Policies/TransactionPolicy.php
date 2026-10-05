@@ -4,6 +4,10 @@ namespace jfsullivan\CommunityManager\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
+/**
+ * Community admins (the owner or admin-role members) manage the books;
+ * members see their own transactions.
+ */
 class TransactionPolicy
 {
     use HandlesAuthorization;
@@ -14,7 +18,7 @@ class TransactionPolicy
             return true;
         }
 
-        return $user->ownsCommunity($community);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function view($user, $transaction, $community)
@@ -23,26 +27,26 @@ class TransactionPolicy
             return true;
         }
 
-        return $user->ownsCommunity($community);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function create($user, $community)
     {
-        return $user->ownsCommunity($community);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function update($user, $community)
     {
-        return $user->ownsCommunity($community);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function delete($user, $community)
     {
-        return $user->ownsCommunity($community);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function deleteAny($user, $community)
     {
-        return $user->ownsCommunity($community);
+        return $community->isCommunityAdmin($user->id);
     }
 }

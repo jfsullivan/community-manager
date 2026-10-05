@@ -4,14 +4,17 @@ namespace jfsullivan\CommunityManager\Livewire\Concerns;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 
 /**
  * Community context for pages that act on a community: resolve it from the
  * community_id mount property (falling back to the user's current community)
- * and expose it as the page's owning model.
+ * and expose it as the page's owning model. Locked, so the browser can't
+ * point the page at another community.
  */
 trait ResolvesCommunity
 {
+    #[Locked]
     public $community_id;
 
     #[Computed]

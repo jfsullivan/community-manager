@@ -147,7 +147,7 @@ class Community extends Model
 
     /**
      * Whether the user administers this community: the owner, or a current
-     * member holding the `admin` role. Mirrors the access rule enforced by the
+     * (started, not ended) member holding the `admin` role. Mirrors the access rule enforced by the
      * `community-admin` route middleware so in-component authorization (which
      * middleware doesn't re-run on Livewire updates) can agree with it.
      */
@@ -160,6 +160,7 @@ class Community extends Model
         return $this->memberships()
             ->where('memberships.user_id', $user_id)
             ->whereRelation('role', 'slug', 'admin')
+            ->current()
             ->exists();
     }
 

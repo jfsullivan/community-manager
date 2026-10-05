@@ -61,6 +61,23 @@ function addCommunityMember(Community $community, User $user)
     return $community;
 }
 
+/** Attach a current admin-role member and make the community their current one. */
+function addCommunityAdmin(Community $community, User $user)
+{
+    $adminRole = Role::firstOrCreate(['slug' => 'admin'], ['name' => 'Admin', 'color' => 'purple']);
+
+    $community->members()->attach($user->id, [
+        'role_id' => $adminRole->id,
+        'type_id' => Type::where('slug', 'active')->first()->id,
+        'start_at' => now(),
+    ]);
+
+    $user->current_community_id = $community->id;
+    $user->save();
+
+    return $community;
+}
+
 // function setupOrganizationMember(Organization $organization, User $user)
 // {
 //     $memberRole = Role::where('slug', 'member')->first();

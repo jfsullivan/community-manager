@@ -104,8 +104,9 @@ class TransactionForm extends Form
     {
         $updateAction = new UpdateTransactionAction;
 
+        // A transaction stays in its community (never the client-sent id).
         return $updateAction->execute($this->transaction, [
-            'community_id' => $this->community_id,
+            'community_id' => $this->transaction->community_id,
             'type_id' => $this->type_id,
             'user_id' => $this->user_id,
             'transfer_user_id' => $this->transfer_user_id,

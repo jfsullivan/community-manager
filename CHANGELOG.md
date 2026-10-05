@@ -2,6 +2,26 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.6.0 - Community admins run the community - 2026-10-05
+
+**Community admins** (current members with the `admin` role) can now do everything the owner can, with three exceptions that stay with the owner:
+- granting the admin role, and changing or removing another admin (or the owner);
+- deleting the community;
+- paying for the community (the host app gates the subscription on ownership).
+
+What changed:
+- **`CommunityPolicy`:**
+  - `update`, `manage` and the member abilities now allow admins.
+  - Adds member-manager's `manageMembers`, `manageMember` and `assignMemberRole` abilities.
+  - Removes the old `before()` hook, which granted every ability to whoever owned the user's *current* community, whichever community was being checked.
+- **`TransactionPolicy`:** allows admins as well as the owner.
+- **`isCommunityAdmin()` and the `community-admin` middleware:** only a current admin membership counts. Pending, former and banned admins have no admin rights.
+- **Security:**
+  - `ResolvesCommunity::$community_id` is locked, so the browser can't point a page at another community.
+  - Editing a transaction keeps it in its own community.
+
+Requires member-manager ^0.10.
+
 ## v3.5.21 - Accounting pages on phones - 2026-10-02
 
 **Transactions and Member Balances on phones:**

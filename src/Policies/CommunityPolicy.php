@@ -7,19 +7,25 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
 
+/**
+ * Community admins (the owner, or a current member holding the `admin` role)
+ * run the community: settings, members, invitations, pools and accounting.
+ * What stays with the owner alone:
+ *
+ * - the admin role: granting it, and changing or removing an existing admin
+ *   (so admins can't promote others or demote each other);
+ * - deleting the community.
+ *
+ * Paying for the community (its subscription) is the owner's too; the host
+ * app gates that on ownership directly.
+ */
 class CommunityPolicy
 {
     use ChecksForFeatures;
     use HandlesAuthorization;
 
-    public function before(Authenticatable $user, string $ability): ?bool
-    {
-        if ($user->ownsCommunity($user->currentCommunity)) {
-            return true;
-        }
-
-        return null;
-    }
+    /** Role slugs only the owner may grant, change or remove. */
+    public const OWNER_MANAGED_ROLES = ['owner', 'admin'];
 
     public function viewAny($user)
     {
@@ -30,7 +36,7 @@ class CommunityPolicy
     {
         // Confirmed members only — a pending (start_at IS NULL) row does not
         // grant view access until an admin confirms it.
-        return $community->hasConfirmedMember($user->id);
+        return $community->isOwner($user->id) || $community->hasConfirmedMember($user->id);
     }
 
     public function create(Authenticatable $user)
@@ -40,15 +46,9 @@ class CommunityPolicy
 
     public function update(Authenticatable $user, Community $community)
     {
-        return $community->isOwner($user->id);
+        return $community->isCommunityAdmin($user->id);
     }
 
-    /**
-     * Renaming the community is an administrative act, not an ownership one:
-     * the owner and any `admin`-role member may do it (matching who reaches the
-     * Community Admin area). Kept separate from `update` so ownership-only
-     * settings stay owner-only.
-     */
     public function renameCommunity(Authenticatable $user, Community $community)
     {
         return $community->isCommunityAdmin($user->id);
@@ -56,22 +56,56 @@ class CommunityPolicy
 
     public function addCommunityMember(Authenticatable $user, Community $community)
     {
-        return $community->isOwner($user->id);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function inviteCommunityMember($user, Community $community)
     {
-        return $community->isOwner($user->id);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function updateCommunityMember($user, Community $community)
     {
-        return $community->isOwner($user->id);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function removeCommunityMember($user, Community $community)
     {
-        return $community->isOwner($user->id);
+        return $community->isCommunityAdmin($user->id);
+    }
+
+    /** member-manager: may the user manage this community's members at all? */
+    public function manageMembers($user, Community $community)
+    {
+        return $community->isCommunityAdmin($user->id);
+    }
+
+    /**
+     * member-manager: may the user give a member this role? The owner and
+     * admin roles are the owner's to hand out.
+     */
+    public function assignMemberRole($user, Community $community, $role)
+    {
+        if (! $community->isCommunityAdmin($user->id)) {
+            return false;
+        }
+
+        return $community->isOwner($user->id) || ! in_array($role?->slug, self::OWNER_MANAGED_ROLES, true);
+    }
+
+    /**
+     * member-manager: may the user change or remove this particular member?
+     * Admins manage everyone but the owner and other admins; the owner manages
+     * everyone but themselves.
+     */
+    public function manageMember($user, Community $community, $membership)
+    {
+        if (! $community->isCommunityAdmin($user->id) || $community->isOwner($membership->user_id)) {
+            return false;
+        }
+
+        return $community->isOwner($user->id)
+            || ! in_array($membership->role?->slug, self::OWNER_MANAGED_ROLES, true);
     }
 
     public function delete($user, Community $community)
@@ -81,9 +115,7 @@ class CommunityPolicy
 
     public function manage($user, Community $community)
     {
-        return $this->create($user)
-                || $this->update($user, $community)
-                || $this->delete($user, $community);
+        return $community->isCommunityAdmin($user->id);
     }
 
     public function viewMemberBalance($user, Community $community)
@@ -93,7 +125,7 @@ class CommunityPolicy
 
     public function addFunds($user, Community $community)
     {
-        return $community->isOwner($user->id)
+        return $community->isCommunityAdmin($user->id)
             || (config('community-manager.features.track_member_balances') && $community->track_member_balances);
     }
 }
