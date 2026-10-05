@@ -3,6 +3,7 @@
 namespace jfsullivan\CommunityManager\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
@@ -98,14 +99,21 @@ class CommunityPolicy
      * Admins manage everyone but the owner and other admins; the owner manages
      * everyone but themselves.
      */
-    public function manageMember($user, Community $community, $membership)
+    public function manageMember($user, Community $community, $membership): Response
     {
-        if (! $community->isCommunityAdmin($user->id) || $community->isOwner($membership->user_id)) {
-            return false;
+        if (! $community->isCommunityAdmin($user->id)) {
+            return Response::deny('Only community admins can manage members.');
         }
 
-        return $community->isOwner($user->id)
-            || ! in_array($membership->role?->slug, self::OWNER_MANAGED_ROLES, true);
+        if ($community->isOwner($membership->user_id)) {
+            return Response::deny('The community owner\'s membership can\'t be changed here.');
+        }
+
+        if (! $community->isOwner($user->id) && in_array($membership->role?->slug, self::OWNER_MANAGED_ROLES, true)) {
+            return Response::deny('Only the community owner can change or remove another admin.');
+        }
+
+        return Response::allow();
     }
 
     public function delete($user, Community $community)

@@ -2,6 +2,14 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.6.1 - Say why a member can't be changed - 2026-10-05
+
+`CommunityPolicy::manageMember` returns a reason with each denial, which member-manager's modals show:
+- "Only the community owner can change or remove another admin."
+- "The community owner's membership can't be changed here."
+
+Requires member-manager ^0.10.2.
+
 ## v3.6.0 - Community admins run the community - 2026-10-05
 
 **Community admins** (current members with the `admin` role) can now do everything the owner can, with three exceptions that stay with the owner:
