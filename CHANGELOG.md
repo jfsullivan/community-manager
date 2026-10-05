@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.6.2 - Role and type modals open instantly - 2026-10-05
+
+The community member row passes each member's role, type and any blocked reason with its Change Role / Change Membership events, so those modals open without a request. Requires member-manager ^0.10.3.
+
 ## v3.6.1 - Say why a member can't be changed - 2026-10-05
 
 `CommunityPolicy::manageMember` returns a reason with each denial, which member-manager's modals show:

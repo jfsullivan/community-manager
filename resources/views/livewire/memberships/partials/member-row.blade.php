@@ -95,11 +95,11 @@
                 @endif
 
                 @if ($this->showsColumn('role'))
-                    <x-apex::menu.item icon="apex-ui.user-settings" wire:click="$dispatch('open-change-member-role', { record_id: '{{ $member->user_id }}' })">Change Role</x-apex::menu.item>
+                    <x-apex::menu.item icon="apex-ui.user-settings" wire:click="$dispatch('open-change-member-role', {{ \Illuminate\Support\Js::from($this->memberChangeDetail($member)) }})">Change Role</x-apex::menu.item>
                 @endif
 
                 @if ($this->showsColumn('type'))
-                    <x-apex::menu.item icon="apex-ui.passport" wire:click="$dispatch('open-change-membership-type', { record_id: '{{ $member->user_id }}' })">Change Membership</x-apex::menu.item>
+                    <x-apex::menu.item icon="apex-ui.passport" wire:click="$dispatch('open-change-membership-type', {{ \Illuminate\Support\Js::from($this->memberChangeDetail($member)) }})">Change Membership</x-apex::menu.item>
                 @endif
 
                 @if ($member->membership_status == 'former')
