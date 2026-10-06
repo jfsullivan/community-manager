@@ -1,6 +1,7 @@
 <div class="w-full flex flex-col items-center pb-8">
     <div class="w-full flex justify-center bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
-        <div class="w-full flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white dark:bg-zinc-900">
+        {{-- Same centered width as the community home and pool pages. --}}
+        <div class="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white dark:bg-zinc-900">
             <div class="w-full flex items-center space-x-4">
                 <x-profile-photo class="h-14 w-14" :url="$this->user->profile_photo_url" :name="$this->user->name" />
                 <div class="flex flex-col">
@@ -31,7 +32,7 @@
         </div>
     </div>
 
-    <div class="flex flex-col w-full py-4 sm:px-4 lg:mt-8">
+    <div class="flex flex-col w-full max-w-7xl mx-auto py-6 sm:px-2 md:px-4 md:py-8">
         <x-apex::grid card bleed striped searchable class="w-full grid-cols-16">
             <x-slot name="heading">Transaction History</x-slot>
 
