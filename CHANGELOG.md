@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.6.3 - Transaction history page width - 2026-10-06
+
+### Fixed
+
+- **Member transaction history page:** the header and the Transaction History card now sit in the same centered column (`max-w-7xl`) as the community home and pool pages, instead of running edge to edge on wide screens.
+
 ## v3.6.2 - Role and type modals open instantly - 2026-10-05
 
 The community member row passes each member's role, type and any blocked reason with its Change Role / Change Membership events, so those modals open without a request. Requires member-manager ^0.10.3.
@@ -9,6 +15,7 @@ The community member row passes each member's role, type and any blocked reason 
 ## v3.6.1 - Say why a member can't be changed - 2026-10-05
 
 `CommunityPolicy::manageMember` returns a reason with each denial, which member-manager's modals show:
+
 - "Only the community owner can change or remove another admin."
 - "The community owner's membership can't be changed here."
 
@@ -17,26 +24,31 @@ Requires member-manager ^0.10.2.
 ## v3.6.0 - Community admins run the community - 2026-10-05
 
 **Community admins** (current members with the `admin` role) can now do everything the owner can, with three exceptions that stay with the owner:
+
 - granting the admin role, and changing or removing another admin (or the owner);
 - deleting the community;
 - paying for the community (the host app gates the subscription on ownership).
 
 What changed:
+
 - **`CommunityPolicy`:**
   - `update`, `manage` and the member abilities now allow admins.
   - Adds member-manager's `manageMembers`, `manageMember` and `assignMemberRole` abilities.
   - Removes the old `before()` hook, which granted every ability to whoever owned the user's *current* community, whichever community was being checked.
+  
 - **`TransactionPolicy`:** allows admins as well as the owner.
 - **`isCommunityAdmin()` and the `community-admin` middleware:** only a current admin membership counts. Pending, former and banned admins have no admin rights.
 - **Security:**
   - `ResolvesCommunity::$community_id` is locked, so the browser can't point a page at another community.
   - Editing a transaction keeps it in its own community.
+  
 
 Requires member-manager ^0.10.
 
 ## v3.5.21 - Accounting pages on phones - 2026-10-02
 
 **Transactions and Member Balances on phones:**
+
 - The title shows a count.
 - Add Transaction folds into a ⋮ menu.
 - The list sits flush under the header with the grid's search and filter bar.
@@ -69,6 +81,7 @@ Requires apex-ui ^1.38.
 ### PHPStan
 
 PHPStan passes again:
+
 - The transaction modals load the current community by `current_community_id` (new `ResolvesCurrentCommunity` concern) instead of the host app's `currentCommunity` relation, which the package can't see.
 - The computed `community`, `user` and `transaction` properties are declared, and `Transaction` declares `community_id`.
 - The member-status filter calls its `updatedMemberStatusFilter()` hook directly; the trait now provides a no-op default that pages override.
@@ -78,6 +91,7 @@ PHPStan passes again:
 ### Member Balances: one filter pattern
 
 Member Balances uses apex-ui's shared `x-apex::filter-bar`:
+
 - **Segments:** the balance (All / Positive / Negative / No balance).
 - **Filters menu:** member status, still Current by default. When it's set to anything else, it shows as a removable "Members: Former" chip.
 
@@ -197,6 +211,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
