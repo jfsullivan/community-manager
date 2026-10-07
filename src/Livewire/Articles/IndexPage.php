@@ -31,4 +31,10 @@ class IndexPage extends ArticleIndexPage
     {
         return 'Community Articles';
     }
+
+    /** "Latest community news", so it isn't mistaken for a pool's news. */
+    public function newsScope(): ?string
+    {
+        return 'community';
+    }
 }
