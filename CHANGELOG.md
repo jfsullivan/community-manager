@@ -2,6 +2,13 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.7.3 - Transaction history phone header - 2026-10-07
+
+### Changed
+
+- **Member transaction history header on phones:** the balance sits on its own row under the name and email (label left, amount right), and the action buttons span the full width, sharing it equally whether there's one button or several. Long names and emails truncate. Wider screens are unchanged.
+- `member-balance-actions`: the wrapper is now `grid grid-flow-col auto-cols-fr md:w-auto md:flex` (was a fixed two-column grid). Apps that override this view should match it.
+
 ## v3.7.2 - Transaction history date range with presets - 2026-10-07
 
 ### Changed
@@ -269,6 +276,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
