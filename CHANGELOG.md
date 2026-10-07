@@ -2,6 +2,17 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.6.5 - Transaction history filters - 2026-10-07
+
+### Added
+
+- **Filters on a member's transaction history:** **Type** up front, and **Pool**, **From** and **To** in the Filters menu, with "Clear all". Dates are whole days in the viewer's timezone.
+- **Pool filter hook:** implement `jfsullivan\CommunityManager\Contracts\FiltersTransactionsByPool` (`poolOptions()` and `applyPoolFilter()`) and set `config('community-manager.transaction_pool_filter')` to it. Without it, the Pool filter is hidden.
+
+### Fixed
+
+- The page's search queried `users.name` without joining `users`, so searching errored. It now uses the transaction search (description, method, type) the admin Transactions page uses.
+
 ## v3.6.4 - Read-only member transaction history - 2026-10-07
 
 ### Changed
@@ -231,6 +242,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
