@@ -17,16 +17,13 @@
                 @can('view-member-balance', $this->community)
                     <div class="flex flex-col items-center justify-center mx-4 sm:ml-0">
                         <div class="flex text-gray-400 dark:text-zinc-500 text-xs whitespace-nowrap">Account Balance</div>
-                        @livewire('community-manager.accounting.components.member-balance', ['size' => 'lg'])
+                        {{-- This member's balance (not the viewer's), shown as text: it
+                             would only link back to this page. --}}
+                        @livewire('community-manager.accounting.components.member-balance', ['user_id' => $this->user->id, 'community_id' => $this->community->id, 'selectable' => false], key('member-balance-'.$this->user->id))
                     </div>
                 @endcan
                 @if(auth()->user()->id == $this->user->id)
-                    @can('add-funds', $this->community)
-                        <div class="w-full grid grid-cols-2 sm:w-auto sm:flex items-center gap-x-3">
-                            <x-community-manager::accounting.add-funds-button />
-                            {{-- <x-community-manager::accounting.request-payout-button /> --}}
-                        </div>
-                    @endcan
+                    <x-community-manager::accounting.member-balance-actions :community="$this->community" :user="$this->user" />
                 @endif
             </div>
         </div>
@@ -36,7 +33,8 @@
         <x-apex::grid card bleed striped searchable class="w-full grid-cols-16">
             <x-slot name="heading">Transaction History</x-slot>
 
-            <x-slot:header actions-variant="icon">
+            {{-- Read-only history: editing and deleting live on the community admin Transactions page. --}}
+            <x-slot:header>
                 <x-apex::grid.header.column class="pl-2 sm:pl-4 col-span-3 justify-start" sortable sort-key="date" :sort-data="$sorts">Date</x-apex::grid.header.column>
                 <x-apex::grid.header.column class="col-span-9 justify-start lg:pl-7" sortable sort-key="transaction" :sort-data="$sorts">Transaction</x-apex::grid.header.column>
                 <div class="col-span-4 w-full flex flex-col-reverse lg:grid lg:grid-cols-2 lg:gap-x-2 items-center justify-end">
@@ -76,20 +74,6 @@
                         </x-apex::grid.item.column>
                     </div>
 
-                    <x-slot:actions>
-                        @php
-                            $canManageTransactions = Gate::any(['edit-community-transaction', 'delete-community-transaction'], [$this->community]);
-                        @endphp
-                        <x-apex::grid.item.column.actions.dropdown :disabled="! $canManageTransactions">
-                            @if(Gate::allows('edit-community-transaction', $this->community))
-                                <x-apex::menu.item icon="apex-ui.edit" wire:click="$dispatch('open-update-transaction', { id: {{ $transaction->id }} })">Edit Transaction</x-apex::menu.item>
-                            @endif
-
-                            @if(Gate::allows('delete-community-transaction', [$this->community]))
-                                <x-apex::menu.item icon="apex-ui.trash" wire:click="$dispatch('open-delete-transaction', { id: {{ $transaction->id }} })">Delete Transaction</x-apex::menu.item>
-                            @endif
-                        </x-apex::grid.item.column.actions.dropdown>
-                    </x-slot:actions>
                 </x-apex::grid.item>
             @empty
                 <x-apex::grid.item :selectable="false">
@@ -115,6 +99,4 @@
         </x-apex::grid>
     </div>
 
-    <livewire:community-manager.accounting.modals.update-transaction-modal />
-    <livewire:community-manager.accounting.modals.delete-transaction-modal />
 </div>

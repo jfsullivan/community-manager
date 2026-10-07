@@ -1,35 +1,35 @@
+{{-- A member's balance in a community, colored by sign. With $selectable it
+     links to that member's transaction history; without, it's plain text
+     (e.g. on the history page itself). --}}
 @php
-// $headerSize = match($size) {
-//     'sm' => 'text-xs',
-//     'lg' => 'text-sm',
-//     default => 'text-xs'
-// };
-
-// $sizeClasses = match($size) {
-//     'sm' => 'text-xs',
-//     'lg' => 'text-base',
-//     default => 'text-sm'
-// };
+    $balanceClasses = [
+        'font-semibold flex items-center',
+        'hover:underline' => $selectable,
+        'text-green-500 dark:text-green-400' => $formatted && $this->memberBalance->isGreaterThan(0),
+        'text-red-500 dark:text-red-400' => $formatted && $this->memberBalance->isLessThan(0),
+        'text-gray-900 dark:text-zinc-100' => $formatted && $this->memberBalance->isEqualTo(0),
+        $class,
+    ];
 @endphp
 
 <div class="flex items-center">
-    <a href="{{ route('community.members.transactions', [Auth::user()->id]) }}"
-        @class([
-            'font-semibold hover:underline flex items-center',
-            'text-green-500 dark:text-green-400' => $formatted && $this->memberBalance->isGreaterThan(0),
-            'text-red-500 dark:text-red-400' => $formatted && $this->memberBalance->isLessThan(0),
-            'text-gray-900 dark:text-zinc-100' =>  $formatted && $this->memberBalance->isEqualTo(0),
-            $class
-        ])
-    >
-        @if($formatted)
-            <x-money :amount="$this->memberBalance" formatted :class="$class" />
-        @else
-            <x-money :amount="$this->memberBalance" :class="$class" />
-        @endif
+    @if($selectable)
+        <a href="{{ route('community.members.transactions', [$this->user->id]) }}" @class($balanceClasses)>
+            @if($formatted)
+                <x-money :amount="$this->memberBalance" formatted :class="$class" />
+            @else
+                <x-money :amount="$this->memberBalance" :class="$class" />
+            @endif
 
-        @if($selectable)
             <flux:icon name="apex-ui.arrow-right" class="w-3 h-3 ml-0.5 stroke-2" />
-        @endif
-    </a>
+        </a>
+    @else
+        <span @class($balanceClasses)>
+            @if($formatted)
+                <x-money :amount="$this->memberBalance" formatted :class="$class" />
+            @else
+                <x-money :amount="$this->memberBalance" :class="$class" />
+            @endif
+        </span>
+    @endif
 </div>
