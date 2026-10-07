@@ -40,12 +40,14 @@ class MemberTransactionHistoryPage extends Component
     #[Url]
     public ?string $poolFilter = null;
 
-    /** First and last day (Y-m-d, the viewer's timezone) to include. */
+    /**
+     * First and last day to include, from the range date picker (Y-m-d, the
+     * viewer's timezone; presets are worked out in the viewer's browser).
+     *
+     * @var array{start?: string|null, end?: string|null, preset?: string|null}|null
+     */
     #[Url]
-    public ?string $fromDate = null;
-
-    #[Url]
-    public ?string $toDate = null;
+    public ?array $dateRange = null;
 
     public function mount()
     {
@@ -140,8 +142,8 @@ class MemberTransactionHistoryPage extends Component
             ->where('transactions.community_id', $this->community->id)
             ->where('transactions.user_id', $this->user->id)
             ->when($this->transactionTypeFilter, fn ($query, $slug) => $query->whereRelation('type', 'slug', $slug))
-            ->when($this->dayBoundary($this->fromDate), fn ($query, $from) => $query->where('transactions.transacted_at', '>=', $from))
-            ->when($this->dayBoundary($this->toDate, endOfDay: true), fn ($query, $to) => $query->where('transactions.transacted_at', '<=', $to))
+            ->when($this->dayBoundary($this->dateRange['start'] ?? null), fn ($query, $from) => $query->where('transactions.transacted_at', '>=', $from))
+            ->when($this->dayBoundary($this->dateRange['end'] ?? null, endOfDay: true), fn ($query, $to) => $query->where('transactions.transacted_at', '<=', $to))
             ->when($this->poolFilter !== null && $this->poolFilterProvider(), fn ($query) => $this->poolFilterProvider()->applyPoolFilter($query, $this->poolFilter))
             ->when($this->searchFilter, fn ($query, $searchTerm) => $query->search($searchTerm));
 
@@ -166,20 +168,20 @@ class MemberTransactionHistoryPage extends Component
     /** Filters in the Filters menu that are set (Type is the primary filter). */
     public function menuFilterCount(): int
     {
-        return count(array_filter([$this->poolFilter, $this->fromDate, $this->toDate]));
+        return count(array_filter([$this->poolFilter, ($this->dateRange['start'] ?? null) ?: ($this->dateRange['end'] ?? null)]));
     }
 
     /** Clear every filter and the search. */
     public function clearAllFilters(): void
     {
-        $this->reset('transactionTypeFilter', 'poolFilter', 'fromDate', 'toDate');
+        $this->reset('transactionTypeFilter', 'poolFilter', 'dateRange');
         $this->clearSearch();
         $this->resetLoadMore();
     }
 
     public function updated(string $property): void
     {
-        if (in_array($property, ['transactionTypeFilter', 'poolFilter', 'fromDate', 'toDate'], true)) {
+        if (in_array(str($property)->before('.')->toString(), ['transactionTypeFilter', 'poolFilter', 'dateRange'], true)) {
             $this->resetLoadMore();
         }
     }

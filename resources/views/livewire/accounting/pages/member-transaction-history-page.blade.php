@@ -59,8 +59,14 @@
                         </x-apex::input.select>
                     @endif
 
-                    <x-apex::input.date-picker label="From" wire:model="fromDate" clearable />
-                    <x-apex::input.date-picker label="To" wire:model="toDate" clearable />
+                    <x-apex::input.date-picker
+                        mode="range"
+                        label="Dates"
+                        wire:model="dateRange"
+                        presets="last7Days last30Days thisMonth lastMonth thisYear lastYear"
+                        placeholder="Any dates"
+                        clearable
+                    />
                 </x-apex::filter-row>
             </x-slot:filterRow>
 
