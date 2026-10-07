@@ -42,6 +42,13 @@ return [
     'transaction_policy' => TransactionPolicy::class,
 
     /*
+     * Optional: a class implementing
+     * jfsullivan\CommunityManager\Contracts\FiltersTransactionsByPool, which
+     * adds a Pool filter to a member's transaction history. Null hides it.
+     */
+    'transaction_pool_filter' => null,
+
+    /*
      * The path to the admin layout for the community.
      */
     'admin_layout' => 'community-manager::components.layouts.admin',

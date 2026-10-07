@@ -30,8 +30,33 @@
     </div>
 
     <div class="flex flex-col w-full max-w-7xl mx-auto py-6 sm:px-2 md:px-4 md:py-8">
-        <x-apex::grid card bleed striped searchable class="w-full grid-cols-16">
+        <x-apex::grid card bleed striped searchable mobile-toolbar class="w-full grid-cols-16">
             <x-slot name="heading">Transaction History</x-slot>
+
+            {{-- Type up front; pool and dates in the Filters menu. The Pool
+                 filter shows only when the app ties transactions to pools. --}}
+            <x-slot:filterRow>
+                <x-apex::filter-row :active="$this->menuFilterCount()" :primary-active="filled($transactionTypeFilter)" clear-action="clearAllFilters">
+                    <x-slot:primary>
+                        <x-apex::input.select nullable label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
+                            @foreach ($this->transactionTypes as $type)
+                                <x-apex::input.select.option value="{{ $type->slug }}">{{ $type->name }}</x-apex::input.select.option>
+                            @endforeach
+                        </x-apex::input.select>
+                    </x-slot:primary>
+
+                    @if ($this->poolOptions !== [])
+                        <x-apex::input.select nullable searchable label="Pool" wire:model.live="poolFilter" placeholder="Any pool">
+                            @foreach ($this->poolOptions as $poolId => $poolName)
+                                <x-apex::input.select.option value="{{ $poolId }}">{{ $poolName }}</x-apex::input.select.option>
+                            @endforeach
+                        </x-apex::input.select>
+                    @endif
+
+                    <x-apex::input.date-picker label="From" wire:model.live="fromDate" clearable />
+                    <x-apex::input.date-picker label="To" wire:model.live="toDate" clearable />
+                </x-apex::filter-row>
+            </x-slot:filterRow>
 
             {{-- Read-only history: editing and deleting live on the community admin Transactions page. --}}
             <x-slot:header>
@@ -78,10 +103,10 @@
             @empty
                 <x-apex::grid.item :selectable="false">
                     <x-apex::grid.item.column class="col-span-full justify-center">
-                        @if (filled($this->searchFilter))
-                            <x-apex::empty-state icon="apex-ui.search" heading="No transactions found" subheading="We couldn't find any transactions that meet that criteria.">
+                        @if (filled($this->searchFilter) || filled($transactionTypeFilter) || $this->menuFilterCount() > 0)
+                            <x-apex::empty-state icon="apex-ui.search" heading="No transactions found" subheading="No transactions match these filters.">
                                 <x-slot:actions>
-                                    <x-apex::button variant="outline" wire:click="clearSearch">Clear search</x-apex::button>
+                                    <x-apex::button variant="outline" wire:click="clearAllFilters">Clear filters</x-apex::button>
                                 </x-slot:actions>
                             </x-apex::empty-state>
                         @else

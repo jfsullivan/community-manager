@@ -2,17 +2,22 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Pages;
 
+use Carbon\CarbonInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\ApexUi\Livewire\Traits\WithFilters;
 use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
 use jfsullivan\ApexUi\Livewire\Traits\WithSearchFilter;
 use jfsullivan\ApexUi\Livewire\Traits\WithSorting;
+use jfsullivan\CommunityManager\Contracts\FiltersTransactionsByPool;
 use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\CommunityManager\Models\User;
+use jfsullivan\UserTimezone\Facades\Timezone;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 /**
@@ -30,6 +35,17 @@ class MemberTransactionHistoryPage extends Component
     public $community_id;
 
     public $user_id;
+
+    /** Pool id, when the app supplies a pool filter (see FiltersTransactionsByPool). */
+    #[Url]
+    public ?string $poolFilter = null;
+
+    /** First and last day (Y-m-d, the viewer's timezone) to include. */
+    #[Url]
+    public ?string $fromDate = null;
+
+    #[Url]
+    public ?string $toDate = null;
 
     public function mount()
     {
@@ -124,9 +140,61 @@ class MemberTransactionHistoryPage extends Component
             ->where('transactions.community_id', $this->community->id)
             ->where('transactions.user_id', $this->user->id)
             ->when($this->transactionTypeFilter, fn ($query, $slug) => $query->whereRelation('type', 'slug', $slug))
-            ->when($this->searchFilter, fn ($query, $searchTerm) => $query->where('users.name', 'LIKE', '%'.$searchTerm.'%'));
+            ->when($this->dayBoundary($this->fromDate), fn ($query, $from) => $query->where('transactions.transacted_at', '>=', $from))
+            ->when($this->dayBoundary($this->toDate, endOfDay: true), fn ($query, $to) => $query->where('transactions.transacted_at', '<=', $to))
+            ->when($this->poolFilter !== null && $this->poolFilterProvider(), fn ($query) => $this->poolFilterProvider()->applyPoolFilter($query, $this->poolFilter))
+            ->when($this->searchFilter, fn ($query, $searchTerm) => $query->search($searchTerm));
 
         return $this->applySorting($query);
+    }
+
+    /** The app's pool filter, if it supplies one. */
+    public function poolFilterProvider(): ?FiltersTransactionsByPool
+    {
+        $class = config('community-manager.transaction_pool_filter');
+
+        return $class ? app($class) : null;
+    }
+
+    /** @return array<int|string, string> pool id => name; empty without a pool filter */
+    #[Computed]
+    public function poolOptions(): array
+    {
+        return $this->poolFilterProvider()?->poolOptions($this->community, $this->user) ?? [];
+    }
+
+    /** Filters in the Filters menu that are set (Type is the primary filter). */
+    public function menuFilterCount(): int
+    {
+        return count(array_filter([$this->poolFilter, $this->fromDate, $this->toDate]));
+    }
+
+    /** Clear every filter and the search. */
+    public function clearAllFilters(): void
+    {
+        $this->reset('transactionTypeFilter', 'poolFilter', 'fromDate', 'toDate');
+        $this->clearSearch();
+        $this->resetLoadMore();
+    }
+
+    public function updated(string $property): void
+    {
+        if (in_array($property, ['transactionTypeFilter', 'poolFilter', 'fromDate', 'toDate'], true)) {
+            $this->resetLoadMore();
+        }
+    }
+
+    /** Start (or end) of a Y-m-d day in the viewer's timezone, as app time; null when unset or invalid. */
+    private function dayBoundary(?string $date, bool $endOfDay = false): ?CarbonInterface
+    {
+        if (blank($date) || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            return null;
+        }
+
+        $day = Carbon::parse($date, Timezone::getUserTimezone());
+        $boundary = Timezone::toAppTimezone($endOfDay ? $day->endOfDay() : $day->startOfDay());
+
+        return $boundary instanceof CarbonInterface ? $boundary : null;
     }
 
     #[Computed]
