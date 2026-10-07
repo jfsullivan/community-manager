@@ -50,13 +50,10 @@
                              share a name across years. Search matches either. --}}
                         <x-apex::input.select nullable searchable label="Pool" wire:model="poolFilter" placeholder="Any pool">
                             @foreach ($this->poolOptions as $poolId => $pool)
-                                <x-apex::input.select.option value="{{ $poolId }}">
-                                    <span class="flex min-w-0 flex-col py-0.5">
-                                        <span class="truncate">{{ $pool['name'] }}</span>
-                                        @if (filled($pool['detail'] ?? null))
-                                            <span class="truncate text-xs text-zinc-500 dark:text-zinc-400">{{ $pool['detail'] }}</span>
-                                        @endif
-                                    </span>
+                                {{-- The season is Flux's option description: small, under the
+                                     name in the list, and left out of the closed field. --}}
+                                <x-apex::input.select.option value="{{ $poolId }}" :description="$pool['detail'] ?? null">
+                                    <span class="block truncate">{{ $pool['name'] }}</span>
                                 </x-apex::input.select.option>
                             @endforeach
                         </x-apex::input.select>
