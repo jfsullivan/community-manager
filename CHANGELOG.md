@@ -2,6 +2,14 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.0 - Multi-select transaction filters - 2026-10-07
+
+### Changed
+
+- **Transactions filters take several values:** **Type** on the community Transactions page and on a member's transaction history, and **Method** on the community Transactions page. Pick e.g. Deposit and Withdrawal together.
+- The filters are lists in the URL (`?transactionTypeFilter[0]=deposit&transactionTypeFilter[1]=withdrawal`). **Old links still work:** a single value or an old numeric type id loads as a one-item list.
+- New `transactionTypeSlugs()` and `methodFilterValues()` helpers. `transactionType()` still returns the type when exactly one is chosen.
+
 ## v3.7.6 - Transaction history card flush on phones - 2026-10-07
 
 ### Changed
@@ -294,6 +302,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
