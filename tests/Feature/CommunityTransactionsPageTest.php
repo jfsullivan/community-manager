@@ -187,8 +187,55 @@ class CommunityTransactionsPageTest extends TestCase
         // Links from before the filter used slugs carry the type's id.
         Livewire::withQueryParams(['transactionTypeFilter' => (string) $withdrawalType->id])
             ->test(CommunityTransactionsPage::class, ['community_id' => $this->community->id])
-            ->assertSet('transactionTypeFilter', $withdrawalType->slug)
+            ->assertSet('transactionTypeFilter', [$withdrawalType->slug])
             ->assertSeeHtml('value="'.$depositType->slug.'"');
+    }
+
+    #[Test]
+    public function it_filters_by_several_transaction_types_and_methods_then_clears_them()
+    {
+        $create = fn (int $typeId, string $method) => Transaction::factory()->create([
+            'community_id' => $this->community->id, 'user_id' => $this->user->id, 'type_id' => $typeId, 'method' => $method,
+        ]);
+        $withdrawal = $create(1, 'venmo');
+        $deposit = $create(2, 'cash');
+        $entryFee = $create(3, 'zelle');
+
+        $page = Livewire::test(CommunityTransactionsPage::class, ['community_id' => $this->community->id]);
+        $ids = fn () => collect($page->get('records')->items())->pluck('id')->all();
+
+        $page->set('transactionTypeFilter', ['withdrawal', 'deposit']);
+        $this->assertEqualsCanonicalizing([$withdrawal->id, $deposit->id], $ids());
+        $this->assertSame(1, $page->instance()->activeFilterCount());
+
+        $page->set('methodFilter', ['cash', 'zelle']);
+        $this->assertSame([$deposit->id], $ids());
+        $this->assertSame(2, $page->instance()->activeFilterCount());
+
+        $page->set('transactionTypeFilter', []);
+        $this->assertEqualsCanonicalizing([$deposit->id, $entryFee->id], $ids());
+        $this->assertSame(1, $page->instance()->activeFilterCount());
+
+        $page->call('clearAllFilters')
+            ->assertSet('transactionTypeFilter', [])
+            ->assertSet('methodFilter', []);
+        $this->assertEqualsCanonicalizing([$withdrawal->id, $deposit->id, $entryFee->id], $ids());
+        $this->assertSame(0, $page->instance()->activeFilterCount());
+    }
+
+    #[Test]
+    public function it_loads_old_single_value_filter_links_as_one_element_lists()
+    {
+        Livewire::withQueryParams(['transactionTypeFilter' => 'deposit', 'methodFilter' => 'venmo'])
+            ->test(CommunityTransactionsPage::class, ['community_id' => $this->community->id])
+            ->assertSet('transactionTypeFilter', ['deposit'])
+            ->assertSet('methodFilter', ['venmo']);
+
+        // Blanks and unknown values are dropped; old ids map to slugs.
+        Livewire::withQueryParams(['transactionTypeFilter' => ['2', '', 'nope', 'withdrawal'], 'methodFilter' => ['', 'carrier-pigeon', 'cash']])
+            ->test(CommunityTransactionsPage::class, ['community_id' => $this->community->id])
+            ->assertSet('transactionTypeFilter', ['deposit', 'withdrawal'])
+            ->assertSet('methodFilter', ['cash']);
     }
 
     #[Test]

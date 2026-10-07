@@ -33,16 +33,16 @@
             <x-slot:subheading>Every deposit, withdrawal, fee and payout in the community.</x-slot:subheading>
 
             <x-slot:filterRow>
-                <x-apex::filter-row :active="count(array_filter([$methodFilter, $periodFilter]))" :primary-active="filled($transactionTypeFilter)" clear-action="clearAllFilters">
+                <x-apex::filter-row :active="count(array_filter([$this->methodFilterValues(), $periodFilter]))" :primary-active="$this->transactionTypeSlugs() !== []" clear-action="clearAllFilters">
                     <x-slot:primary>
-                        <x-apex::input.select nullable label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
+                        <x-apex::input.select multiple label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
                             @foreach ($this->transactionTypes as $type)
                                 <x-apex::input.select.option value="{{ $type->slug }}">{{ $type->name }}</x-apex::input.select.option>
                             @endforeach
                         </x-apex::input.select>
                     </x-slot:primary>
 
-                    <x-apex::input.select nullable label="Method" wire:model="methodFilter" placeholder="Any method">
+                    <x-apex::input.select multiple label="Method" wire:model="methodFilter" placeholder="Any method">
                         @foreach (\jfsullivan\CommunityManager\Enums\TransactionMethod::options() as $option)
                             <x-apex::input.select.option value="{{ $option['value'] }}">{{ $option['label'] }}</x-apex::input.select.option>
                         @endforeach

@@ -141,7 +141,7 @@ class MemberTransactionHistoryPage extends Component
             ->leftJoin('transaction_types', 'transactions.type_id', '=', 'transaction_types.id')
             ->where('transactions.community_id', $this->community->id)
             ->where('transactions.user_id', $this->user->id)
-            ->when($this->transactionTypeFilter, fn ($query, $slug) => $query->whereRelation('type', 'slug', $slug))
+            ->when($this->transactionTypeSlugs(), fn ($query, $slugs) => $query->whereIn('transaction_types.slug', $slugs))
             ->when($this->dayBoundary($this->dateRange['start'] ?? null), fn ($query, $from) => $query->where('transactions.transacted_at', '>=', $from))
             ->when($this->dayBoundary($this->dateRange['end'] ?? null, endOfDay: true), fn ($query, $to) => $query->where('transactions.transacted_at', '<=', $to))
             ->when($this->poolFilter !== null && $this->poolFilterProvider(), fn ($query) => $this->poolFilterProvider()->applyPoolFilter($query, $this->poolFilter))

@@ -40,9 +40,9 @@
             {{-- Type up front; pool and dates in the Filters menu. The Pool
                  filter shows only when the app ties transactions to pools. --}}
             <x-slot:filterRow>
-                <x-apex::filter-row :active="$this->menuFilterCount()" :primary-active="filled($transactionTypeFilter)" clear-action="clearAllFilters">
+                <x-apex::filter-row :active="$this->menuFilterCount()" :primary-active="$this->transactionTypeSlugs() !== []" clear-action="clearAllFilters">
                     <x-slot:primary>
-                        <x-apex::input.select nullable label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
+                        <x-apex::input.select multiple label="Type" wire:model.live="transactionTypeFilter" placeholder="Any type">
                             @foreach ($this->transactionTypes as $type)
                                 <x-apex::input.select.option value="{{ $type->slug }}">{{ $type->name }}</x-apex::input.select.option>
                             @endforeach
@@ -119,7 +119,7 @@
             @empty
                 <x-apex::grid.item :selectable="false">
                     <x-apex::grid.item.column class="col-span-full justify-center">
-                        @if (filled($this->searchFilter) || filled($transactionTypeFilter) || $this->menuFilterCount() > 0)
+                        @if (filled($this->searchFilter) || $this->transactionTypeSlugs() !== [] || $this->menuFilterCount() > 0)
                             <x-apex::empty-state icon="apex-ui.search" heading="No transactions found" subheading="No transactions match these filters.">
                                 <x-slot:actions>
                                     <x-apex::button variant="outline" wire:click="clearAllFilters">Clear filters</x-apex::button>

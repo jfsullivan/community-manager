@@ -2,12 +2,14 @@
 
 namespace jfsullivan\CommunityManager\Livewire\Accounting\Pages;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use jfsullivan\ApexUi\Livewire\Traits\WithFilters;
 use jfsullivan\ApexUi\Livewire\Traits\WithPerPagePagination;
 use jfsullivan\ApexUi\Livewire\Traits\WithSearchFilter;
 use jfsullivan\ApexUi\Livewire\Traits\WithSorting;
+use jfsullivan\CommunityManager\Enums\TransactionMethod;
 use jfsullivan\CommunityManager\Livewire\Filters\TransactionTypeFilter;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use Livewire\Attributes\Computed;
@@ -29,6 +31,8 @@ class CommunityTransactionsPage extends Component
 
     public function mount()
     {
+        $this->methodFilter = $this->normaliseMethodFilter($this->methodFilter);
+
         $this->perPage = 100;
 
         $this->defaultSortDir = [
@@ -110,8 +114,14 @@ class CommunityTransactionsPage extends Component
         return TransactionType::select(['id', 'slug', 'name'])->get();
     }
 
+    /**
+     * Transaction method values (TransactionMethod). Untyped so links from
+     * before the filter took several methods (?methodFilter=venmo) still load.
+     *
+     * @var array<int, string>|string|null
+     */
     #[Url]
-    public ?string $methodFilter = null;
+    public $methodFilter = [];
 
     /** 7d | 30d | 90d | this_year | last_year */
     #[Url]
@@ -131,7 +141,7 @@ class CommunityTransactionsPage extends Component
 
     public function activeFilterCount(): int
     {
-        return count(array_filter([$this->transactionTypeFilter, $this->methodFilter, $this->periodFilter]));
+        return count(array_filter([$this->transactionTypeSlugs(), $this->methodFilterValues(), $this->periodFilter]));
     }
 
     public function clearAllFilters(): void
@@ -142,9 +152,33 @@ class CommunityTransactionsPage extends Component
 
     public function updated(string $property): void
     {
-        if (in_array($property, ['transactionTypeFilter', 'methodFilter', 'periodFilter'], true)) {
+        if (in_array(str($property)->before('.')->toString(), ['transactionTypeFilter', 'methodFilter', 'periodFilter'], true)) {
             $this->resetLoadMore();
         }
+    }
+
+    /**
+     * The selected method values, empty when the filter is off.
+     *
+     * @return array<int, string>
+     */
+    public function methodFilterValues(): array
+    {
+        return $this->normaliseMethodFilter($this->methodFilter);
+    }
+
+    /**
+     * Wrap a single value and drop blanks and unknown methods.
+     *
+     * @return array<int, string>
+     */
+    private function normaliseMethodFilter(mixed $value): array
+    {
+        return collect(Arr::wrap($value))
+            ->filter(fn ($item) => is_string($item) && TransactionMethod::tryFrom($item) !== null)
+            ->unique()
+            ->values()
+            ->all();
     }
 
     /** @return array{0: Carbon, 1: Carbon}|null */
@@ -174,8 +208,8 @@ class CommunityTransactionsPage extends Component
             ->leftJoin('transaction_types', 'transactions.type_id', '=', 'transaction_types.id')
             ->leftJoin('users', 'transactions.user_id', '=', 'users.id')
             ->where('transactions.community_id', $this->community->id)
-            ->when($this->transactionTypeFilter, fn ($query, $slug) => $query->whereRelation('type', 'slug', $slug))
-            ->when($this->methodFilter, fn ($query, $method) => $query->where('transactions.method', $method))
+            ->when($this->transactionTypeSlugs(), fn ($query, $slugs) => $query->whereIn('transaction_types.slug', $slugs))
+            ->when($this->methodFilterValues(), fn ($query, $methods) => $query->whereIn('transactions.method', $methods))
             ->when($this->periodRange(), fn ($query, $range) => $query->whereBetween('transactions.transacted_at', $range))
             ->when($this->searchFilter, fn ($query, $searchTerm) => $query->search($searchTerm));
 
