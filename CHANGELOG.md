@@ -2,6 +2,16 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.7.2 - Transaction history date range with presets - 2026-10-07
+
+### Changed
+
+- **Member transaction history:** the From and To date filters are now one **Dates** range field with presets (Last 7 Days, Last 30 Days, This Month, Last Month, This Year, Last Year). Presets use the viewer's own days, and the range still applies on the Filters menu's **Apply** button.
+
+### Breaking (for apps that set the filter directly)
+
+- `fromDate` / `toDate` are replaced by `dateRange` (`['start' => 'Y-m-d', 'end' => 'Y-m-d']`), including in the page URL.
+
 ## v3.7.1 - Pool filter option styling - 2026-10-07
 
 ### Changed
@@ -259,6 +269,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
