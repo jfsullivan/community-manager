@@ -1,8 +1,8 @@
 <div class="w-full flex flex-col items-center pb-8">
     <div class="w-full flex justify-center bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
         {{-- Same centered width as the community home and pool pages. Phones:
-             name and email, then a divided row with the balance (label left,
-             amount right) and full-width actions. Wider: the balance and
+             name and email, then the balance as a stat (small label over a
+             larger amount) and full-width actions. Wider: the balance and
              actions sit to the right of the name. --}}
         <div class="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4 py-5 px-4 bg-white dark:bg-zinc-900">
             <div class="min-w-0 flex items-center gap-4">
@@ -16,13 +16,13 @@
                 </div>
             </div>
 
-            <div class="w-full md:w-auto flex flex-col md:flex-row md:items-center gap-3 md:gap-6 max-md:pt-4 max-md:border-t border-gray-200 dark:border-zinc-700">
+            <div class="w-full md:w-auto flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
                 @can('view-member-balance', $this->community)
-                    <div class="flex items-center justify-between md:flex-col md:items-end md:justify-center">
-                        <div class="text-sm md:text-xs text-gray-500 dark:text-zinc-400 whitespace-nowrap">Account Balance</div>
+                    <div class="flex flex-col items-start md:items-center">
+                        <div class="text-xs text-gray-500 dark:text-zinc-400 whitespace-nowrap">Account Balance</div>
                         {{-- This member's balance (not the viewer's), shown as text: it
                              would only link back to this page. --}}
-                        @livewire('community-manager.accounting.components.member-balance', ['user_id' => $this->user->id, 'community_id' => $this->community->id, 'selectable' => false], key('member-balance-'.$this->user->id))
+                        @livewire('community-manager.accounting.components.member-balance', ['user_id' => $this->user->id, 'community_id' => $this->community->id, 'selectable' => false, 'class' => 'text-2xl md:text-base'], key('member-balance-'.$this->user->id))
                     </div>
                 @endcan
                 @if(auth()->user()->id == $this->user->id)
