@@ -1,22 +1,25 @@
 <div class="w-full flex flex-col items-center pb-8">
     <div class="w-full flex justify-center bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700">
-        {{-- Same centered width as the community home and pool pages. --}}
-        <div class="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:justify-between space-y-2 md:space-y-0 py-5 px-2 md:px-4 bg-white dark:bg-zinc-900">
-            <div class="w-full flex items-center space-x-4">
-                <x-profile-photo class="h-14 w-14" :url="$this->user->profile_photo_url" :name="$this->user->name" />
-                <div class="flex flex-col">
-                    <x-apex::heading size="xl" class="mb-0! font-semibold!">{{ $this->user->name }}</x-apex::heading>
-                    <div class="flex items-center text-sm text-gray-600 dark:text-zinc-300">
+        {{-- Same centered width as the community home and pool pages. Phones:
+             name and email, then a divided row with the balance (label left,
+             amount right) and full-width actions. Wider: the balance and
+             actions sit to the right of the name. --}}
+        <div class="w-full max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4 py-5 px-4 bg-white dark:bg-zinc-900">
+            <div class="min-w-0 flex items-center gap-4">
+                <x-profile-photo class="h-14 w-14 shrink-0" :url="$this->user->profile_photo_url" :name="$this->user->name" />
+                <div class="min-w-0 flex flex-col">
+                    <x-apex::heading size="xl" class="mb-0! font-semibold! truncate">{{ $this->user->name }}</x-apex::heading>
+                    <div class="min-w-0 flex items-center text-sm text-gray-600 dark:text-zinc-300">
                         <flux:icon name="apex-ui.mail" class="mr-1.5 h-5 w-5 shrink-0 text-gray-500 dark:text-zinc-400" />
-                        {{ $this->user->email }}
+                        <span class="truncate">{{ $this->user->email }}</span>
                     </div>
                 </div>
             </div>
 
-            <div class="w-full md:w-auto flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0">
+            <div class="w-full md:w-auto flex flex-col md:flex-row md:items-center gap-3 md:gap-6 max-md:pt-4 max-md:border-t border-gray-200 dark:border-zinc-700">
                 @can('view-member-balance', $this->community)
-                    <div class="flex flex-col items-center justify-center mx-4 sm:ml-0">
-                        <div class="flex text-gray-400 dark:text-zinc-500 text-xs whitespace-nowrap">Account Balance</div>
+                    <div class="flex items-center justify-between md:flex-col md:items-end md:justify-center">
+                        <div class="text-sm md:text-xs text-gray-500 dark:text-zinc-400 whitespace-nowrap">Account Balance</div>
                         {{-- This member's balance (not the viewer's), shown as text: it
                              would only link back to this page. --}}
                         @livewire('community-manager.accounting.components.member-balance', ['user_id' => $this->user->id, 'community_id' => $this->community->id, 'selectable' => false], key('member-balance-'.$this->user->id))
