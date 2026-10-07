@@ -32,7 +32,8 @@
         </div>
     </div>
 
-    <div class="flex flex-col w-full max-w-7xl mx-auto py-6 sm:px-2 md:px-4 md:py-8">
+    {{-- Phones: the edge-to-edge card sits right under the header. --}}
+    <div class="flex flex-col w-full max-w-7xl mx-auto pb-6 sm:pt-6 sm:px-2 md:px-4 md:py-8">
         <x-apex::grid card bleed striped searchable mobile-toolbar class="w-full grid-cols-16">
             <x-slot name="heading">Transaction History</x-slot>
 
