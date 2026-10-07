@@ -2,6 +2,17 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.7.0 - Accounting filters apply on Apply; pool seasons - 2026-10-07
+
+### Changed
+
+- **Filters menus apply on Apply** on the member transaction history, community **Transactions** and **Member Balances** pages. Requires apex-ui **^1.46**.
+- **Pool filter options show which season or tournament a pool belongs to**, under its name, so same-named pools from different years can be told apart. Search matches either line.
+
+### Breaking (for implementers of the Pool filter hook)
+
+- `FiltersTransactionsByPool::poolOptions()` now returns `[poolId => ['name' => string, 'detail' => string|null]]`, newest first, instead of `[poolId => name]`.
+
 ## v3.6.5 - Transaction history filters - 2026-10-07
 
 ### Added
@@ -242,6 +253,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
