@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.7.4 - Transaction history balance stat on phones - 2026-10-07
+
+### Changed
+
+- **Member transaction history header on phones:** the balance shows as a stat (a small "Account Balance" label over a larger amount, left-aligned above the buttons) instead of label and amount at opposite ends of a row. Wider screens are unchanged.
+
 ## v3.7.3 - Transaction history phone header - 2026-10-07
 
 ### Changed
@@ -276,6 +282,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
