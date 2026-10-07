@@ -46,15 +46,24 @@
                     </x-slot:primary>
 
                     @if ($this->poolOptions !== [])
-                        <x-apex::input.select nullable searchable label="Pool" wire:model.live="poolFilter" placeholder="Any pool">
-                            @foreach ($this->poolOptions as $poolId => $poolName)
-                                <x-apex::input.select.option value="{{ $poolId }}">{{ $poolName }}</x-apex::input.select.option>
+                        {{-- Name, with the season or tournament underneath: many pools
+                             share a name across years. Search matches either. --}}
+                        <x-apex::input.select nullable searchable label="Pool" wire:model="poolFilter" placeholder="Any pool">
+                            @foreach ($this->poolOptions as $poolId => $pool)
+                                <x-apex::input.select.option value="{{ $poolId }}">
+                                    <span class="flex min-w-0 flex-col py-0.5">
+                                        <span class="truncate">{{ $pool['name'] }}</span>
+                                        @if (filled($pool['detail'] ?? null))
+                                            <span class="truncate text-xs text-zinc-500 dark:text-zinc-400">{{ $pool['detail'] }}</span>
+                                        @endif
+                                    </span>
+                                </x-apex::input.select.option>
                             @endforeach
                         </x-apex::input.select>
                     @endif
 
-                    <x-apex::input.date-picker label="From" wire:model.live="fromDate" clearable />
-                    <x-apex::input.date-picker label="To" wire:model.live="toDate" clearable />
+                    <x-apex::input.date-picker label="From" wire:model="fromDate" clearable />
+                    <x-apex::input.date-picker label="To" wire:model="toDate" clearable />
                 </x-apex::filter-row>
             </x-slot:filterRow>
 

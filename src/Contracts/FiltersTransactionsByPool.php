@@ -16,9 +16,10 @@ use Illuminate\Database\Eloquent\Model;
 interface FiltersTransactionsByPool
 {
     /**
-     * Pools the member's transactions in this community belong to.
+     * Pools the member's transactions in this community belong to, newest
+     * first. `detail` (e.g. the season) tells apart pools that share a name.
      *
-     * @return array<int|string, string> pool id => pool name
+     * @return array<int|string, array{name: string, detail: string|null}> pool id => option
      */
     public function poolOptions(Model $community, Authenticatable $user): array;
 

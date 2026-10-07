@@ -156,7 +156,7 @@ class MemberTransactionHistoryPage extends Component
         return $class ? app($class) : null;
     }
 
-    /** @return array<int|string, string> pool id => name; empty without a pool filter */
+    /** @return array<int|string, array{name: string, detail: string|null}> pool id => option; empty without a pool filter */
     #[Computed]
     public function poolOptions(): array
     {

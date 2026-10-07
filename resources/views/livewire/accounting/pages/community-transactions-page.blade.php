@@ -42,13 +42,13 @@
                         </x-apex::input.select>
                     </x-slot:primary>
 
-                    <x-apex::input.select nullable label="Method" wire:model.live="methodFilter" placeholder="Any method">
+                    <x-apex::input.select nullable label="Method" wire:model="methodFilter" placeholder="Any method">
                         @foreach (\jfsullivan\CommunityManager\Enums\TransactionMethod::options() as $option)
                             <x-apex::input.select.option value="{{ $option['value'] }}">{{ $option['label'] }}</x-apex::input.select.option>
                         @endforeach
                     </x-apex::input.select>
 
-                    <x-apex::input.select nullable label="When" wire:model.live="periodFilter" placeholder="Any time">
+                    <x-apex::input.select nullable label="When" wire:model="periodFilter" placeholder="Any time">
                         @foreach ($this->periodOptions() as $value => $label)
                             <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
                         @endforeach

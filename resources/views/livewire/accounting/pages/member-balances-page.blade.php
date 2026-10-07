@@ -45,7 +45,7 @@
                         </x-apex::input.select>
                     </x-slot:primary>
 
-                    <x-apex::input.select label="Members" wire:model.live="memberStatusFilter">
+                    <x-apex::input.select label="Members" wire:model="memberStatusFilter">
                         @foreach ($this->memberStatusFilterOptions() as $value => $label)
                             <x-apex::input.select.option value="{{ $value }}">{{ $label }}</x-apex::input.select.option>
                         @endforeach
