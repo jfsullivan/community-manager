@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.7.5 - Transaction history balance centered on phones - 2026-10-07
+
+### Changed
+
+- **Member transaction history header on phones:** the Account Balance label and amount are centered, like the full-width button below them, and the amount is a size smaller. Wider screens are unchanged.
+
 ## v3.7.4 - Transaction history balance stat on phones - 2026-10-07
 
 ### Changed
@@ -282,6 +288,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
