@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.1 - Community news headings - 2026-10-07
+
+### Changed
+
+- **Community News page:** card headings read "Latest community news" / "Older community news" / "All community news", so they can't be mistaken for a pool's news. Requires article-manager **^3.13**.
+
 ## v3.8.0 - Multi-select transaction filters - 2026-10-07
 
 ### Changed
@@ -302,6 +308,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
