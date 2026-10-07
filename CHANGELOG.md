@@ -2,6 +2,22 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.6.4 - Read-only member transaction history - 2026-10-07
+
+### Changed
+
+- **Member transaction history is read-only.** Edit/Delete row actions are gone from this page; admins edit and delete on the community admin **Transactions** page. Members no longer see a disabled menu on each row.
+- **Header balance:** shows the member whose history it is (it showed the viewer's own balance), as plain text instead of a link back to the same page.
+- **Balance links:** the `member-balance` component's link goes to the shown member's history, not always the viewer's.
+
+### Added
+
+- `x-community-manager::accounting.member-balance-actions` (Add Funds by default) beside the balance on a member's own history page. Host apps can override it to add their own actions, such as a payout request.
+
+### Removed
+
+- The unused `accounting.request-payout-button` component (it used a modal pattern that no longer exists).
+
 ## v3.6.3 - Transaction history page width - 2026-10-06
 
 ### Fixed
@@ -32,13 +48,17 @@ Requires member-manager ^0.10.2.
 What changed:
 
 - **`CommunityPolicy`:**
+  
   - `update`, `manage` and the member abilities now allow admins.
   - Adds member-manager's `manageMembers`, `manageMember` and `assignMemberRole` abilities.
   - Removes the old `before()` hook, which granted every ability to whoever owned the user's *current* community, whichever community was being checked.
   
 - **`TransactionPolicy`:** allows admins as well as the owner.
+  
 - **`isCommunityAdmin()` and the `community-admin` middleware:** only a current admin membership counts. Pending, former and banned admins have no admin rights.
+  
 - **Security:**
+  
   - `ResolvesCommunity::$community_id` is locked, so the browser can't point a page at another community.
   - Editing a transaction keeps it in its own community.
   
@@ -211,6 +231,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
