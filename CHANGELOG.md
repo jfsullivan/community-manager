@@ -2,6 +2,12 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.7.1 - Pool filter option styling - 2026-10-07
+
+### Changed
+
+- **Pool filter options** on a member's transaction history: the pool name in the standard option size with the season (or tournament) as a smaller line underneath. Once a pool is chosen, the closed field shows just its name, so it's the same height as the other fields. Long names end in an ellipsis. Requires apex-ui **^1.46.1**.
+
 ## v3.7.0 - Accounting filters apply on Apply; pool seasons - 2026-10-07
 
 ### Changed
@@ -253,6 +259,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
