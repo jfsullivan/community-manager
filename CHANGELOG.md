@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.5 - Type filter: one update for quick ticks - 2026-10-08
+
+- The Transaction Type multi-select (transactions and member transaction history) waits 500ms after the last tick before updating, so ticking several types quickly is one update: no in-between result and no gap in the loading state.
+
 ## v3.8.4 - Transaction lists: 50 rows per update - 2026-10-08
 
 - The transactions, member transactions and member transaction history pages render 50 rows per update (the usual page size) instead of 100, and load more as you scroll. Filter changes re-render about half as much. Member balances keeps 100.
@@ -320,6 +324,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
