@@ -42,7 +42,7 @@
             <x-slot:filterRow>
                 <x-apex::filter-row :active="$this->menuFilterCount()" :primary-active="$this->transactionTypeSlugs() !== []" clear-action="clearAllFilters">
                     <x-slot:primary>
-                        <x-apex::input.select multiple label="Type" wire:model.live.debounce.500ms="transactionTypeFilter" placeholder="Any type">
+                        <x-apex::input.select multiple label="Type" wire:model="transactionTypeFilter" apply-on-close placeholder="Any type">
                             @foreach ($this->transactionTypes as $type)
                                 <x-apex::input.select.option value="{{ $type->slug }}">{{ $type->name }}</x-apex::input.select.option>
                             @endforeach
