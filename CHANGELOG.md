@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.4 - Transaction lists: 50 rows per update - 2026-10-08
+
+- The transactions, member transactions and member transaction history pages render 50 rows per update (the usual page size) instead of 100, and load more as you scroll. Filter changes re-render about half as much. Member balances keeps 100.
+
 ## v3.8.3 - Accounting pages: stable modal keys - 2026-10-08
 
 - The transactions, member transactions and member balances pages give their modals (and the member balance) explicit `wire:key`s. Livewire 4 otherwise derives a child's key from the loops rendered before it, so filtering the list re-keyed the modals; picking a second transaction type while the first update was still running broke the page ("Snapshot missing").
@@ -316,6 +320,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
