@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.2 - Filter URLs update on apply - 2026-10-08
+
+- List filters (transactions: type, method, period, pool, dates; member balances and status) now keep the URL in Livewire history mode: the address bar changes only once a filter is applied, not while a Filters-menu choice is still a draft. Each applied change becomes a Back-button step.
+
 ## v3.8.1 - Community news headings - 2026-10-07
 
 ### Changed
@@ -308,6 +312,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
