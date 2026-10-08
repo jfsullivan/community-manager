@@ -29,7 +29,6 @@ class MemberTransactionsPage extends Component
 
     public function mount()
     {
-        $this->perPage = 100;
 
         $this->defaultSortDir = [
             'date' => 'desc',

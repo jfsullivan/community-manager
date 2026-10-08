@@ -33,8 +33,6 @@ class CommunityTransactionsPage extends Component
     {
         $this->methodFilter = $this->normaliseMethodFilter($this->methodFilter);
 
-        $this->perPage = 100;
-
         $this->defaultSortDir = [
             'date' => 'desc',
             'member' => 'asc',

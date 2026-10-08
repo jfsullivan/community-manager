@@ -60,8 +60,6 @@ class MemberTransactionHistoryPage extends Component
             403
         );
 
-        $this->perPage = 100;
-
         $this->defaultSortDir = [
             'date' => 'desc',
             'type' => 'asc',
