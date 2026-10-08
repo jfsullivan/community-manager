@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.3 - Accounting pages: stable modal keys - 2026-10-08
+
+- The transactions, member transactions and member balances pages give their modals (and the member balance) explicit `wire:key`s. Livewire 4 otherwise derives a child's key from the loops rendered before it, so filtering the list re-keyed the modals; picking a second transaction type while the first update was still running broke the page ("Snapshot missing").
+
 ## v3.8.2 - Filter URLs update on apply - 2026-10-08
 
 - List filters (transactions: type, method, period, pool, dates; member balances and status) now keep the URL in Livewire history mode: the address bar changes only once a filter is applied, not while a Filters-menu choice is still a draft. Each applied change becomes a Back-button step.
@@ -312,6 +316,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
