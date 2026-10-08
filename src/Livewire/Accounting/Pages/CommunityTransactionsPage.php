@@ -120,11 +120,11 @@ class CommunityTransactionsPage extends Component
      *
      * @var array<int, string>|string|null
      */
-    #[Url]
+    #[Url(history: true)]
     public $methodFilter = [];
 
     /** 7d | 30d | 90d | this_year | last_year */
-    #[Url]
+    #[Url(history: true)]
     public ?string $periodFilter = null;
 
     /** @return array<string, string> value => label */

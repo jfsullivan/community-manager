@@ -6,7 +6,7 @@ use Livewire\Attributes\Url;
 
 trait BalanceFilter
 {
-    #[Url]
+    #[Url(history: true)]
     public $balanceFilter = 'all';
 
     /** @return array<string, string> value => label */

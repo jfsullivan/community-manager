@@ -37,7 +37,7 @@ class MemberTransactionHistoryPage extends Component
     public $user_id;
 
     /** Pool id, when the app supplies a pool filter (see FiltersTransactionsByPool). */
-    #[Url]
+    #[Url(history: true)]
     public ?string $poolFilter = null;
 
     /**
@@ -46,7 +46,7 @@ class MemberTransactionHistoryPage extends Component
      *
      * @var array{start?: string|null, end?: string|null, preset?: string|null}|null
      */
-    #[Url]
+    #[Url(history: true)]
     public ?array $dateRange = null;
 
     public function mount()

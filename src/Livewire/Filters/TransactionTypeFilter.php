@@ -18,7 +18,7 @@ use Livewire\Attributes\Url;
 trait TransactionTypeFilter
 {
     /** @var array<int, string>|string|int|null */
-    #[Url]
+    #[Url(history: true)]
     public $transactionTypeFilter = [];
 
     public function mountTransactionTypeFilter()

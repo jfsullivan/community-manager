@@ -11,7 +11,7 @@ use Livewire\Attributes\Url;
  */
 trait MemberStatusFilter
 {
-    #[Url]
+    #[Url(history: true)]
     public string $memberStatusFilter = 'current';
 
     public function mountMemberStatusFilter(): void
