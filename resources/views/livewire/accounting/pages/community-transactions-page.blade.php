@@ -146,7 +146,7 @@
         </x-apex::grid>
     </div>
 
-    <livewire:community-manager.accounting.modals.create-transaction-modal />
-    <livewire:community-manager.accounting.modals.update-transaction-modal />
-    <livewire:community-manager.accounting.modals.delete-transaction-modal />
+    <livewire:community-manager.accounting.modals.create-transaction-modal wire:key="create-transaction-modal" />
+    <livewire:community-manager.accounting.modals.update-transaction-modal wire:key="update-transaction-modal" />
+    <livewire:community-manager.accounting.modals.delete-transaction-modal wire:key="delete-transaction-modal" />
 </div>

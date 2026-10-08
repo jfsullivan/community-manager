@@ -121,5 +121,5 @@
         </x-apex::grid>
     </div>
 
-    <livewire:community-manager.accounting.modals.create-transaction-modal />
+    <livewire:community-manager.accounting.modals.create-transaction-modal wire:key="create-transaction-modal" />
 </div>

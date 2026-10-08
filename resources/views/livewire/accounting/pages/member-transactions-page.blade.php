@@ -23,7 +23,7 @@
                 @can('view-member-balance', $this->community)
                     <div class="flex flex-col items-center justify-center mx-4 sm:ml-0">
                         <div class="flex text-xs text-gray-400 dark:text-zinc-500 whitespace-nowrap">Account Balance</div>
-                        <livewire:community-manager.accounting.components.member-balance :user_id="$this->user->id" size="lg" :selectable="false" />
+                        <livewire:community-manager.accounting.components.member-balance :user_id="$this->user->id" size="lg" :selectable="false" wire:key="member-balance-{{ $this->user->id }}" />
                     </div>
                 @endcan
                 @if(Gate::allows('create-community-transaction', $this->community))
@@ -123,7 +123,7 @@
         </x-apex::grid>
     </div>
 
-    <livewire:community-manager.accounting.modals.create-transaction-modal />
-    <livewire:community-manager.accounting.modals.update-transaction-modal />
-    <livewire:community-manager.accounting.modals.delete-transaction-modal />
+    <livewire:community-manager.accounting.modals.create-transaction-modal wire:key="create-transaction-modal" />
+    <livewire:community-manager.accounting.modals.update-transaction-modal wire:key="update-transaction-modal" />
+    <livewire:community-manager.accounting.modals.delete-transaction-modal wire:key="delete-transaction-modal" />
 </div>

@@ -616,4 +616,22 @@ class CommunityTransactionsPageTest extends TestCase
         $this->assertEqualsCanonicalizing([$venmo->id, $oldCash->id], $ids());
         $this->assertSame(0, $page->instance()->activeFilterCount());
     }
+
+    #[Test]
+    public function its_modals_keep_their_identity_when_a_filter_changes_the_row_count()
+    {
+        Transaction::factory()->count(30)->create(['community_id' => $this->community->id, 'user_id' => $this->user->id, 'type_id' => 1]);
+        Transaction::factory()->count(5)->create(['community_id' => $this->community->id, 'user_id' => $this->user->id, 'type_id' => 2]);
+
+        $page = Livewire::test(CommunityTransactionsPage::class, ['community_id' => $this->community->id]);
+        $childKeys = fn () => array_keys($page->snapshot['memo']['children'] ?? []);
+        $before = $childKeys();
+
+        // Fewer rows render after the filter. Child keys must not follow the row
+        // count, or overlapping updates lose track of the modals ('Snapshot missing').
+        $page->set('transactionTypeFilter', ['deposit', 'withdrawal'])->set('transactionTypeFilter', ['deposit']);
+
+        $this->assertCount(3, $before);
+        $this->assertSame($before, $childKeys());
+    }
 }
