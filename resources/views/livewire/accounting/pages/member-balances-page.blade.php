@@ -77,10 +77,10 @@
                     </x-apex::grid.item.column>
 
                     <x-apex::grid.item.column class="justify-end hidden col-span-3 text-xs md:flex md:text-sm">
-                        @if(is_null($member->currentMembership->last_accessed_at))
+                        @if(is_null($member->last_accessed_at))
                             -
                         @else
-                            {{ \Illuminate\Support\Carbon::parse($member->currentMembership->last_accessed_at)->diffForHumans() }}
+                            {{ \Illuminate\Support\Carbon::parse($member->last_accessed_at)->diffForHumans() }}
                         @endif
                     </x-apex::grid.item.column>
 

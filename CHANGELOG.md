@@ -2,6 +2,10 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.7 - Member Balances shows this community's last access - 2026-10-10
+
+- Member Balances: the "last accessed" column now shows when the member last opened **this** community. It read `$member->currentMembership`, an unscoped relation that returned any one of the member's memberships (another community or a pool), and lazy-loaded it, which crashes when lazy loading is prevented. It now uses the `last_accessed_at` the page's query already selects for this community's membership.
+
 ## v3.8.6 - Type filter applies on close - 2026-10-08
 
 - The Transaction Type multi-select applies once, when its dropdown closes, instead of after a 500ms pause (needs apex-ui ^1.49.0). Ticking several types is one update however slowly you click.
