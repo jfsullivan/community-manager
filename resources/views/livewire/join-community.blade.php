@@ -6,11 +6,9 @@
     subheading="Enter the ID and password provided by the community owner."
     loading-target="openModal, save"
 >
-    <x-slot name="icon">
-        <div class="flex items-center justify-center w-12 h-12 mx-auto rounded-full shrink-0 bg-primary-100 dark:bg-primary-500/15 sm:mx-0 sm:h-10 sm:w-10">
-            <flux:icon name="apex-ui.community" class="w-8 h-8 sm:h-6 sm:w-6 text-primary-500 dark:text-primary-400 stroke-1.5"/>
-        </div>
-    </x-slot>
+    <x-slot:icon>
+        <x-apex::featured-icon name="apex-ui.community" />
+    </x-slot:icon>
 
     <div class="flex flex-col w-full">
         @error('form')
@@ -24,7 +22,9 @@
     </div>
 
     <x-slot name="actions">
-        <x-apex::button wire:click="closeModal" class="max-sm:hidden">{{ __('Cancel') }}</x-apex::button>
+        <flux:modal.close>
+            <x-apex::button>{{ __('Cancel') }}</x-apex::button>
+        </flux:modal.close>
         <x-apex::button variant="primary" type="submit">{{ __('Join') }}</x-apex::button>
     </x-slot>
 </x-apex::modal.form>
