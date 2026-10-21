@@ -18,13 +18,17 @@ use jfsullivan\CommunityManager\Traits\TracksMemberBalances;
 use jfsullivan\MemberManager\Contracts\HasAdministrators;
 use jfsullivan\MemberManager\Traits\HasMembers;
 use jfsullivan\MemberManager\Traits\InvitesMembers;
+use jfsullivan\MemberManager\Traits\ManagesJoining;
 
 /**
+ * @property string $name
  * @property int|null $user_id The owner.
  * @property bool $track_member_balances
  * @property int|null $low_balance_threshold Cents; members below it are reminded to add funds (null = off).
  * @property bool $require_funds_for_entry_fees
  * @property int $entry_fee_allowance_cents
+ * @property string|null $join_mode A JoinMode value; null = member-manager.joining.default_mode.
+ * @property string|null $member_invites A MemberInvites value; null = off.
  */
 class Community extends Model implements HasAdministrators
 {
@@ -34,11 +38,13 @@ class Community extends Model implements HasAdministrators
     use HasFactory;
     use HasMembers;
     use InvitesMembers;
+    use ManagesJoining;
     use TracksMemberBalances;
 
     protected $fillable = [
         'name', 'description', 'user_id', 'join_id', 'password', 'track_member_balances', 'is_personal', 'timezone',
         'low_balance_threshold', 'require_funds_for_entry_fees', 'entry_fee_allowance_cents',
+        'join_mode', 'member_invites',
     ];
 
     public $invitationMailable = 'jfsullivan\CommunityManager\Mail\CommunityInvitation';
@@ -185,6 +191,21 @@ class Community extends Model implements HasAdministrators
         return false;
     }
 
+    /**
+     * Why nobody can join (or be confirmed) right now, or null when they can:
+     * a disabled community takes nobody new. Overrides ManagesJoining.
+     */
+    public function joinClosedReason(): ?string
+    {
+        return $this->isDisabled() ? 'This community isn\'t taking new members right now.' : null;
+    }
+
+    /** Why invitations can't be sent right now, or null when they can (a disabled community). */
+    public function invitationsClosedReason(): ?string
+    {
+        return $this->isDisabled() ? 'This community isn\'t sending invitations right now.' : null;
+    }
+
     /**************************************************************************
      * Member accounting
      *
@@ -301,8 +322,11 @@ class Community extends Model implements HasAdministrators
 
     /**
      * The users who run this community: its owner and its current admin-role
-     * members ({@see isCommunityAdmin()}), without duplicates.
+     * members ({@see isCommunityAdmin()}), without duplicates. They are
+     * instances of config('community-manager.user_model'); an app that reads
+     * its own user attributes (->email) can narrow the type in its model:
      *
+     * `/** @return Collection<int, User> *\/ public function administrators(): Collection { return parent::administrators(); }`.
      * @return Collection<int, Authenticatable>
      */
     public function administrators(): Collection

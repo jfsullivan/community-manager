@@ -100,6 +100,9 @@ class TestCase extends Orchestra
         $migration = include __DIR__.'/../database/migrations/add_member_accounting_settings_to_communities_table.php.stub';
         $migration->up();
 
+        $migration = include __DIR__.'/../database/migrations/add_joining_settings_to_communities_table.php.stub';
+        $migration->up();
+
         $migration = include __DIR__.'/../database/migrations/add_current_community_column_to_users_table.php.stub';
         $migration->up();
 

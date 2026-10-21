@@ -2,6 +2,7 @@
 
 namespace jfsullivan\CommunityManager\Tests\Feature;
 
+use Illuminate\Support\Facades\Notification;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage;
 use jfsullivan\CommunityManager\Livewire\Modals\JoinCommunity;
 use jfsullivan\MemberManager\Models\Role;
@@ -22,6 +23,9 @@ function attachMember($community, $user, ?string $startAt): void
 }
 
 beforeEach(function () {
+    // Rejecting a request notifies the person; these tests check the rows.
+    Notification::fake();
+
     // The default seeded type is 'active'; JoinCommunity looks up 'standard'.
     if (! Type::where('slug', 'standard')->exists()) {
         Type::create(['name' => 'Standard', 'slug' => 'standard', 'color' => 'green']);

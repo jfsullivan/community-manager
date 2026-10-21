@@ -51,6 +51,7 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
                 'member_manager_create_mail_templates_table',
                 'member_manager_create_invitations_table',
                 'add_member_accounting_settings_to_communities_table',
+                'add_joining_settings_to_communities_table',
             ])
             ->hasCommand(CommunityManagerCommand::class);
     }

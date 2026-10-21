@@ -5,10 +5,12 @@ namespace jfsullivan\CommunityManager\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\MemberManager\Mail\BaseMailable;
 use jfsullivan\MemberManager\Mail\Concerns\SendsOnBehalfOfInviter;
 use jfsullivan\MemberManager\Models\Invitation;
+use jfsullivan\MemberManager\Support\InvitationMessageSanitizer;
 
 class CommunityInvitation extends BaseMailable implements ShouldQueue
 {
@@ -16,11 +18,12 @@ class CommunityInvitation extends BaseMailable implements ShouldQueue
     use SendsOnBehalfOfInviter;
     use SerializesModels;
 
-    private $community;
+    /** Protected (not private) so subclasses keep them when queued mail is serialized. */
+    protected $community;
 
-    private $invitation;
+    protected $invitation;
 
-    private $existing_user;
+    protected $existing_user;
 
     public $app_name;
 
@@ -69,7 +72,22 @@ class CommunityInvitation extends BaseMailable implements ShouldQueue
             'no_reply' => empty($this->mailTemplate->sender_email),
             'acceptUrl' => $this->invitation->generateAcceptUrl(),
             'registerUrl' => $this->invitation->generateRegisterUrl(),
+            // Sanitized again here: the view renders it as HTML.
+            'personalMessage' => InvitationMessageSanitizer::sanitize($this->invitation->message),
+            'inviterName' => $this->getInviter()?->name,
+            'communityDescription' => $this->communityDescription(),
         ])->render();
+    }
+
+    /**
+     * The community's description as plain text, capped at 300 characters
+     * (the view keeps its line breaks), or null when it has none.
+     */
+    protected function communityDescription(): ?string
+    {
+        $description = trim(strip_tags((string) $this->community->getAttribute('description')));
+
+        return $description === '' ? null : Str::limit($description, 300);
     }
 
     // public function build()
