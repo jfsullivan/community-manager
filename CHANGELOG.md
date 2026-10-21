@@ -2,6 +2,34 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.9.0 - Shared hooks, member-accounting core, ledger descriptions - 2026-10-21
+
+### Shared hooks on `Community`
+
+- **Paid features:** `allowsFeature()`, `featureLimit()` and `hasPremiumAccess()`, decided by `config('community-manager.premium.resolver')` (a `Contracts\ResolvesPremiumAccess`). The default allows everything.
+- **`administrators()`:** the owner plus current admins. Implements member-manager's `HasAdministrators`.
+- **`isDisabled()` / `isHiddenFrom()`:** hooks that return false.
+
+### Member accounting
+
+- **`tracksMemberAccounting()`:** the feature flag, shared communities only, and the community's own switch.
+- **Entry fees:** `requiresFundsForEntryFees()`, `entryFeeAllowanceCents()`, `pendingCreditsCents()`, `spendableBalanceCents()` and `entryFeeShortfallCents()`.
+- **New stub:** `add_member_accounting_settings_to_communities_table` adds `low_balance_threshold`, `require_funds_for_entry_fees` and `entry_fee_allowance_cents`, each only if missing.
+- **Behaviour change:** `CommunityPolicy` shows balances and Add Funds only where the community tracks balances, admins included.
+- **New `community-accounting` middleware:** the accounting pages return 404 when the community doesn't track balances. It's also registered as Livewire persistent middleware.
+- **`<x-community-manager::low-balance-reminder />`:** a weekly popup when a member's balance is below the community's threshold.
+
+### Ledger
+
+- **New `Contracts\DescribesTransaction`:** a transaction's model can say what the money was for, shown in the detail and type columns.
+
+### Other
+
+- `HasCommunityMemberships` adds `sharedCommunities()` and `hasSharedCommunities()`.
+- Requires `jfsullivan/member-manager ^0.10.20`.
+
+Apps overriding any of the new `Community` methods must keep identical signatures. Publish the new migration stub to get the accounting columns.
+
 ## v3.8.9 - Description saved, transfer rows, balance-tracking toggle check - 2026-10-21
 
 - **Community descriptions are saved.** `description` is fillable on the package `Community` model; the create form's description was silently dropped unless the app merged it in.
@@ -350,6 +378,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
