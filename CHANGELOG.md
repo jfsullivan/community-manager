@@ -2,6 +2,18 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.8.9 - Description saved, transfer rows, balance-tracking toggle check - 2026-10-21
+
+- **Community descriptions are saved.** `description` is fillable on the package `Community` model; the create form's description was silently dropped unless the app merged it in.
+- **Transfer rows render in the ledger** ("Transfer to/from <member>"). Credits and app-defined types (entry fees, winnings, …) show their description instead of a blank cell, and `transaction-detail` merges the classes callers pass.
+- **Server-side check on balance tracking.**
+  - New config keys: `member_accounting.self_serve` (default `true`, today's behaviour) and `site_admin_ability` (default `manage-site`).
+  - With `self_serve` false, only site admins can turn on member balance tracking when creating a community. The toggle is hidden and ignored on the server for everyone else.
+  - Apps that relied on hiding the toggle in a view override should set `self_serve => false`.
+  
+
+Published config files don't pick up new keys; add `member_accounting` to yours to change the default.
+
 ## v3.8.8 - Modals follow the apex-ui modal rules - 2026-10-15
 
 ### v3.8.8
@@ -338,6 +350,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
