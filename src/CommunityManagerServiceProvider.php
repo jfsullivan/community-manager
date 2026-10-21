@@ -76,6 +76,13 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
 
         $this->configureDisabling();
 
+        // Opt-in (membership_status.enabled): the page a pending or
+        // turned-down request is sent to. Off by default, so an app with its
+        // own copy of the route isn't affected until it adopts it.
+        if (config('community-manager.membership_status.enabled', false)) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/membership-status.php');
+        }
+
         Relation::morphMap([
             'community' => config('community-manager.community_model'),
             'user' => config('community-manager.user_model'),

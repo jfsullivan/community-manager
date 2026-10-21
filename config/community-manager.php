@@ -3,6 +3,7 @@
 use jfsullivan\ArticleManager\Livewire\Articles\Show;
 use jfsullivan\CommunityManager\Livewire\Dashboard;
 use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberDetailsPage;
+use jfsullivan\CommunityManager\Mail\MembershipRequestMessageMail;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Models\TransactionType;
@@ -146,6 +147,25 @@ return [
         ],
         'unavailable_kinds' => ['community'],
         'contact_view' => null,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Membership Status
+    |--------------------------------------------------------------------------
+    |
+    | `enabled`: registers community/{community}/membership-status (named
+    | community.membership-status) and sends a pending or turned-down request
+    | there from the community-member middleware, instead of a 403. Off by
+    | default. `mail`: the mailable a person's message to the admins uses
+    | (new $class($sender, $community, $body, $state)).
+    |
+    */
+
+    'membership_status' => [
+        'enabled' => false,
+        'mail' => MembershipRequestMessageMail::class,
+        'daily_message_limit' => 3,
     ],
 
     /*
