@@ -2,6 +2,42 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.10.0 - Join modes, rejected requests, richer invitation email - 2026-10-21
+
+### Join modes
+
+- **`Community` uses member-manager's `ManagesJoining`:** `joinMode()` and `memberInvites()`. Joining and invitations close automatically while `isDisabled()`.
+- **New stub `add_joining_settings_to_communities_table`:** nullable `join_mode` / `member_invites`. An empty `join_mode` follows `member-manager.joining.default_mode` (default `approval`).
+- **The join modal follows the mode:**
+  - open (`password`) admits at once
+  - `approval` leaves a pending request
+  - `invite_only` refuses
+  - a closed community refuses
+  
+- **A turned-down request can ask again.**
+
+### Rejected requests
+
+- **New `Actions\RejectMembership`:** notifies the person through `notifications.membership_rejected` (default `Notifications\MembershipRejected`).
+- **Members page:**
+  - a Rejected segment, and "Confirm After All"
+  - confirming clears `end_at`
+  - Confirm / Send Invite are hidden and refused while the community is closed
+  
+
+### Invitation email
+
+- **`CommunityInvitation`:** the community and invitation are now protected properties.
+- **The email shows** the inviter's sanitized personal note, the inviter's name and the community description.
+
+### Fixes
+
+- **Ledger:** the type cell is sized and right-aligned on phones.
+- **`administrators()`:** the docblock explains narrowing the user type in an app.
+- **The invitations stub** is synced with member-manager's.
+
+**Apps whose `Community` uses `ManagesJoining` directly** should remove it, since it's now inherited, so the package's closed-community rules apply.
+
 ## v3.9.0 - Shared hooks, member-accounting core, ledger descriptions - 2026-10-21
 
 ### Shared hooks on `Community`
@@ -378,6 +414,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
