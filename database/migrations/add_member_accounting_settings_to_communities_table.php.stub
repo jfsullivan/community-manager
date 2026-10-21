@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * Member-accounting settings on communities. Each column is added only when
+ * missing, so an app that already has them (from its own migrations) can
+ * publish and run this safely.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('communities', function (Blueprint $table) {
+            if (! Schema::hasColumn('communities', 'low_balance_threshold')) {
+                // Cents; members below it are reminded to add funds (null = off).
+                $table->unsignedInteger('low_balance_threshold')->nullable();
+            }
+
+            if (! Schema::hasColumn('communities', 'require_funds_for_entry_fees')) {
+                $table->boolean('require_funds_for_entry_fees')->default(false);
+            }
+
+            if (! Schema::hasColumn('communities', 'entry_fee_allowance_cents')) {
+                $table->unsignedInteger('entry_fee_allowance_cents')->default(0);
+            }
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('communities', function (Blueprint $table) {
+            foreach (['low_balance_threshold', 'require_funds_for_entry_fees', 'entry_fee_allowance_cents'] as $column) {
+                if (Schema::hasColumn('communities', $column)) {
+                    $table->dropColumn($column);
+                }
+            }
+        });
+    }
+};

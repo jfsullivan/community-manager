@@ -2,19 +2,31 @@
 
 namespace jfsullivan\CommunityManager\Models;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use jfsullivan\CommunityManager\Contracts\ResolvesPremiumAccess;
 use jfsullivan\CommunityManager\Database\Factories\CommunityFactory;
 // use jfsullivan\ArticleManager\Traits\HasArticles;
 // use jfsullivan\BrainTools\Mail\Templates\CommunityInvitationMailTemplate;
 use jfsullivan\CommunityManager\Mail\Templates\CommunityInvitationMailTemplate;
+use jfsullivan\CommunityManager\Support\UnlimitedPremiumAccess;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
 use jfsullivan\CommunityManager\Traits\TracksMemberBalances;
+use jfsullivan\MemberManager\Contracts\HasAdministrators;
 use jfsullivan\MemberManager\Traits\HasMembers;
 use jfsullivan\MemberManager\Traits\InvitesMembers;
 
-class Community extends Model
+/**
+ * @property int|null $user_id The owner.
+ * @property bool $track_member_balances
+ * @property int|null $low_balance_threshold Cents; members below it are reminded to add funds (null = off).
+ * @property bool $require_funds_for_entry_fees
+ * @property int $entry_fee_allowance_cents
+ */
+class Community extends Model implements HasAdministrators
 {
     use ChecksForFeatures;
 
@@ -24,7 +36,10 @@ class Community extends Model
     use InvitesMembers;
     use TracksMemberBalances;
 
-    protected $fillable = ['name', 'description', 'user_id', 'join_id', 'password', 'track_member_balances', 'is_personal', 'timezone'];
+    protected $fillable = [
+        'name', 'description', 'user_id', 'join_id', 'password', 'track_member_balances', 'is_personal', 'timezone',
+        'low_balance_threshold', 'require_funds_for_entry_fees', 'entry_fee_allowance_cents',
+    ];
 
     public $invitationMailable = 'jfsullivan\CommunityManager\Mail\CommunityInvitation';
 
@@ -33,6 +48,9 @@ class Community extends Model
         return [
             'track_member_balances' => 'boolean',
             'is_personal' => 'boolean',
+            'low_balance_threshold' => 'integer',
+            'require_funds_for_entry_fees' => 'boolean',
+            'entry_fee_allowance_cents' => 'integer',
         ];
     }
 
@@ -119,6 +137,123 @@ class Community extends Model
         return $this->isShared();
     }
 
+    /**
+     * Whether the community may use a paid feature (e.g. 'messages'), as the
+     * resolver in config('community-manager.premium.resolver') decides. The
+     * default resolver allows everything.
+     */
+    public function allowsFeature(string $feature): bool
+    {
+        return $this->premiumAccess()->allows($this, $feature);
+    }
+
+    /**
+     * The community's limit for the key (e.g. 'members'), or null for no
+     * limit. Not named limit(): that would shadow the query builder's.
+     */
+    public function featureLimit(string $key): ?int
+    {
+        return $this->premiumAccess()->limit($this, $key);
+    }
+
+    /** Whether the community has its plan's premium tools: {@see allowsFeature()} 'premium'. */
+    public function hasPremiumAccess(): bool
+    {
+        return $this->allowsFeature('premium');
+    }
+
+    protected function premiumAccess(): ResolvesPremiumAccess
+    {
+        return app(config('community-manager.premium.resolver', UnlimitedPremiumAccess::class));
+    }
+
+    /**
+     * Disabled by a site admin. Never, until an app (or a later release)
+     * adds disabling; apps that disable communities override this.
+     */
+    public function isDisabled(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Whether the user's lists and switchers leave the community out (e.g. a
+     * disabled community, for its members). Never, by default.
+     */
+    public function isHiddenFrom(?Authenticatable $user): bool
+    {
+        return false;
+    }
+
+    /**************************************************************************
+     * Member accounting
+     *
+     * Balances, Add Funds, payment methods and transactions. A community that
+     * doesn't track member balances shows none of it.
+    ***************************************************************************/
+
+    /**
+     * Whether this community does member accounting at all: behind the
+     * `features.track_member_balances` flag, never for personal communities,
+     * and only when the community turned tracking on.
+     */
+    public function tracksMemberAccounting(): bool
+    {
+        return (bool) config('community-manager.features.track_member_balances')
+            && $this->isShared()
+            && (bool) $this->track_member_balances;
+    }
+
+    /**
+     * Whether members must have enough available balance to cover an entry
+     * fee before they can be charged it. Only while the community tracks
+     * member balances.
+     */
+    public function requiresFundsForEntryFees(): bool
+    {
+        return $this->tracksMemberAccounting() && (bool) $this->require_funds_for_entry_fees;
+    }
+
+    /**
+     * Where funds are required for entry fees, how far below zero (in cents)
+     * a member's available balance may go to cover one; 0 otherwise.
+     */
+    public function entryFeeAllowanceCents(): int
+    {
+        return $this->requiresFundsForEntryFees() ? max((int) $this->entry_fee_allowance_cents, 0) : 0;
+    }
+
+    /**
+     * Money a member has reported paying that an admin hasn't confirmed yet,
+     * in cents; counted as available for entry fees. None by default; apps
+     * with reported payments override this.
+     */
+    public function pendingCreditsCents(Authenticatable $member): int
+    {
+        return 0;
+    }
+
+    /** What a member can spend here, in cents: their balance plus pending credits. */
+    public function spendableBalanceCents(Authenticatable $member): int
+    {
+        return (int) $this->memberBalance($member) + $this->pendingCreditsCents($member);
+    }
+
+    /**
+     * How much more (in cents) the member needs before a fee of $feeCents is
+     * allowed, or 0 when they can be charged it: always 0 unless the community
+     * requires funds for entry fees, then the fee less their spendable balance
+     * and the community's allowance.
+     */
+    public function entryFeeShortfallCents(Authenticatable $member, int $feeCents): int
+    {
+        if ($feeCents <= 0 || ! $this->requiresFundsForEntryFees()) {
+            return 0;
+        }
+
+        return max($feeCents - $this->spendableBalanceCents($member) - $this->entryFeeAllowanceCents(), 0);
+    }
+
     /**************************************************************************
      * Model Methods
     ***************************************************************************/
@@ -162,6 +297,27 @@ class Community extends Model
             ->whereRelation('role', 'slug', 'admin')
             ->current()
             ->exists();
+    }
+
+    /**
+     * The users who run this community: its owner and its current admin-role
+     * members ({@see isCommunityAdmin()}), without duplicates.
+     *
+     * @return Collection<int, Authenticatable>
+     */
+    public function administrators(): Collection
+    {
+        $userModel = config('community-manager.user_model');
+
+        $adminIds = $this->memberships()
+            ->whereRelation('role', 'slug', 'admin')
+            ->current()
+            ->pluck('memberships.user_id')
+            ->push($this->user_id)
+            ->filter()
+            ->unique();
+
+        return $userModel::query()->whereKey($adminIds->all())->get()->toBase()->values();
     }
 
     // public function getInvitationModel()

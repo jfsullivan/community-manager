@@ -38,7 +38,7 @@
         </x-apex::sidebar.nav.group>
     @endif
 
-    @if (Auth::user()->currentCommunity?->isShared() && Auth::user()->currentCommunity?->track_member_balances)
+    @if (Auth::user()->currentCommunity?->tracksMemberAccounting())
         <x-apex::sidebar.nav.group heading="Accounting">
             <x-apex::sidebar.nav.item
                 icon="apex-ui.coins-swap"

@@ -126,14 +126,18 @@ class CommunityPolicy
         return $community->isCommunityAdmin($user->id);
     }
 
+    /** Balances show only where the community tracks them ({@see Community::tracksMemberAccounting()}). */
     public function viewMemberBalance($user, Community $community)
     {
-        return config('community-manager.features.track_member_balances') && $community->track_member_balances;
+        return $community->tracksMemberAccounting();
     }
 
+    /**
+     * Add Funds, likewise only where the community tracks balances — admins
+     * included: there is no balance to add funds to otherwise.
+     */
     public function addFunds($user, Community $community)
     {
-        return $community->isCommunityAdmin($user->id)
-            || (config('community-manager.features.track_member_balances') && $community->track_member_balances);
+        return $community->tracksMemberAccounting();
     }
 }
