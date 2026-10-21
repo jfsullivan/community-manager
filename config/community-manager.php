@@ -7,6 +7,7 @@ use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\CommunityManager\Models\User;
+use jfsullivan\CommunityManager\Notifications\MembershipRejected;
 use jfsullivan\CommunityManager\Policies\CommunityPolicy;
 use jfsullivan\CommunityManager\Policies\TransactionPolicy;
 use jfsullivan\CommunityManager\Support\UnlimitedPremiumAccess;
@@ -120,5 +121,20 @@ return [
 
     'premium' => [
         'resolver' => UnlimitedPremiumAccess::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Notifications
+    |--------------------------------------------------------------------------
+    |
+    | The notification classes the package sends; apps swap in their own
+    | (same constructor arguments) for their own wording or mail views.
+    |
+    */
+
+    'notifications' => [
+        // new $class(Community $community), to the person whose request was turned down.
+        'membership_rejected' => MembershipRejected::class,
     ],
 ];

@@ -1,6 +1,7 @@
 {{-- Community member row — the base member-manager row plus Confirm/Reject
-     affordances on pending (start_at IS NULL) rows so admins can approve or
-     turn down join requests directly from the roster. --}}
+     affordances on pending (start_at IS NULL) rows, Confirm After All on
+     rejected ones, and no Confirm / Invite while the community can't take
+     anyone new (confirmUnavailableReason / invitationsUnavailableReason). --}}
 <x-apex::grid.item wire:key="member-{{ $member->id }}" wire:model="selected">
     <x-apex::grid.item.column variant="primary" class="col-span-12 md:col-span-8 justify-start">
         <div class="flex items-center space-x-2">
@@ -30,6 +31,8 @@
                 <x-apex::badge color="red" size="sm">Banned</x-apex::badge>
             @elseif ($member->membership_status == 'former')
                 <x-apex::badge color="zinc" size="sm">Former</x-apex::badge>
+            @elseif ($member->membership_status == 'rejected')
+                <x-apex::badge color="red" size="sm">Rejected</x-apex::badge>
             @elseif ($member->membership_status == 'pending')
                 @if (! is_null($member->invitation_id) && is_null($member->invitation_accepted_at))
                     <x-apex::badge color="amber" size="sm">Invited</x-apex::badge>
@@ -44,8 +47,8 @@
 
     @if ($this->showsColumn('type'))
         <x-apex::grid.item.column class="col-span-4 md:col-span-3 justify-start">
-            @if($member->membership_status == 'pending')
-                <x-apex::badge color="zinc" size="sm">Pending</x-apex::badge>
+            @if($member->membership_status == 'pending' || $member->membership_status == 'rejected')
+                <x-apex::badge color="zinc" size="sm">{{ ucfirst($member->membership_status) }}</x-apex::badge>
             @elseif($member->membership_status == 'former')
                 <x-apex::badge color="red" size="sm">Expired</x-apex::badge>
             @else
@@ -58,12 +61,16 @@
         <x-apex::grid.item.column class="hidden md:flex md:col-span-3 justify-end text-xs md:text-sm">
             @if($member->membership_status == 'pending')
                 <div class="flex items-center gap-2">
-                    <x-apex::button variant="primary" size="xs" wire:click="confirmMembership({{ $member->user_id }})">Confirm</x-apex::button>
+                    @unless ($this->confirmUnavailableReason())
+                        <x-apex::button variant="primary" size="xs" wire:click="confirmMembership({{ $member->user_id }})">Confirm</x-apex::button>
+                    @endunless
                     <x-apex::button variant="ghost" size="xs" wire:click="rejectMembership({{ $member->user_id }})">Reject</x-apex::button>
                 </div>
             @elseif(is_null($member->last_accessed_at))
                 @if(is_null($member->invitation_id))
-                    <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, null)" class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">Send Invite</x-apex::button>
+                    @unless ($this->invitationsUnavailableReason())
+                        <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, null)" class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">Send Invite</x-apex::button>
+                    @endunless
                 @else
                     @if(!is_null($member->invitation_accepted_at))
                         <div class="flex flex-col items-end">
@@ -74,7 +81,9 @@
                         <div class="flex flex-col items-end">
                             <div class="text-xs text-gray-500 dark:text-zinc-400">Invitation Sent</div>
                             <div class="text-xs text-gray-500 dark:text-zinc-400">{{ \Illuminate\Support\Carbon::parse($member->invitation_last_sent_at)->diffForHumans() }}</div>
-                            <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, {{ $member->invitation_id }})" class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">Resend</x-apex::button>
+                            @unless ($this->invitationsUnavailableReason())
+                                <x-apex::button variant="ghost" size="xs" wire:click="sendInvitation({{ $member->id }}, {{ $member->invitation_id }})" class="text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">Resend</x-apex::button>
+                            @endunless
                         </div>
                     @endif
                 @endif
@@ -90,10 +99,18 @@
                 <x-apex::menu.item icon="apex-ui.check" wire:click="liftBan({{ $member->user_id }})">Lift Ban</x-apex::menu.item>
             @else
                 @if ($member->membership_status == 'pending')
-                    <x-apex::menu.item icon="apex-ui.check" wire:click="confirmMembership({{ $member->user_id }})">Confirm Request</x-apex::menu.item>
+                    @unless ($this->confirmUnavailableReason())
+                        <x-apex::menu.item icon="apex-ui.check" wire:click="confirmMembership({{ $member->user_id }})">Confirm Request</x-apex::menu.item>
+                    @endunless
                     <x-apex::menu.item icon="apex-ui.x-close" wire:click="rejectMembership({{ $member->user_id }})">Reject Request</x-apex::menu.item>
+                @elseif ($member->membership_status == 'rejected' && ! $this->confirmUnavailableReason())
+                    {{-- An admin can change their mind about a rejection. --}}
+                    <x-apex::menu.item icon="apex-ui.check" wire:click="confirmMembership({{ $member->user_id }})">Confirm After All</x-apex::menu.item>
                 @endif
 
+                {{-- A turned-down request isn't a membership: no role, type or
+                     anything to remove — only Confirm After All. --}}
+                @if ($member->membership_status !== 'rejected')
                 @if ($this->showsColumn('role'))
                     <x-apex::menu.item icon="apex-ui.user-settings" wire:click="$dispatch('open-change-member-role', {{ \Illuminate\Support\Js::from($this->memberChangeDetail($member)) }})">Change Role</x-apex::menu.item>
                 @endif
@@ -107,6 +124,7 @@
                 @endif
 
                 <x-apex::menu.item icon="apex-ui.users-x" wire:click="$dispatch('open-remove-members', { id: {{ $member->user_id }} })">Remove Member</x-apex::menu.item>
+                @endif
             @endif
         </x-apex::grid.item.column.actions.dropdown>
     </x-slot:actions>
