@@ -94,6 +94,18 @@ parameters:
 			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
 			identifier: property.notFound
 			count: 1
+			path: src/Http/Middleware/EnsureCommunityIsEnabled.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/Http/Middleware/EnsureCommunityIsWritable.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
+			identifier: property.notFound
+			count: 1
 			path: src/View/Components/LowBalanceReminder.php
 
 		-

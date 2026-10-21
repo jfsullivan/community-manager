@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * A site admin can disable a community (e.g. a terms violation), as with
+     * pools: when and why, the community admins' request to have it enabled
+     * again, and a site admin's answer when that request is turned down.
+     *
+     * @var array<string, string>
+     */
+    private array $columns = [
+        'disabled_at' => 'timestamp',
+        'disabled_reason' => 'text',
+        'reenable_requested_at' => 'timestamp',
+        'reenable_request_message' => 'text',
+        'reenable_declined_at' => 'timestamp',
+        'reenable_decline_message' => 'text',
+    ];
+
+    public function up(): void
+    {
+        foreach ($this->columns as $column => $type) {
+            if (Schema::hasColumn('communities', $column)) {
+                continue;
+            }
+
+            Schema::table('communities', function (Blueprint $table) use ($column, $type) {
+                $table->{$type}($column)->nullable();
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        foreach (array_reverse(array_keys($this->columns)) as $column) {
+            if (! Schema::hasColumn('communities', $column)) {
+                continue;
+            }
+
+            Schema::table('communities', function (Blueprint $table) use ($column) {
+                $table->dropColumn($column);
+            });
+        }
+    }
+};
