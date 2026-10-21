@@ -2,6 +2,7 @@
 
 namespace jfsullivan\CommunityManager;
 
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
@@ -73,7 +74,7 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
         // pages don't pass through the route middleware again.
         Livewire::addPersistentMiddleware([EnsureCommunityTracksMemberAccounting::class]);
 
-        $this->configureDisabling($router);
+        $this->configureDisabling();
 
         Relation::morphMap([
             'community' => config('community-manager.community_model'),
@@ -91,8 +92,15 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
      * pages and the web-group middleware that lock a disabled community and
      * keep it read-only. Off by default, so an app with its own copies of
      * these routes isn't affected until it adopts them.
+     *
+     * The middleware goes through the HTTP kernel, not the router: the
+     * kernel re-syncs its groups to the router when it is built, which can be
+     * after boot (tests, artisan, queue), wiping router-only additions. It is
+     * appended to the end of the web group; an app that needs it earlier
+     * (e.g. before its own billing redirect) turns off
+     * `disabling.register_middleware` and adds both classes itself.
      */
-    protected function configureDisabling(Router $router): void
+    protected function configureDisabling(): void
     {
         if (! config('community-manager.disabling.enabled', false)) {
             return;
@@ -100,10 +108,15 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
 
         $this->loadRoutesFrom(__DIR__.'/../routes/disabling.php');
 
-        $router->pushMiddlewareToGroup('web', EnsureCommunityIsEnabled::class);
-        $router->pushMiddlewareToGroup('web', EnsureCommunityIsWritable::class);
-
         Livewire::addPersistentMiddleware([EnsureCommunityIsEnabled::class, EnsureCommunityIsWritable::class]);
+
+        if (! config('community-manager.disabling.register_middleware', true)) {
+            return;
+        }
+
+        $kernel = $this->app->make(HttpKernel::class);
+        $kernel->appendMiddlewareToGroup('web', EnsureCommunityIsEnabled::class);
+        $kernel->appendMiddlewareToGroup('web', EnsureCommunityIsWritable::class);
     }
 
     protected function configurePolicies()

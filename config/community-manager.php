@@ -123,6 +123,10 @@ return [
     | pages and adds the lock (EnsureCommunityIsEnabled) and read-only
     | (EnsureCommunityIsWritable) middleware to the web group. Off by default.
     |
+    | `register_middleware`: append those two to the end of the web group.
+    | Turn it off to place them yourself (e.g. before a billing redirect) with
+    | $middleware->web(append: [...]) in bootstrap/app.php.
+    |
     | `community_routes` are locked while the community is disabled, except
     | `open_routes`. `write_only_routes` send site admins back with a warning.
     | `unavailable_kinds`: the {kind} values the unavailable page accepts.
@@ -132,6 +136,7 @@ return [
 
     'disabling' => [
         'enabled' => false,
+        'register_middleware' => true,
         'community_routes' => ['community.*'],
         'open_routes' => ['community.disabled', 'community.membership-status'],
         'write_only_routes' => [
