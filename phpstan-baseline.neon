@@ -103,6 +103,30 @@ parameters:
 			path: src/Http/Middleware/EnsureCommunityIsWritable.php
 
 		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:isMember\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Livewire/Pages/MembershipStatusPage.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:isConfirmedMember\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Livewire/Pages/MembershipStatusPage.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:ownsCommunity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Livewire/Pages/MembershipStatusPage.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Foundation\\Auth\\User\:\:switchCommunity\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Livewire/Pages/MembershipStatusPage.php
+
+		-
 			message: '#^Access to an undefined property Illuminate\\Foundation\\Auth\\User\:\:\$currentCommunity\.$#'
 			identifier: property.notFound
 			count: 1
