@@ -7,6 +7,10 @@ use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\CommunityManager\Models\User;
+use jfsullivan\CommunityManager\Notifications\CommunityDisabled;
+use jfsullivan\CommunityManager\Notifications\CommunityEnabled;
+use jfsullivan\CommunityManager\Notifications\CommunityReenableDeclined;
+use jfsullivan\CommunityManager\Notifications\CommunityReenableRequested;
 use jfsullivan\CommunityManager\Notifications\MembershipRejected;
 use jfsullivan\CommunityManager\Policies\CommunityPolicy;
 use jfsullivan\CommunityManager\Policies\TransactionPolicy;
@@ -103,9 +107,41 @@ return [
     ],
 
     /*
-     * The Gate ability that identifies a site administrator.
+     * The Gate ability that identifies a site administrator, and the users
+     * column that marks one (to find who to tell about re-enable requests).
      */
     'site_admin_ability' => 'manage-site',
+
+    'site_admin_column' => 'is_site_admin',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Disabling Communities
+    |--------------------------------------------------------------------------
+    |
+    | `enabled`: registers the community.disabled and unavailable/{kind}
+    | pages and adds the lock (EnsureCommunityIsEnabled) and read-only
+    | (EnsureCommunityIsWritable) middleware to the web group. Off by default.
+    |
+    | `community_routes` are locked while the community is disabled, except
+    | `open_routes`. `write_only_routes` send site admins back with a warning.
+    | `unavailable_kinds`: the {kind} values the unavailable page accepts.
+    | `contact_view`: optional view at the bottom of the disabled page.
+    |
+    */
+
+    'disabling' => [
+        'enabled' => false,
+        'community_routes' => ['community.*'],
+        'open_routes' => ['community.disabled', 'community.membership-status'],
+        'write_only_routes' => [
+            'community.admin.articles.create',
+            'community.admin.articles.edit',
+            'community.admin.members.invitations',
+        ],
+        'unavailable_kinds' => ['community'],
+        'contact_view' => null,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -136,5 +172,13 @@ return [
     'notifications' => [
         // new $class(Community $community), to the person whose request was turned down.
         'membership_rejected' => MembershipRejected::class,
+
+        // new $class(Community $community), to its owner and admins.
+        'community_disabled' => CommunityDisabled::class,
+        'community_enabled' => CommunityEnabled::class,
+        'community_reenable_declined' => CommunityReenableDeclined::class,
+
+        // new $class(Community $community, Authenticatable $requester), to the site admins.
+        'community_reenable_requested' => CommunityReenableRequested::class,
     ],
 ];

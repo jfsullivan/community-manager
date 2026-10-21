@@ -6,11 +6,13 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use jfsullivan\CommunityManager\Contracts\ResolvesPremiumAccess;
-use jfsullivan\CommunityManager\Database\Factories\CommunityFactory;
 // use jfsullivan\ArticleManager\Traits\HasArticles;
 // use jfsullivan\BrainTools\Mail\Templates\CommunityInvitationMailTemplate;
+use jfsullivan\CommunityManager\Database\Factories\CommunityFactory;
 use jfsullivan\CommunityManager\Mail\Templates\CommunityInvitationMailTemplate;
 use jfsullivan\CommunityManager\Support\UnlimitedPremiumAccess;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
@@ -29,6 +31,12 @@ use jfsullivan\MemberManager\Traits\ManagesJoining;
  * @property int $entry_fee_allowance_cents
  * @property string|null $join_mode A JoinMode value; null = member-manager.joining.default_mode.
  * @property string|null $member_invites A MemberInvites value; null = off.
+ * @property Carbon|null $disabled_at
+ * @property string|null $disabled_reason
+ * @property Carbon|null $reenable_requested_at
+ * @property string|null $reenable_request_message
+ * @property Carbon|null $reenable_declined_at
+ * @property string|null $reenable_decline_message
  */
 class Community extends Model implements HasAdministrators
 {
@@ -45,6 +53,7 @@ class Community extends Model implements HasAdministrators
         'name', 'description', 'user_id', 'join_id', 'password', 'track_member_balances', 'is_personal', 'timezone',
         'low_balance_threshold', 'require_funds_for_entry_fees', 'entry_fee_allowance_cents',
         'join_mode', 'member_invites',
+        'disabled_at', 'disabled_reason', 'reenable_requested_at', 'reenable_request_message', 'reenable_declined_at', 'reenable_decline_message',
     ];
 
     public $invitationMailable = 'jfsullivan\CommunityManager\Mail\CommunityInvitation';
@@ -57,6 +66,9 @@ class Community extends Model implements HasAdministrators
             'low_balance_threshold' => 'integer',
             'require_funds_for_entry_fees' => 'boolean',
             'entry_fee_allowance_cents' => 'integer',
+            'disabled_at' => 'datetime',
+            'reenable_requested_at' => 'datetime',
+            'reenable_declined_at' => 'datetime',
         ];
     }
 
@@ -173,22 +185,58 @@ class Community extends Model implements HasAdministrators
         return app(config('community-manager.premium.resolver', UnlimitedPremiumAccess::class));
     }
 
-    /**
-     * Disabled by a site admin. Never, until an app (or a later release)
-     * adds disabling; apps that disable communities override this.
-     */
+    /**************************************************************************
+     * Disabling
+     *
+     * A site admin can disable a community (e.g. a terms violation). It is
+     * locked: every page in it is closed to everyone but site admins; its
+     * owner and admins still see it listed and get the page saying why,
+     * while its members don't see it at all. Nothing is deleted, so enabling
+     * it again restores everything.
+    ***************************************************************************/
+
     public function isDisabled(): bool
     {
-        return false;
+        return ! is_null($this->disabled_at);
     }
 
     /**
-     * Whether the user's lists and switchers leave the community out (e.g. a
-     * disabled community, for its members). Never, by default.
+     * Whether the community's pages are closed to the user: it is disabled
+     * and they aren't a site admin (config('community-manager.site_admin_ability')).
+     */
+    public function isLockedFor(?Authenticatable $user): bool
+    {
+        return $this->isDisabled()
+            && ! ($user !== null && Gate::forUser($user)->allows(config('community-manager.site_admin_ability', 'manage-site')));
+    }
+
+    /**
+     * Whether the user's lists and switchers leave the community out: it is
+     * locked for them and they don't run it. Its owner and admins keep
+     * seeing it, marked Disabled.
      */
     public function isHiddenFrom(?Authenticatable $user): bool
     {
-        return false;
+        return $this->isLockedFor($user) && ! $this->isRunBy($user);
+    }
+
+    /** Whether the user runs this community: its owner or an admin ({@see administrators()}). */
+    public function isRunBy(?Authenticatable $user): bool
+    {
+        if ($user === null) {
+            return false;
+        }
+
+        return $this->administrators()->contains(fn ($admin) => $admin->getAuthIdentifier() == $user->getAuthIdentifier());
+    }
+
+    /**
+     * A disabled community takes no new members, so its outstanding
+     * invitations read as expired; otherwise they never expire.
+     */
+    public function invitationAcceptDeadline(): ?\DateTimeInterface
+    {
+        return $this->isDisabled() ? now() : null;
     }
 
     /**

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\Compilers\BladeCompiler;
 use jfsullivan\ArticleManager\Policies\ArticlePolicy;
 use jfsullivan\CommunityManager\Commands\CommunityManagerCommand;
+use jfsullivan\CommunityManager\Http\Middleware\EnsureCommunityIsEnabled;
+use jfsullivan\CommunityManager\Http\Middleware\EnsureCommunityIsWritable;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureCommunityTracksMemberAccounting;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureIsCommunityAdmin;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureIsCommunityMember;
@@ -52,6 +54,7 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
                 'member_manager_create_invitations_table',
                 'add_member_accounting_settings_to_communities_table',
                 'add_joining_settings_to_communities_table',
+                'add_disabled_columns_to_communities_table',
             ])
             ->hasCommand(CommunityManagerCommand::class);
     }
@@ -70,6 +73,8 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
         // pages don't pass through the route middleware again.
         Livewire::addPersistentMiddleware([EnsureCommunityTracksMemberAccounting::class]);
 
+        $this->configureDisabling($router);
+
         Relation::morphMap([
             'community' => config('community-manager.community_model'),
             'user' => config('community-manager.user_model'),
@@ -79,6 +84,26 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
         $this->configurePolicies();
         $this->configureComponents();
         $this->configureLivewireComponents();
+    }
+
+    /**
+     * Opt-in (community-manager.disabling.enabled): the disabled / unavailable
+     * pages and the web-group middleware that lock a disabled community and
+     * keep it read-only. Off by default, so an app with its own copies of
+     * these routes isn't affected until it adopts them.
+     */
+    protected function configureDisabling(Router $router): void
+    {
+        if (! config('community-manager.disabling.enabled', false)) {
+            return;
+        }
+
+        $this->loadRoutesFrom(__DIR__.'/../routes/disabling.php');
+
+        $router->pushMiddlewareToGroup('web', EnsureCommunityIsEnabled::class);
+        $router->pushMiddlewareToGroup('web', EnsureCommunityIsWritable::class);
+
+        Livewire::addPersistentMiddleware([EnsureCommunityIsEnabled::class, EnsureCommunityIsWritable::class]);
     }
 
     protected function configurePolicies()

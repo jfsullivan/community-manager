@@ -91,6 +91,7 @@ class TestCase extends Orchestra
             $table->string('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('remember_token')->nullable();
+            $table->boolean('is_site_admin')->default(false);
             $table->timestamps();
         });
 
@@ -102,6 +103,15 @@ class TestCase extends Orchestra
 
         $migration = include __DIR__.'/../database/migrations/add_joining_settings_to_communities_table.php.stub';
         $migration->up();
+
+        $migration = include __DIR__.'/../database/migrations/add_disabled_columns_to_communities_table.php.stub';
+        $migration->up();
+
+        // The notifications package's table (actions clear earlier notices by subject).
+        foreach (['create_notifications_table', 'add_expiry_and_grouping_to_notifications_table', 'add_context_to_notifications_table'] as $stub) {
+            $migration = include __DIR__.'/../vendor/jfsullivan/notifications/database/migrations/'.$stub.'.php.stub';
+            $migration->up();
+        }
 
         $migration = include __DIR__.'/../database/migrations/add_current_community_column_to_users_table.php.stub';
         $migration->up();
