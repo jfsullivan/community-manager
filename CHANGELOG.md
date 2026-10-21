@@ -2,19 +2,54 @@
 
 All notable changes to `community-manager` will be documented in this file.
 
+## v3.11.0 - Disable and enable communities, re-enable requests - 2026-10-21
+
+### Disabling communities
+
+A site admin can disable a community; nothing is deleted.
+
+- **Model:** `isDisabled()`, `isLockedFor()` (site admins excepted, via `site_admin_ability`), `isHiddenFrom()` (members only), `isRunBy()` and `invitationAcceptDeadline()`. While a community is disabled, joining and invitations close.
+- **New stub `add_disabled_columns_to_communities_table`:** the six `disabled_*` / `reenable_*` columns, each only if missing.
+- **New actions in `Actions\Communities`:**
+  - `DisableCommunityAction::disable($community, $reason)`
+  - `EnableCommunityAction::enable()`
+  - `RequestCommunityReenableAction::request()`
+  - `DeclineCommunityReenableRequestAction::decline()`
+  
+- **Notifications:** four, each swappable under `notifications.*`.
+- **Events:** `Events\CommunityDisabled` and `Events\CommunityEnabled`.
+
+### Opt-in pages and lock (`disabling.enabled`, default off)
+
+- **Pages:**
+  - `community/{community_id}/disabled` (`community.disabled`): for the owner and admins, with a re-enable request form.
+  - `unavailable/{kind}`: kinds come from `disabling.unavailable_kinds`.
+  
+- **Middleware:**
+  - `EnsureCommunityIsEnabled` locks the `disabling.community_routes`.
+  - `EnsureCommunityIsWritable` keeps site admins off the `disabling.write_only_routes`.
+  - Both are appended to the `web` group through the HTTP kernel and registered as Livewire persistent middleware.
+  
+- **`disabling.register_middleware => false`:** place the two middleware yourself instead, e.g. before a billing redirect.
+- **New config:** `site_admin_column` (default `is_site_admin`), plus `disabling.contact_view`.
+
 ## v3.10.0 - Join modes, rejected requests, richer invitation email - 2026-10-21
 
 ### Join modes
 
 - **`Community` uses member-manager's `ManagesJoining`:** `joinMode()` and `memberInvites()`. Joining and invitations close automatically while `isDisabled()`.
+  
 - **New stub `add_joining_settings_to_communities_table`:** nullable `join_mode` / `member_invites`. An empty `join_mode` follows `member-manager.joining.default_mode` (default `approval`).
+  
 - **The join modal follows the mode:**
+  
   - open (`password`) admits at once
   - `approval` leaves a pending request
   - `invite_only` refuses
   - a closed community refuses
   
 - **A turned-down request can ask again.**
+  
 
 ### Rejected requests
 
@@ -414,6 +449,7 @@ Add the column in the host app:
 
 ```php
 Schema::table('transactions', fn (Blueprint $table) => $table->string('method')->nullable()->after('description'));
+
 
 
 
