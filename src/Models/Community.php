@@ -24,7 +24,7 @@ class Community extends Model
     use InvitesMembers;
     use TracksMemberBalances;
 
-    protected $fillable = ['name', 'user_id', 'join_id', 'password', 'track_member_balances', 'is_personal', 'timezone'];
+    protected $fillable = ['name', 'description', 'user_id', 'join_id', 'password', 'track_member_balances', 'is_personal', 'timezone'];
 
     public $invitationMailable = 'jfsullivan\CommunityManager\Mail\CommunityInvitation';
 

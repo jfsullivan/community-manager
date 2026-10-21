@@ -30,6 +30,7 @@
                         </x-apex::input.select>
 
                         {{-- Premium capability --}}
+                        @if ($form->canEnableBalanceTracking())
                         <div class="p-4 border rounded-lg border-amber-200 bg-amber-50/60 dark:border-amber-500/40 dark:bg-amber-500/10">
                             <div class="flex items-center gap-2">
                                 <flux:icon name="apex-ui.wallet" class="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 stroke-1.5" />
@@ -41,6 +42,7 @@
                                 <x-apex::input.checkbox wire:model="form.track_member_balances" label="Enable member balance tracking" />
                             </div>
                         </div>
+                        @endif
                     </div>
 
                     <x-slot name="actions">
