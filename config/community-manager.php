@@ -84,4 +84,24 @@ return [
         // 'manage-members' => false,
         'track_member_balances' => false, // pre-requisite: manage-members = true
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Member Accounting
+    |--------------------------------------------------------------------------
+    |
+    | `self_serve`: whether whoever creates a community may turn on member
+    | balance tracking. When false, only users passing the site-admin ability
+    | may, and the create form ignores the toggle for everyone else.
+    |
+    */
+
+    'member_accounting' => [
+        'self_serve' => true,
+    ],
+
+    /*
+     * The Gate ability that identifies a site administrator.
+     */
+    'site_admin_ability' => 'manage-site',
 ];
