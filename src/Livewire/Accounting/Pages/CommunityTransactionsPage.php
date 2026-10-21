@@ -200,7 +200,7 @@ class CommunityTransactionsPage extends Component
         $transactionClass = app(config('community-manager.transaction_model'));
 
         $query = $transactionClass::query()
-            ->with(['transferPartner:id,first_name,last_name', 'type:id,name,slug', 'user:id,first_name,last_name'])
+            ->with(['transferPartner:id,first_name,last_name', 'type:id,name,slug', 'user:id,first_name,last_name', 'model'])
             ->select(['transactions.*'])
             ->withRelatedInfo()
             ->leftJoin('transaction_types', 'transactions.type_id', '=', 'transaction_types.id')

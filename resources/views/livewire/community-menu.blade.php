@@ -28,7 +28,7 @@
                                 <div class="text-xs text-gray-500 dark:text-zinc-400">{{ Auth::user()->currentCommunity->owner->name }}</div>
                             </div>
                         </div>
-                        @if (Auth::user()->currentCommunity->track_member_balances)
+                        @if (Auth::user()->currentCommunity->tracksMemberAccounting())
                             <div class="flex justify-between w-full pb-2">
                                 <div class="flex flex-col items-start justify-center text-xs">
                                     <div class="flex text-xs text-gray-400 dark:text-zinc-500">Balance</div>

@@ -4,6 +4,8 @@ namespace jfsullivan\CommunityManager\Traits;
 
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Collection;
+use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\MemberManager\Traits\HasMemberships;
 
 trait HasCommunityMemberships
@@ -115,6 +117,27 @@ trait HasCommunityMemberships
         // Confirmed memberships only — a pending community is not one the user
         // can access or switch into, so it must not surface in the home list.
         return $this->confirmedCommunities->merge($this->ownedCommunities)->sortBy('name');
+    }
+
+    /**
+     * Shared (non-personal) communities the user owns or belongs to: the ones
+     * to present as communities (switchers, lists). The private personal
+     * community is left out, and so is any community hidden from the user
+     * ({@see Community::isHiddenFrom()}).
+     *
+     * @return Collection<int, Community>
+     */
+    public function sharedCommunities(): Collection
+    {
+        return $this->allCommunities()
+            ->filter(fn ($community) => $community->isShared() && ! $community->isHiddenFrom($this))
+            ->values();
+    }
+
+    /** Whether the user belongs to any shared community (a personal one doesn't count). */
+    public function hasSharedCommunities(): bool
+    {
+        return $this->sharedCommunities()->isNotEmpty();
     }
 
     public function belongsToCommunity($community)

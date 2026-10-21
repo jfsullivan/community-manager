@@ -3,11 +3,11 @@
 {{--
     The member's balance in a community, shown as a card. Rendered below the menubar
     by the page-header so it's visible on every community page (not just the home),
-    and self-guards on track_member_balances so it never shows for personal communities.
+    and shows only where the community tracks member balances (never personal communities).
 
     actions: optional extra buttons beside Add Funds (e.g. an app's Request payout).
 --}}
-@if ($community->track_member_balances)
+@if ($community->tracksMemberAccounting())
     @php $memberBalanceCents = (int) $community->memberBalance(auth()->user()); @endphp
 
     <div {{ $attributes->class('flex flex-col items-start w-full gap-3 p-4 bg-white dark:bg-zinc-800 border rounded-lg border-gray-200 dark:border-zinc-700 sm:flex-row sm:items-center sm:justify-between') }}>

@@ -18,8 +18,14 @@
         <p class="w-full text-xs sm:text-sm leading-6 truncate">{{ $transaction->description ?? 'New deposit' }}</p>
     @elseif($transaction->type->slug == 'withdrawal')
         <p class="w-full text-xs sm:text-sm leading-6 truncate">{{ $transaction->description ?? 'Withdrawal of funds' }}</p>
+    @elseif($transaction->model instanceof \jfsullivan\CommunityManager\Contracts\DescribesTransaction)
+        {{-- App-defined types (entry fees, winnings, ...) whose model says what the money was for. --}}
+        <p class="w-full text-xs sm:text-sm leading-4 sm:leading-5 truncate">{{ $transaction->model->transactionTitle() ?? $transaction->description }}</p>
+        @if(filled($subtitle = $transaction->model->transactionSubtitle()))
+            <p class="w-full text-2xs sm:text-xs text-gray-400 dark:text-zinc-500 truncate font-normal">{{ $subtitle }}</p>
+        @endif
     @else
-        {{-- Credits and app-defined types (entry fees, winnings, ...) show their description. --}}
+        {{-- Credits and other types show their description. --}}
         <p class="w-full text-xs sm:text-sm leading-6 truncate">{{ $transaction->description }}</p>
     @endif
 </div>

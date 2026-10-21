@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\View\Compilers\BladeCompiler;
 use jfsullivan\ArticleManager\Policies\ArticlePolicy;
 use jfsullivan\CommunityManager\Commands\CommunityManagerCommand;
+use jfsullivan\CommunityManager\Http\Middleware\EnsureCommunityTracksMemberAccounting;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureIsCommunityAdmin;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureIsCommunityMember;
 use jfsullivan\CommunityManager\Http\Middleware\EnsureIsCommunityOwner;
@@ -49,6 +50,7 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
                 'member_manager_create_memberships_table',
                 'member_manager_create_mail_templates_table',
                 'member_manager_create_invitations_table',
+                'add_member_accounting_settings_to_communities_table',
             ])
             ->hasCommand(CommunityManagerCommand::class);
     }
@@ -61,6 +63,11 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
         $router->aliasMiddleware('community-owner', EnsureIsCommunityOwner::class);
         $router->aliasMiddleware('community-admin', EnsureIsCommunityAdmin::class);
         $router->aliasMiddleware('community-member', EnsureIsCommunityMember::class);
+        $router->aliasMiddleware('community-accounting', EnsureCommunityTracksMemberAccounting::class);
+
+        // Re-checked on Livewire updates: component actions on the accounting
+        // pages don't pass through the route middleware again.
+        Livewire::addPersistentMiddleware([EnsureCommunityTracksMemberAccounting::class]);
 
         Relation::morphMap([
             'community' => config('community-manager.community_model'),

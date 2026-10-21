@@ -51,7 +51,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
             Route::get('articles', CommunityArticlesIndexPage::class)->name('articles.index');
             Route::get('articles/{article_id}', CommunityArticlesShowPage::class)->name('articles.show');
 
-            Route::get('members/{user_id}/transactions', MemberTransactionHistoryPage::class)->name('members.transactions');
+            Route::get('members/{user_id}/transactions', MemberTransactionHistoryPage::class)->middleware('community-accounting')->name('members.transactions');
 
             // Community Members
             Route::get('members', [MemberController::class, 'index'])->name('members.index');
@@ -87,7 +87,7 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
                 /**************************************************************************
                  * Community Accounting Routes - community.admin.accounting.*
                  ***************************************************************************/
-                Route::prefix('accounting')->name('accounting.')->group(function () {
+                Route::middleware('community-accounting')->prefix('accounting')->name('accounting.')->group(function () {
                     // Route::get('transactions', [OrganizationTransactionController::class, 'index'])->name('transactions.index');
                     // Route::get('accounting', [OrganizationAccountingController::class, 'manage'])->name('accounting.manage');
                     Route::get('/', CommunityTransactionsPage::class)->name('index');

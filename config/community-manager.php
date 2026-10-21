@@ -9,6 +9,7 @@ use jfsullivan\CommunityManager\Models\TransactionType;
 use jfsullivan\CommunityManager\Models\User;
 use jfsullivan\CommunityManager\Policies\CommunityPolicy;
 use jfsullivan\CommunityManager\Policies\TransactionPolicy;
+use jfsullivan\CommunityManager\Support\UnlimitedPremiumAccess;
 
 return [
     /*
@@ -104,4 +105,20 @@ return [
      * The Gate ability that identifies a site administrator.
      */
     'site_admin_ability' => 'manage-site',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paid Features
+    |--------------------------------------------------------------------------
+    |
+    | `resolver`: a class implementing
+    | jfsullivan\CommunityManager\Contracts\ResolvesPremiumAccess, which
+    | decides Community::allowsFeature() / featureLimit() /
+    | hasPremiumAccess(). The default allows every feature with no limits.
+    |
+    */
+
+    'premium' => [
+        'resolver' => UnlimitedPremiumAccess::class,
+    ],
 ];
