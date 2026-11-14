@@ -57,7 +57,6 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
             ->hasConfigFile('community-manager')
             ->hasTranslations()
             ->hasViews()
-            ->hasRoute('web')
             ->hasMigrations([
                 'create_communities_table',
                 'add_current_community_column_to_users_table',
@@ -90,6 +89,12 @@ class CommunityManagerServiceProvider extends PackageServiceProvider
     public function packageBooted()
     {
         config()->set('member-manager.user_model', config('community-manager.user_model'));
+
+        // The community pages (/current-community, /communities/create and
+        // community.*). An app that only uses the community core turns them off.
+        if (config('community-manager.routes.enabled', true)) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        }
 
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('community-owner', EnsureIsCommunityOwner::class);

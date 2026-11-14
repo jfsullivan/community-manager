@@ -22,8 +22,12 @@ two membership modes, and strict opt-in data isolation. See
 - PHP 8.4+
 - Laravel 12 / 13
 - Livewire 3 / 4 + `livewire/flux` ^2.0 and the [apex-ui](https://github.com/jfsullivan/apex-ui) stack
-- Sibling packages: `jfsullivan/member-manager`, `jfsullivan/notifications`,
-  `jfsullivan/user-timezone`, `jfsullivan/common-helpers`
+- Sibling packages: `jfsullivan/notifications`, `jfsullivan/user-timezone`,
+  `jfsullivan/common-helpers`
+- `jfsullivan/member-manager` for membership mode `memberships` (the default), the
+  package's `Community` model and its member, invitation and accounting pages. Require
+  it yourself (BracketBrain and BogeyBrain do); an app that only uses the community
+  core in mode `scoped_users` (CompleteHOA) doesn't need it.
 - Optional: `jfsullivan/article-manager` (community news pages; without it the article
   routes, links and gates are left out), `spatie/laravel-multitenancy` (keep Spatie's
   current tenant in step), `spatie/laravel-permission` (permission team per community)
@@ -110,6 +114,7 @@ return [
     'community_policy'       => \App\Policies\CommunityPolicy::class,
     'transaction_model'      => \App\Models\Transaction::class,
     'transaction_policy'     => \App\Policies\TransactionPolicy::class,
+    'routes'                 => ['enabled' => true], // the package's pages; false for core-only apps
     'admin_layout'           => 'community-manager::components.layouts.admin',
     'components' => [
         'dashboard'           => /* Livewire component for the member dashboard */,
@@ -177,7 +182,9 @@ Write your own by implementing `Contracts\SwitchesCommunity`.
 **Queues.** A job dispatched while a community is current runs inside it (the key
 travels in the payload); a job dispatched with none runs with none. Opt a job out with
 `Contracts\NotCommunityAware`, or set `queue.aware_by_default` to false and opt jobs in
-with `Contracts\CommunityAware`. `Jobs\Middleware\RunInCommunity($community)` pins a
+with `Contracts\CommunityAware`; either may also go on a queued mailable, notification,
+event listener or broadcast event (Laravel's wrapper job is looked through).
+`Jobs\Middleware\RunInCommunity($community)` pins a
 job to a named community. If the community was deleted before the job ran, it runs
 with none and logs a warning.
 
@@ -199,6 +206,13 @@ inside a community (id or slug); `community:run all "..."` runs it for each comm
 Either way `Contracts\ChecksMembership` answers `isMember()`, `roleOf()` and `isAdmin()`
 (also `$community->includesUser($user)` and `$community->roleFor($user)`). Bind your
 own in `membership.checker` (e.g. spatie/laravel-permission roles).
+
+**An app's own community model.** The core only needs
+`config('community-manager.community_model')` to be an Eloquent model. One that doesn't
+extend the package's `Community` (so it needs no member-manager) uses
+`Traits\ActsAsCommunity` for `current()`, `isCurrent()`, `includesUser()` and
+`roleFor()`, and sets `routes.enabled` to false so the package's pages (which expect
+its model and memberships) aren't registered.
 
 ## Data isolation
 

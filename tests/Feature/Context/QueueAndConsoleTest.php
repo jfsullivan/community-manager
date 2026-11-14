@@ -3,10 +3,13 @@
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\Events\JobProcessing;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use jfsullivan\CommunityManager\Contracts\CommunityAware;
 use jfsullivan\CommunityManager\Contracts\NotCommunityAware;
 use jfsullivan\CommunityManager\Facades\CommunityContext;
@@ -39,8 +42,21 @@ class PinnedJob extends RecordsCommunityJob
     }
 }
 
+class QueuedCommunityMail extends Mailable implements ShouldQueue
+{
+    use Queueable;
+
+    public function content(): Content
+    {
+        return new Content(htmlString: '<p>Hello</p>');
+    }
+}
+
+class QueuedPlatformMail extends QueuedCommunityMail implements NotCommunityAware {}
+
 beforeEach(function () {
     RecordsCommunityJob::$seen = [];
+    config()->set('mail.default', 'array');
     config()->set('queue.default', 'sync');
 });
 
@@ -84,6 +100,23 @@ describe('queued jobs', function () {
         });
 
         expect(RecordsCommunityJob::$seen)->toBe([null]);
+    });
+
+    it('read the opt-out from a queued mailable, not the job Laravel wraps it in', function () {
+        $a = createCommunity();
+        $payloads = [];
+        app('events')->listen(JobProcessing::class, function ($event) use (&$payloads) {
+            $payloads[] = $event->job->payload();
+        });
+
+        CommunityContext::run($a, function () {
+            Mail::to('someone@example.com')->queue(new QueuedCommunityMail);
+            Mail::to('someone@example.com')->queue(new QueuedPlatformMail);
+        });
+
+        expect($payloads)->toHaveCount(2)
+            ->and($payloads[0][PropagatesCommunityContext::PAYLOAD_KEY] ?? null)->toBe($a->id)
+            ->and($payloads[1])->not->toHaveKey(PropagatesCommunityContext::PAYLOAD_KEY);
     });
 
     it('only propagate opted-in jobs when not aware by default', function () {

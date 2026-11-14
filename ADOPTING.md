@@ -21,7 +21,10 @@ What an upgrade does add, inertly:
 - The `community:run` command.
 - Requirements: PHP ^8.4 and Laravel ^12 || ^13 (both apps are on Laravel 13).
   `jfsullivan/article-manager` moved to `suggest`; all three apps require it directly,
-  so nothing changes for them.
+  so nothing changes for them. `jfsullivan/member-manager` moved to `suggest` too:
+  BracketBrain and BogeyBrain require it directly (keep it there), CompleteHOA
+  doesn't use it.
+- A `routes.enabled` switch (default on) for the package's pages.
 
 Read the [README](README.md) sections *Community context*, *Membership modes* and
 *Data isolation* first.
@@ -134,108 +137,84 @@ apex-multitenancy templates or apex-menu-builder menus later, point
 
 ---
 
-## CompleteHOA: community-scoped users + HostResolver replacing apex-multitenancy
+## CompleteHOA: the core only, replacing apex-multitenancy (done)
 
-CompleteHOA already has strict-looking isolation through apex-multitenancy; the move
-replaces that machinery with this package's, one layer at a time. Each step can ship
-on its own.
+CompleteHOA moved onto the core in one step and dropped apex-multitenancy and
+spatie/laravel-multitenancy. What it uses, as a reference for an app with
+community-scoped logins and host-based sites:
 
-### 1. Community model and context
+### 1. Community model and package pages
 
-- Make `App\Models\Community` extend `jfsullivan\CommunityManager\Models\Community`
-  instead of `ApexMultitenancy\Models\Tenant`, keeping Spatie by using its traits:
+- `App\Models\Community` extends `Model` (not the package's `Community`) and uses
+  `Traits\ActsAsCommunity`, so it needs no member-manager (which isn't installed):
+  `Community::current()`, `isCurrent()`, `includesUser()`, `roleFor()`. Its own
+  columns, relations, branding and templates are unchanged.
+- Config: `community_model`, `user_model`, `community_policy` point at the app's
+  classes; `routes.enabled => false` (CompleteHOA has its own `community.dashboard`
+  and `invitations.accept` routes, and the package pages expect member-manager).
+- `community()` and `tenant()` are app helpers returning `Community::current()`;
+  `resolve_view()` / `resolve_layout()` moved into the app with its template resolver.
 
-  ```php
-  class Community extends \jfsullivan\CommunityManager\Models\Community implements IsTenant
-  {
-      use ImplementsTenant;          // Spatie: makeCurrent(), execute(), current()
-      use UsesMultitenancyConfig;
-      // ...
-  }
-  ```
-
-  The package's `current()` / `isCurrent()` signatures match Spatie's, so both
-  traits coexist. The package's columns not in CompleteHOA's `communities` table
-  (join settings, accounting, disabling) are only read by the features that use them;
-  publish and run the migrations you need, or leave them.
-- Config: `community_model => App\Models\Community::class`, `user_model => App\Models\User::class`.
-- Bridge Spatie and the context both ways while both exist:
-  - `multitenancy.switch_tenant_tasks`: add `Integrations\Spatie\SyncCommunityContextTask`
-    (replaces `SyncApexTenantTask`'s state syncing).
-  - `community-manager.context.tasks`:
-    `[SyncSpatieTenant::class, ShareCommunityWithViews::class, SetPermissionsTeam::class, RegisterCommunityViewPaths::class]`,
-    plus an app task for `URL::forceRootUrl()` outside HTTP (from `SyncApexTenantTask`).
-  - `context.view_paths`: a `ProvidesCommunityViewPaths` returning
-    `resources/views/templates/{slug}` then `templates/default` (and their
-    `components` folders). This replaces `SetTenant`'s and `ErrorPage`'s component-path
-    registration and resets between communities (the apex R3 bug).
-- `community()` (119 calls) and `tenant()` (84) can both return `Community::current()`
-  during the move; `current_community()` is the package's own name, so it doesn't
-  collide with the app helper.
-
-### 2. Hosts (replaces `CommunityTenantFinder`)
+### 2. Hosts
 
 ```php
-'context' => ['resolvers' => [HostResolver::class]],
+'context' => ['resolvers' => [HostResolver::class], 'lazy' => true],
 'hosts' => [
+    // copied from config/completehoa.php in AppServiceProvider::register()
     'base_domain' => config('completehoa.tenant_base_domain'),
     'central_domains' => CentralDomains::all(),
-    'reserved_subdomains' => [/* CommunityTenantFinder's list */],
-    'slug_column' => 'slug',
-    'custom_domain_column' => 'custom_domain',
+    'reserved_subdomains' => config('completehoa.reserved_subdomains'),
 ],
 ```
 
-Then set `multitenancy.tenant_finder` to null (so Spatie no longer resolves from the
-raw Host header at boot) and replace the `tenant` middleware group with
-`['community.context', 'community.required']` placed **after** `TrustHosts`, so the
-tenant comes from the validated host (apex review R4). `TrustedHosts` can build its
-custom-domain list from `HostResolver::customDomains()`; `CommunityDomain` provisioning
-keeps copying the active domain into `communities.custom_domain`, which now forgets the
-cache automatically.
+- `SetCommunityContext` is prepended to the `web` group, so every page (and Livewire
+  update) resolves the community from the host after `TrustHosts` and `TrustProxies`
+  (apex review R4). Lazy resolution stays on for code outside routes (error pages,
+  Fortify's routes).
+- The app's `tenant` group is `EnsureCommunityContext` (404 on the central site or an
+  unknown host), an app `EnsureValidCommunitySession` (Spatie's session check, same
+  session key) and the app's own site middleware.
+- `TrustedHosts` lists `HostResolver::customDomains()` and forgets that cache now and
+  after the transaction commits.
 
-### 3. Community-scoped users
+### 3. Switching tasks
 
-- `membership.mode => 'scoped_users'` (CompleteHOA already has `users.community_id`;
-  skip the migration tag).
-- `User`: `use BelongsToCommunity, BelongsToOneCommunity;` with
-  `protected string $whenNoCommunity = 'unowned';`. A community then sees only its own
-  logins, central code (no community) sees only platform staff, and platform staff no
-  longer appear inside communities: drop the `communityMembers()` workarounds.
-  `isSuperAdmin()` can become `isPlatformStaff()`.
-- Bind a `membership.checker` that answers roles from spatie/laravel-permission teams
-  and group grants (`HasRolesThroughGroups`), so `includesUser()` / `roleFor()` agree
-  with the app's policies.
-- The customer portal, SSO tokens and per-login password broker stay app code.
+`SetPermissionsTeam`, `ShareCommunityWithViews`, `RegisterCommunityViewPaths` (an app
+`ProvidesCommunityViewPaths`: `templates/{template}/components` then
+`templates/default/components`), plus two app tasks: `$currentTenant` /
+`$currentTemplate` / `$currentTheme` view shares, and `URL::forceRootUrl()` at the
+community's site outside HTTP. They replace `SetTenant`, `SyncApexTenantTask` and the
+error page's own component registration; nothing leaks between communities (apex R3).
 
-### 4. Isolation (replaces `BelongsToTenant`)
+### 4. Community-scoped users
 
-- Point `App\Models\Traits\BelongsToCommunity` at the package trait (or swap the ~50
-  `use` lines). Models that rely on shared null rows (`Role` and other system rows) set
-  `protected bool $sharesCommunityRows = true;`; everything else becomes strict (apex
-  R1).
-- Replace `withoutGlobalScope('tenant')` (35) and `allTenants()` (61) with
-  `withoutCommunityScope()`, and `allTenants()->where('community_id', $id)` (9) with
-  `forCommunity($id)`.
-- Expect the write guard (apex R7) to surface legitimate cross-community writes in
-  provisioning and the legacy import: wrap those in `Model::withoutCommunityGuard()` or
-  run them with no current community.
-- Replace `TenantIsolationTest`'s reflection with
-  `CommunityIsolation::assertModelsAreScoped()` (keep `UNSCOPED_COMMUNITY_MODELS` as
-  `except`), and add `assertIsolated()` for the most sensitive models.
+- `membership.mode => 'scoped_users'`; `membership.checker` is an app checker
+  (login's `community_id`, admin = can use the admin tools in that community's
+  permission team).
+- `User` and `Person` use an app trait over `BelongsToCommunity` whose null rows are the
+  platform's: platform staff sign in on every community's site, so their rows are
+  shared (visible in every community) and may be saved there; deleting or moving them
+  is still guarded. Community lists keep `User::scopeCommunityMembers()`.
+  `User` also uses `BelongsToOneCommunity` (`isSuperAdmin()` is `isPlatformStaff()`).
 
-### 5. Jobs and commands
+### 5. Isolation
 
-- Spatie's tenant-aware queue and the package's payload both carry the community; keep
-  one. With the bridge, either works. Central jobs keep `NotTenantAware` and add
-  `NotCommunityAware`.
-- Commands that loop with `$community->execute(...)` keep working through the bridge,
-  or move to `CommunityContext::run()` / `community:run all`.
-- `ProvisionCommunityAction`'s save-and-restore becomes `CommunityContext::run()`.
+- Every model with a `community_id` uses `BelongsToCommunity` directly (the old app
+  wrapper is gone). `Role` and `PositionTitle` set `$sharesCommunityRows` (system rows);
+  everything else is strict (apex R1).
+- `allTenants()` became `withoutCommunityScope()`, `allTenants()->where('community_id', $id)`
+  became `forCommunity($id)`, `withoutGlobalScope('tenant')` became
+  `withoutCommunityScope()`. Watch for a model's own static `forCommunity()` or
+  `scopeForCommunity()`: the builder macro wins over a local scope.
+- Factories default `community_id` to the current community when there is one (else a
+  new community), so test setup never trips the write guard.
+- `TenantIsolationTest` uses `CommunityIsolation::assertModelsAreScoped()` and
+  `assertIsolated()` for properties, households, groups, articles, documents, events,
+  announcements and pages.
 
-### 6. Retire apex-multitenancy
+### 6. Jobs and commands
 
-Once nothing reads its singleton (`tenant()`, `template()`, `theme()`, `resolve_view()`),
-remove the package and its `tenant` middleware group. Templates and palettes are
-CompleteHOA's own (`app/Support/Templates`) and stay in the app; menus stay on
-apex-menu-builder.
+- The package's queue payload carries the community; central jobs and mailables
+  implement `NotCommunityAware` (read through Laravel's mailable/notification wrapper).
+- Commands that loop communities and provisioning use `CommunityContext::run()`;
+  `tenants:artisan` is an app alias for `community:run`.

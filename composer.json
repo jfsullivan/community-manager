@@ -58,7 +58,6 @@
         "jackiedo/timezonelist": "^5.1",
         "jfsullivan/apex-ui": "^1.63.1",
         "jfsullivan/common-helpers": "^1.0",
-        "jfsullivan/member-manager": "^0.10.20",
         "jfsullivan/notifications": "^1.0",
         "jfsullivan/user-timezone": "^1.0",
         "livewire/flux": "^2.0",
@@ -68,6 +67,7 @@
     },
     "require-dev": {
         "jfsullivan/article-manager": "^3.13",
+        "jfsullivan/member-manager": "^0.10.20",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.14",
         "livewire/flux-pro": "^2.0",
@@ -84,6 +84,7 @@
     },
     "suggest": {
         "jfsullivan/article-manager": "Community articles: the community.articles.* and community.admin.articles.* pages (^3.13)",
+        "jfsullivan/member-manager": "Membership mode 'memberships' (the default), the package Community model and its member, invitation and accounting pages (^0.10.20); not needed for 'scoped_users' with an app community model using the ActsAsCommunity trait",
         "spatie/laravel-multitenancy": "Keep Spatie's current tenant in step with the community context (SyncSpatieTenant, SyncCommunityContextTask)",
         "spatie/laravel-permission": "Point permission teams at the current community (SetPermissionsTeam)"
     },

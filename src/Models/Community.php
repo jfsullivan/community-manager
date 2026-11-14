@@ -10,14 +10,13 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use jfsullivan\CommunityManager\CommunityManager;
-use jfsullivan\CommunityManager\Context\CommunityContext;
-use jfsullivan\CommunityManager\Contracts\ChecksMembership;
 // use jfsullivan\ArticleManager\Traits\HasArticles;
 // use jfsullivan\BrainTools\Mail\Templates\CommunityInvitationMailTemplate;
 use jfsullivan\CommunityManager\Contracts\ResolvesPremiumAccess;
 use jfsullivan\CommunityManager\Database\Factories\CommunityFactory;
 use jfsullivan\CommunityManager\Mail\Templates\CommunityInvitationMailTemplate;
 use jfsullivan\CommunityManager\Support\UnlimitedPremiumAccess;
+use jfsullivan\CommunityManager\Traits\ActsAsCommunity;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
 use jfsullivan\CommunityManager\Traits\TracksMemberBalances;
 use jfsullivan\MemberManager\Contracts\HasAdministrators;
@@ -43,6 +42,11 @@ use jfsullivan\MemberManager\Traits\ManagesJoining;
  */
 class Community extends Model implements HasAdministrators
 {
+    // The community context and membership answers: current(), isCurrent(),
+    // includesUser() and roleFor(). Signatures match
+    // spatie/laravel-multitenancy's IsTenant, so a subclass can also be a
+    // Spatie tenant.
+    use ActsAsCommunity;
     use ChecksForFeatures;
 
     // use HasArticles;
@@ -86,42 +90,6 @@ class Community extends Model implements HasAdministrators
         } while (static::where('join_id', $joinId)->exists());
 
         return $joinId;
-    }
-
-    /**************************************************************************
-     * Community context
-     *
-     * The community current for this request, job or command
-     * ({@see CommunityContext}). Signatures match spatie/laravel-multitenancy's
-     * IsTenant, so a subclass can also be a Spatie tenant.
-    ***************************************************************************/
-
-    /** The current community, or null. */
-    public static function current(): ?static
-    {
-        $community = app(CommunityContext::class)->current();
-
-        return $community instanceof static ? $community : null;
-    }
-
-    /** Whether this is the current community. */
-    public function isCurrent(): bool
-    {
-        $current = app(CommunityContext::class)->current();
-
-        return $current !== null && $current->getKey() == $this->getKey();
-    }
-
-    /** Whether the user belongs to this community, in either membership mode ({@see ChecksMembership}). */
-    public function includesUser(?Authenticatable $user): bool
-    {
-        return app(ChecksMembership::class)->isMember($user, $this);
-    }
-
-    /** The user's role slug here ('owner' for the owner), or null when they aren't a member. */
-    public function roleFor(?Authenticatable $user): ?string
-    {
-        return app(ChecksMembership::class)->roleOf($user, $this);
     }
 
     /**************************************************************************

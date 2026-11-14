@@ -5,6 +5,7 @@ use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\CommunityManager\Testing\InteractsWithCommunityContext;
+use jfsullivan\CommunityManager\Tests\CoreOnlyTestCase;
 use jfsullivan\CommunityManager\Tests\DisablingTestCase;
 use jfsullivan\CommunityManager\Tests\SpatieTestCase;
 use jfsullivan\CommunityManager\Tests\TestCase;
@@ -15,8 +16,9 @@ use jfsullivan\MemberManager\Models\Type;
 uses(LazilyRefreshDatabase::class);
 uses(TestCase::class)->in('Feature', 'Unit');
 uses(DisablingTestCase::class)->in('Disabling');
+uses(CoreOnlyTestCase::class)->in('CoreOnly');
 uses(SpatieTestCase::class)->in('Spatie');
-uses(InteractsWithCommunityContext::class)->in('Feature', 'Disabling', 'Spatie');
+uses(InteractsWithCommunityContext::class)->in('Feature', 'Disabling', 'Spatie', 'CoreOnly');
 
 /*
 |--------------------------------------------------------------------------

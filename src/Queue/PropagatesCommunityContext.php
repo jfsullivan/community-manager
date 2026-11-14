@@ -2,7 +2,11 @@
 
 namespace jfsullivan\CommunityManager\Queue;
 
+use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Events\CallQueuedListener;
+use Illuminate\Mail\SendQueuedMailable;
+use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Queue\Events\JobProcessed;
@@ -93,11 +97,33 @@ class PropagatesCommunityContext
 
     protected function isCommunityAware(object $job): bool
     {
-        if ($job instanceof NotCommunityAware) {
+        $queued = $this->queuedClass($job);
+
+        if (is_a($queued, NotCommunityAware::class, true)) {
             return false;
         }
 
-        return $job instanceof CommunityAware || config('community-manager.queue.aware_by_default', true);
+        return is_a($queued, CommunityAware::class, true) || config('community-manager.queue.aware_by_default', true);
+    }
+
+    /**
+     * What was queued: the mailable, notification, listener or broadcast
+     * event Laravel wraps in a job of its own, otherwise the job itself, so
+     * NotCommunityAware / CommunityAware on a queued mailable (etc.) count.
+     *
+     * @return object|class-string
+     */
+    protected function queuedClass(object $job): object|string
+    {
+        $wrapped = match (true) {
+            $job instanceof SendQueuedMailable => $job->mailable,
+            $job instanceof SendQueuedNotifications => $job->notification,
+            $job instanceof CallQueuedListener => $job->class,
+            $job instanceof BroadcastEvent => $job->event,
+            default => null,
+        };
+
+        return is_object($wrapped) || (is_string($wrapped) && class_exists($wrapped)) ? $wrapped : $job;
     }
 
     protected function jobKey(mixed $job): string

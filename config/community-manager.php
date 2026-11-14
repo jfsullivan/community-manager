@@ -56,6 +56,15 @@ return [
     'transaction_pool_filter' => null,
 
     /*
+     * The package's pages: /current-community, /communities/create and the
+     * community.* member and admin pages. An app that only uses the
+     * community core (context, isolation, membership modes) turns them off.
+     */
+    'routes' => [
+        'enabled' => true,
+    ],
+
+    /*
      * The path to the admin layout for the community.
      */
     'admin_layout' => 'community-manager::components.layouts.admin',
