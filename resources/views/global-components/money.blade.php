@@ -9,7 +9,7 @@
     $cents = $amount instanceof \Brick\Money\Money
         ? $amount->getMinorAmount()->toInt()
         : (int) $amount;
-    $display = ($cents < 0 ? '-' : '').'$'.number_format(abs($cents) / 100, 2);
+    $display = \jfsullivan\CommunityManager\CommunityManager::formatCents($cents);
 @endphp
 
 <span {{ $attributes->except('formatted') }}>{{ $display }}</span>

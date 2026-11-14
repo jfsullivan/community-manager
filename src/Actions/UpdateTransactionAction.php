@@ -3,6 +3,7 @@
 namespace jfsullivan\CommunityManager\Actions;
 
 use Brick\Money\Money;
+use jfsullivan\CommunityManager\CommunityManager;
 use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Models\TransactionType;
 
@@ -30,7 +31,7 @@ class UpdateTransactionAction
             'transfer_user_id' => $data['transfer_user_id'] ?? null,
             'transacted_at' => $data['transacted_at'],
             'description' => $data['description'],
-            'amount' => Money::of($data['amount'], 'USD')->multipliedBy($transactionType->direction),
+            'amount' => Money::of($data['amount'], CommunityManager::currency())->multipliedBy($transactionType->direction),
         ]);
 
         // Handle companion transaction logic
@@ -94,7 +95,7 @@ class UpdateTransactionAction
             'transfer_user_id' => $data['user_id'],
             'transacted_at' => $data['transacted_at'],
             'description' => $data['description'],
-            'amount' => Money::of($data['amount'], 'USD')->multipliedBy($companionTransactionType->direction),
+            'amount' => Money::of($data['amount'], CommunityManager::currency())->multipliedBy($companionTransactionType->direction),
         ]);
 
         return $companionTransaction;
@@ -110,7 +111,7 @@ class UpdateTransactionAction
             'transfer_user_id' => $data['user_id'],
             'transacted_at' => $data['transacted_at'],
             'description' => $data['description'],
-            'amount' => Money::of($data['amount'], 'USD')->multipliedBy($companionTransactionType->direction),
+            'amount' => Money::of($data['amount'], CommunityManager::currency())->multipliedBy($companionTransactionType->direction),
         ]);
 
         return $companionTransaction;

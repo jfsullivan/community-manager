@@ -5,6 +5,7 @@ namespace jfsullivan\CommunityManager\Traits;
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Collection;
+use jfsullivan\CommunityManager\CommunityManager;
 use jfsullivan\CommunityManager\Models\Community;
 use jfsullivan\MemberManager\Traits\HasMemberships;
 
@@ -65,11 +66,11 @@ trait HasCommunityMemberships
     protected function balance(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Money::ofMinor($value ?? 0, 'USD'),
+            get: fn ($value) => Money::ofMinor($value ?? 0, CommunityManager::currency()),
             set: function ($value) {
                 return ($value instanceof Money)
                         ? $value->getMinorAmount()->toInt()
-                        : Money::of($value, 'USD')->getMinorAmount()->toInt();
+                        : Money::of($value, CommunityManager::currency())->getMinorAmount()->toInt();
             },
         );
     }

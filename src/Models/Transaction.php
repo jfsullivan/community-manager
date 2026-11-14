@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use jfsullivan\CommunityManager\CommunityManager;
 use jfsullivan\CommunityManager\Database\Factories\TransactionFactory;
 use jfsullivan\CommunityManager\Enums\TransactionMethod;
 
@@ -112,11 +113,11 @@ class Transaction extends Model
     protected function amount(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => Money::ofMinor($value, 'USD'),
+            get: fn ($value) => Money::ofMinor($value, CommunityManager::currency()),
             set: function ($value) {
                 return ($value instanceof Money)
                         ? $value->getMinorAmount()->toInt()
-                        : Money::of($value, 'USD')->getMinorAmount()->toInt();
+                        : Money::of($value, CommunityManager::currency())->getMinorAmount()->toInt();
             },
         );
     }
@@ -127,7 +128,7 @@ class Transaction extends Model
         $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
 
         return Attribute::make(
-            get: fn ($value, $attributes) => (new MoneyNumberFormatter($formatter))->format(Money::ofMinor($attributes['amount'], 'USD')->abs()),
+            get: fn ($value, $attributes) => (new MoneyNumberFormatter($formatter))->format(Money::ofMinor($attributes['amount'], CommunityManager::currency())->abs()),
         );
     }
 
@@ -137,7 +138,7 @@ class Transaction extends Model
         $formatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
 
         return Attribute::make(
-            get: fn ($value, $attributes) => (new MoneyNumberFormatter($formatter))->format(Money::ofMinor($attributes['amount'], 'USD')),
+            get: fn ($value, $attributes) => (new MoneyNumberFormatter($formatter))->format(Money::ofMinor($attributes['amount'], CommunityManager::currency())),
         );
     }
 

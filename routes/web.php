@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use jfsullivan\ArticleManager\Policies\ArticlePolicy;
 use jfsullivan\CommunityManager\Http\Controllers\CurrentCommunityController;
 use jfsullivan\CommunityManager\Http\Controllers\MemberController;
 use jfsullivan\CommunityManager\Livewire\Accounting\Pages\CommunityTransactionsPage;
@@ -21,12 +22,14 @@ use jfsullivan\CommunityManager\Livewire\Memberships\Pages\MemberManagementPage 
 use jfsullivan\CommunityManager\Livewire\Pages\CreateCommunityPage;
 use jfsullivan\MemberManager\Models\Invitation;
 
-Route::group(['middleware' => config('jetstream.middleware', ['web'])], function () {
+$articlesInstalled = class_exists(ArticlePolicy::class);
+
+Route::group(['middleware' => config('jetstream.middleware', ['web'])], function () use ($articlesInstalled) {
     // Route::middleware(['signed'])->group(function () {
     //     Route::get('community' . '-invitations/{invitation}', [OrganizationInvitationController::class, 'accept'])->name('organization-invitations.accept');
     // });
 
-    Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () use ($articlesInstalled) {
 
         Route::put('/current-community', [CurrentCommunityController::class, 'update'])->name('current-community.update');
 
@@ -44,12 +47,15 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
         /**************************************************************************
          * Community Member Routes - community.*
          ***************************************************************************/
-        Route::middleware(['community-member'])->prefix('community')->name('community.')->group(function () {
+        Route::middleware(['community-member'])->prefix('community')->name('community.')->group(function () use ($articlesInstalled) {
             Route::get('dashboard', config('community-manager.components.dashboard'))->name('dashboard');
             Route::get('create', config('community-manager.components.dashboard'))->name('create');
 
-            Route::get('articles', CommunityArticlesIndexPage::class)->name('articles.index');
-            Route::get('articles/{article_id}', CommunityArticlesShowPage::class)->name('articles.show');
+            // article-manager is optional.
+            if ($articlesInstalled) {
+                Route::get('articles', CommunityArticlesIndexPage::class)->name('articles.index');
+                Route::get('articles/{article_id}', CommunityArticlesShowPage::class)->name('articles.show');
+            }
 
             Route::get('members/{user_id}/transactions', MemberTransactionHistoryPage::class)->middleware('community-accounting')->name('members.transactions');
 
@@ -59,16 +65,18 @@ Route::group(['middleware' => config('jetstream.middleware', ['web'])], function
             /**************************************************************************
              * Admin Routes - community.admin.*
              ***************************************************************************/
-            Route::middleware(['community-admin'])->prefix('admin')->name('admin.')->group(function () {
+            Route::middleware(['community-admin'])->prefix('admin')->name('admin.')->group(function () use ($articlesInstalled) {
 
                 // Community Adminstration
                 Route::get('/', config('community-manager.components.admin_dashboard'))->name('index');
 
                 // Community Article Administration
-                Route::get('articles', CommunityArticleManagementPage::class)->name('articles.index');
-                Route::get('articles/create', CommunityArticleCreatePage::class)->name('articles.create');
-                Route::get('articles/{article_id}', CommunityArticleShowPage::class)->name('articles.show');
-                Route::get('articles/{article_id}/edit', CommunityArticleEditPage::class)->name('articles.edit');
+                if ($articlesInstalled) {
+                    Route::get('articles', CommunityArticleManagementPage::class)->name('articles.index');
+                    Route::get('articles/create', CommunityArticleCreatePage::class)->name('articles.create');
+                    Route::get('articles/{article_id}', CommunityArticleShowPage::class)->name('articles.show');
+                    Route::get('articles/{article_id}/edit', CommunityArticleEditPage::class)->name('articles.edit');
+                }
                 // Route::middleware(['community-owner'])->prefix('community/admin')->name('community.admin.')->group(function () {
 
                 // Route::post('assets/upload', [AssetController::class, 'upload'])->name('assets.upload');

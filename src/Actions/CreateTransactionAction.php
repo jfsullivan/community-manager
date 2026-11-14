@@ -3,6 +3,7 @@
 namespace jfsullivan\CommunityManager\Actions;
 
 use Brick\Money\Money;
+use jfsullivan\CommunityManager\CommunityManager;
 use jfsullivan\CommunityManager\Models\Transaction;
 use jfsullivan\CommunityManager\Models\TransactionType;
 
@@ -24,7 +25,7 @@ class CreateTransactionAction
             'description' => $data['description'] ?? null,
             'model_id' => $data['model_id'] ?? null,
             'model_type' => $data['model_type'] ?? null,
-            'amount' => Money::of($data['amount'], 'USD')->multipliedBy($transactionType->direction),
+            'amount' => Money::of($data['amount'], CommunityManager::currency())->multipliedBy($transactionType->direction),
         ];
 
         // Get additional fillable fields from the data array
@@ -76,7 +77,7 @@ class CreateTransactionAction
             'transfer_user_id' => $data['user_id'],
             'transacted_at' => $data['transacted_at'],
             'description' => $data['description'],
-            'amount' => Money::of($data['amount'], 'USD')->multipliedBy($companionTransactionType->direction),
+            'amount' => Money::of($data['amount'], CommunityManager::currency())->multipliedBy($companionTransactionType->direction),
         ];
 
         // Get additional fillable fields

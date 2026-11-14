@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * Opt-in (publish tag community-manager-scoped-users-migrations): for
+ * membership mode 'scoped_users', the community each login belongs to.
+ * Null marks platform staff.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (! Schema::hasColumn('users', 'community_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->foreignId('community_id')->nullable()->constrained('communities')->cascadeOnDelete();
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        if (Schema::hasColumn('users', 'community_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropConstrainedForeignId('community_id');
+            });
+        }
+    }
+};
