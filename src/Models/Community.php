@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
-use jfsullivan\CommunityManager\Contracts\ResolvesPremiumAccess;
+use jfsullivan\CommunityManager\CommunityManager;
 // use jfsullivan\ArticleManager\Traits\HasArticles;
 // use jfsullivan\BrainTools\Mail\Templates\CommunityInvitationMailTemplate;
+use jfsullivan\CommunityManager\Contracts\ResolvesPremiumAccess;
 use jfsullivan\CommunityManager\Database\Factories\CommunityFactory;
 use jfsullivan\CommunityManager\Mail\Templates\CommunityInvitationMailTemplate;
 use jfsullivan\CommunityManager\Support\UnlimitedPremiumAccess;
+use jfsullivan\CommunityManager\Traits\ActsAsCommunity;
 use jfsullivan\CommunityManager\Traits\ChecksForFeatures;
 use jfsullivan\CommunityManager\Traits\TracksMemberBalances;
 use jfsullivan\MemberManager\Contracts\HasAdministrators;
@@ -40,6 +42,11 @@ use jfsullivan\MemberManager\Traits\ManagesJoining;
  */
 class Community extends Model implements HasAdministrators
 {
+    // The community context and membership answers: current(), isCurrent(),
+    // includesUser() and roleFor(). Signatures match
+    // spatie/laravel-multitenancy's IsTenant, so a subclass can also be a
+    // Spatie tenant.
+    use ActsAsCommunity;
     use ChecksForFeatures;
 
     // use HasArticles;
@@ -328,7 +335,7 @@ class Community extends Model implements HasAdministrators
     ***************************************************************************/
     public function allUsers()
     {
-        return $this->users->merge([$this->owner]);
+        return $this->users->merge(array_filter([$this->owner]));
     }
 
     public function purge()
@@ -423,7 +430,7 @@ class Community extends Model implements HasAdministrators
     protected function currency(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => 'USD',
+            get: fn ($value) => CommunityManager::currency(),
         );
     }
 

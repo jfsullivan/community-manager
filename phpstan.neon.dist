@@ -6,7 +6,8 @@ parameters:
     paths:
         - src
         - database
+        # The fixtures use the opt-in traits, so PHPStan analyses those too.
+        - tests/Fixtures
     tmpDir: build/phpstan
     checkModelProperties: true
     reportUnmatchedIgnoredErrors: false
-

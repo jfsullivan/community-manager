@@ -4,7 +4,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use jfsullivan\CommunityManager\Models\Community;
+use jfsullivan\CommunityManager\Testing\InteractsWithCommunityContext;
+use jfsullivan\CommunityManager\Tests\CoreOnlyTestCase;
 use jfsullivan\CommunityManager\Tests\DisablingTestCase;
+use jfsullivan\CommunityManager\Tests\SpatieTestCase;
 use jfsullivan\CommunityManager\Tests\TestCase;
 use jfsullivan\CommunityManager\Tests\User;
 use jfsullivan\MemberManager\Models\Role;
@@ -13,6 +16,9 @@ use jfsullivan\MemberManager\Models\Type;
 uses(LazilyRefreshDatabase::class);
 uses(TestCase::class)->in('Feature', 'Unit');
 uses(DisablingTestCase::class)->in('Disabling');
+uses(CoreOnlyTestCase::class)->in('CoreOnly');
+uses(SpatieTestCase::class)->in('Spatie');
+uses(InteractsWithCommunityContext::class)->in('Feature', 'Disabling', 'Spatie', 'CoreOnly');
 
 /*
 |--------------------------------------------------------------------------
@@ -93,3 +99,19 @@ function addCommunityAdmin(Community $community, User $user)
 //     $user->current_organization_id = $organization->id;
 //     $user->save();
 // }
+
+/*
+ * Stand-ins for spatie/laravel-permission's team helpers (not installed here),
+ * for the SetPermissionsTeam switching task.
+ */
+if (! function_exists('setPermissionsTeamId')) {
+    function setPermissionsTeamId($id): void
+    {
+        $GLOBALS['__community_manager_tests_team_id'] = $id;
+    }
+
+    function getPermissionsTeamId()
+    {
+        return $GLOBALS['__community_manager_tests_team_id'] ?? null;
+    }
+}

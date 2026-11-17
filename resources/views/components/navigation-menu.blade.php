@@ -31,10 +31,12 @@
             {{ __('community-manager::labels.dashboard') }}
         </x-community-manager::navigation-menu.item>
 
-        <x-community-manager::navigation-menu.item :selected="$selected == 'articles'" class="flex-1 sm:flex-none"
-            active-icon="newspaper" inactive-icon="newspaper" url="{{ route('community.articles.index') }}">
-            {{ __('community-manager::labels.news') }}
-        </x-community-manager::navigation-menu.item>
+        @if (Route::has('community.articles.index'))
+            <x-community-manager::navigation-menu.item :selected="$selected == 'articles'" class="flex-1 sm:flex-none"
+                active-icon="newspaper" inactive-icon="newspaper" url="{{ route('community.articles.index') }}">
+                {{ __('community-manager::labels.news') }}
+            </x-community-manager::navigation-menu.item>
+        @endif
 
         <x-community-manager::navigation-menu.item :selected="$selected == 'members'" class="flex-1 sm:flex-none"
             active-icon="users" inactive-icon="users" url="{{ route('community.members.index') }}">

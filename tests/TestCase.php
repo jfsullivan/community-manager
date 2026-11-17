@@ -107,6 +107,10 @@ class TestCase extends Orchestra
         $migration = include __DIR__.'/../database/migrations/add_disabled_columns_to_communities_table.php.stub';
         $migration->up();
 
+        // Opt-in: slug and custom_domain, for HostResolver.
+        $migration = include __DIR__.'/../database/migrations/add_site_columns_to_communities_table.php.stub';
+        $migration->up();
+
         // The notifications package's table (actions clear earlier notices by subject).
         foreach (['create_notifications_table', 'add_expiry_and_grouping_to_notifications_table', 'add_context_to_notifications_table'] as $stub) {
             $migration = include __DIR__.'/../vendor/jfsullivan/notifications/database/migrations/'.$stub.'.php.stub';

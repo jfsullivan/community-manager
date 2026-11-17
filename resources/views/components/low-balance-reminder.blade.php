@@ -3,7 +3,7 @@
      jfsullivan\CommunityManager\View\Components\LowBalanceReminder). "See how
      to add funds" opens the community's Add Funds dialog. --}}
 @if ($show)
-    @php($format = fn (int $cents) => ($cents < 0 ? '-' : '').'$'.number_format(abs($cents) / 100, 2))
+    @php($format = fn (int $cents) => \jfsullivan\CommunityManager\CommunityManager::formatCents($cents))
 
     <div
         x-data="{ open: true }"

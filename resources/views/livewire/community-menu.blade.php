@@ -46,7 +46,7 @@
                     </x-community-manager::dropdown-link>
 
                     <!-- Community News -->
-                    @if (Auth::user()->currentCommunity->isShared())
+                    @if (Auth::user()->currentCommunity->isShared() && Route::has('community.articles.index'))
                         <x-community-manager::dropdown-link url="{{ route('community.articles.index') }}" show-arrow>
                             <x-slot name="icon"><flux:icon name="apex-ui.newspaper" class="h-5 w-5 text-gray-500 dark:text-zinc-400 stroke-1.5" /></x-slot>
                             {{ __('community-manager::labels.news') }}
